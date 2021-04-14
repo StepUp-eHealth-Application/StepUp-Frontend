@@ -7,22 +7,23 @@ Für einen bestimmten vorhandenen Patient werden mit der Anwendung Gesundheitszi
 
 **Anforderungen an die Anwendung**
 
-    1. Es muss mit der Anwendung möglich sein Patientendaten zu erfassen (der Anwender wird aufgefordert die Daten einzugeben).
-    2. Folgende Patientendaten sind erforderlich:
-        ◦ Vorname, Nachname, Adresse, Geschlecht
-    3. Es kann einen spezifischen FHIR-Server für den Datenaustausch spezifiziert werden.
-    4. Ein entsprechender Patient kann mit den angegebenen Daten auf dem spezifizierten Server erstellt werden. Es gibt eine Meldung über den Erfolg/Misserfolg der Patientenerstellung.
-    5. Es muss möglich sein nach Patienten auf dem Server zu suchen.
-        ◦ Gültige Suchkriterien sind mindestens: Vorname, Nachname, Adresse, Geschlecht
-    6. Es erfolgt eine geeignete Darstellung der gefundenen Patienteninformationen.
-    7. Für die weitere Arbeit mit der Anwendung, muss es möglich sein den aktuellen Patienten auszuwählen (der Kontext wird gesetzt).
-    8. Es muss für den Anwender ersichtlich sein welcher der aktuelle Patient ist. 
-    9. Die Information des ausgewählten Patienten wird ausgegeben.
-    10. Für den aktuellen Patient muss möglich sein Gesundheitsziele zu setzen. Die Ziele bestehen aus einem numerischen Wert, der entsprechenden Einheit und dem Zeitpunkt der Zielsetzung.
-    11. Es muss möglich sein die Ziele zu verändern. Den neuen Wert und den neuen Zeitpunkt der Zielsetzung werden protokolliert.
-    12. Zu den jeweiligen Zielen muss es möglich sein Beobachtungen zu erfassen. Die Beobachtungen bestehen aus einem numerischen Wert, der entsprechenden Einheit und dem Zeitpunkt der Erfassung. Auch erfasst wird wer die Beobachtung durchgeführt hat.
-    13. Es muss möglich sein für einen bestimmten Patient die definierten Ziele auszugeben.
-    14. Es muss möglich sein für die Kombination (Patient/Ziel) die erfassten Beobachtungen auszugeben. Die Beobachten werden von einer Beurteilung der Zielerreichung (Ziel erreicht Ja/Nein und ggf. % der Erreichung) begleitet. 
+
+1. Es muss mit der Anwendung möglich sein Patientendaten zu erfassen (der Anwender wird aufgefordert die Daten einzugeben).
+2. Folgende Patientendaten sind erforderlich:
+    - Vorname, Nachname, Adresse, Geschlecht
+3. Es kann einen spezifischen FHIR-Server für den Datenaustausch spezifiziert werden.
+4. Ein entsprechender Patient kann mit den angegebenen Daten auf dem spezifizierten Server erstellt werden. Es gibt eine Meldung über den Erfolg/Misserfolg der Patientenerstellung.
+5. Es muss möglich sein nach Patienten auf dem Server zu suchen.
+    -Gültige Suchkriterien sind mindestens: Vorname, Nachname, Adresse, Geschlecht
+6. Es erfolgt eine geeignete Darstellung der gefundenen Patienteninformationen.
+7. Für die weitere Arbeit mit der Anwendung, muss es möglich sein den aktuellen Patienten auszuwählen (der Kontext wird gesetzt).
+8. Es muss für den Anwender ersichtlich sein welcher der aktuelle Patient ist. 
+9. Die Information des ausgewählten Patienten wird ausgegeben.
+10. Für den aktuellen Patient muss möglich sein Gesundheitsziele zu setzen. Die Ziele bestehen aus einem numerischen Wert, der entsprechenden Einheit und dem Zeitpunkt der Zielsetzung.
+11. Es muss möglich sein die Ziele zu verändern. Den neuen Wert und den neuen Zeitpunkt der Zielsetzung werden protokolliert.
+12. Zu den jeweiligen Zielen muss es möglich sein Beobachtungen zu erfassen. Die Beobachtungen bestehen aus einem numerischen Wert, der entsprechenden Einheit und dem Zeitpunkt der Erfassung. Auch erfasst wird wer die Beobachtung durchgeführt hat.
+13. Es muss möglich sein für einen bestimmten Patient die definierten Ziele auszugeben.
+14. Es muss möglich sein für die Kombination (Patient/Ziel) die erfassten Beobachtungen auszugeben. Die Beobachten werden von einer Beurteilung der Zielerreichung (Ziel erreicht Ja/Nein und ggf. % der Erreichung) begleitet. 
 
 **Weitere Anforderungen/Rahmenbedingungen**
 
