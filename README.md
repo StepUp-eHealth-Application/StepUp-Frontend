@@ -27,22 +27,22 @@ Für einen bestimmten vorhandenen Patient werden mit der Anwendung Gesundheitszi
 
 **Weitere Anforderungen/Rahmenbedingungen**
 
-    * A. FHIR muss als Kommunikationsstandard für den Datenaustausch zwischen Anwendung und Server verwendet werden. Es soll der aktuelle Standard FHIR v4.0.1: R4 (http://hl7.org/fhir/) verwendet werden. 
-    * B. Die Digitale Gesundheitsanwendung kann in Form einer Webseite, eines ausführbaren Programms oder eines Jupyter-Notebooks umgesetzt werden.
-    * C. Es kann eine beliebige Programmiersprache verwendet werden. Es bietet sich an eine Programmiersprache zu verwenden für die es Clients vorhanden sind (C#, Java, javascript, python). 
-    * D. Bei einer Umsetzung als ausführbares Programm ist eine GUI wünschenswert. Die Interaktion mit dem Anwender kann aber auch über den Terminal erfolgen.
-    * E. Bei einer Umsetzung als ausführbares Programm, muss das Programm entweder auf Linux, Windows oder Android laufen.
-    * F. Eine graphische Darstellung der Ergebnisse (z.B. Fortschritt der erfassten Daten mit der Zeit) ist wünschenswert aber nicht zwingend. 
-    * G. Eine Dokumentation für die Installation, Inbetriebnahme sowie die Bedienung der Digitalen Gesundheitsanwendung ist erforderlich.
-    * H. Der gesamte Code und die Dokumentation müssen über den Open Project Server der Fakultät Informatik (Hochschule Kempten) zur Verfügung gestellt werden 
+* A. FHIR muss als Kommunikationsstandard für den Datenaustausch zwischen Anwendung und Server verwendet werden. Es soll der aktuelle Standard FHIR v4.0.1: R4 (http://hl7.org/fhir/) verwendet werden. 
+* B. Die Digitale Gesundheitsanwendung kann in Form einer Webseite, eines ausführbaren Programms oder eines Jupyter-Notebooks umgesetzt werden.
+* C. Es kann eine beliebige Programmiersprache verwendet werden. Es bietet sich an eine Programmiersprache zu verwenden für die es Clients vorhanden sind (C#, Java, javascript, python). 
+* D. Bei einer Umsetzung als ausführbares Programm ist eine GUI wünschenswert. Die Interaktion mit dem Anwender kann aber auch über den Terminal erfolgen.
+* E. Bei einer Umsetzung als ausführbares Programm, muss das Programm entweder auf Linux, Windows oder Android laufen.
+* F. Eine graphische Darstellung der Ergebnisse (z.B. Fortschritt der erfassten Daten mit der Zeit) ist wünschenswert aber nicht zwingend. 
+* G. Eine Dokumentation für die Installation, Inbetriebnahme sowie die Bedienung der Digitalen Gesundheitsanwendung ist erforderlich.
+* H. Der gesamte Code und die Dokumentation müssen über den Open Project Server der Fakultät Informatik (Hochschule Kempten) zur Verfügung gestellt werden 
 
 **Weitere Ideen (noch mehr Spaß!)**
 
-    - Aus den Verschiedenen Zielen und Beobachtungen kann für einen bestimmten Patient ein zusammenfassendes Dokument erstellt werden (FHIR-Ressource „composition“).
-    - Die Patienten haben einen Arzt/Ärztin und der Leistungserbringer führen einige der Beobachtung durch.
-    - Das Gerät mit dem die Beobachtungen durchgeführt wurden kann definiert und erfasst werden.
-    - Leistungserbringer und Geräte können dann als Suchkriterien verwendet werden.
-    - Man kann nach spezifischen Beobachtungen suchen, die bestimmten Kriterien erfüllen: z.B. das Ziel wurde erreicht bzw. nicht erreicht (oder zu einem bestimmten %-Wert), oder die Beobachtung erfolgte innerhalb eines bestimmten Zeitraums, usw.
+- Aus den Verschiedenen Zielen und Beobachtungen kann für einen bestimmten Patient ein zusammenfassendes Dokument erstellt werden (FHIR-Ressource „composition“).
+- Die Patienten haben einen Arzt/Ärztin und der Leistungserbringer führen einige der Beobachtung durch.
+- Das Gerät mit dem die Beobachtungen durchgeführt wurden kann definiert und erfasst werden.
+- Leistungserbringer und Geräte können dann als Suchkriterien verwendet werden.
+- Man kann nach spezifischen Beobachtungen suchen, die bestimmten Kriterien erfüllen: z.B. das Ziel wurde erreicht bzw. nicht erreicht (oder zu einem bestimmten %-Wert), oder die Beobachtung erfolgte innerhalb eines bestimmten Zeitraums, usw.
 
 **Anmerkung**
 Bei Fragen bzw. Unklarheiten bezüglich der Anforderungen, melden Sie sich bitte rechtzeitig!
