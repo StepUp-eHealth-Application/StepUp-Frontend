@@ -10,20 +10,25 @@
   ------------------------------------------------------------------------------
 ## Detailbeschreibung
 **Kurzbeschreibung**: Ein Arzt kann nach bestimmten Patienten auf dem Server über verschiedene Kriterien suchen.
+
 **Akteure**:
 * Arzt
 * FHIR Server
+
 **Eingehende Daten**:
 * Vorname
 * Nachname
 * Adresse
 * Geschlecht
+
 **Essentielle Schritte**: 
 1. Arzt klickt auf die Suchzeile
 2. Arzt gibt ein Suchkriterium ein und bestätigt die Suche mit der Entertaste
 3. Eine Liste aller zutreffenden Patienten wird angezeigt
+
 **Ausnahmen**:
 * zu 3.) gibt es keine Patienten auf welche die Sucheingabe zutrifft wird statt der Liste die Nachricht "Keine Patienten gefunden" angezeigt
+
 **Änderungshistorie**:
 * 22.04.2021; Daniel Heiserer; Use Case angelegt
 
