@@ -7,7 +7,7 @@
 * Es muss möglich sein den Patient Kontext zu setzen bzw. einen Patient auszuwählen
 * Es muss für den Anwender ersichtlich sein welcher der aktuelle Patient ist
 * Die Information des ausgewählten Patienten wird ausgegeben
-* Für den aktuellen Patient muss möglich sein Ziele für Gewicht und Schritte (24h), sowie einen Zeitpunkt
+* Für den aktuellen Patient muss möglich sein Ziele für Gewicht und Schritte (24h), sowie einen Zeitpunkt anzugeben
 * Es muss möglich sein die Ziele zu verändern
 * Es muss möglich sein Beobachtungen zu Gewicht und Schritte (24h) hinzuzufügen
 * Es muss möglich sein für einen bestimmten Patient die definierten Ziele für Gewicht und Schritte (24h) auszugeben
@@ -16,8 +16,8 @@
 
 # Wunschkriterien
 * Aus den Zielen und Beobachtungen für Gewicht und Schritte kann ein zusammenfassendes Dokument erstellt werden
-* Ein Arzt/Ärztin kann für einen Patienten angegeben werden
-* Der Leistungeerbringer führt einige der Beobachtungen durch
+* Ein Arzt oder eine Ärztin kann als Leistungserbringer für einen Patienten angegeben werden
+* Der Leistungerbringer führt einige der Beobachtungen durch
 * Das Gerät mit dem die Beobachtungen durchgeführt wurden kann definiert und erfasst werden
 * Leistungserbringer und Geräte können dann als Suchkriterien verwendet werden
 * Man kann nach spezifischen Beobachtungen suchen, die bestimmten Kriterien erfüllen: z.B. das Ziel wurde erreicht bzw. nicht erreicht (oder zu einem bestimmten %-Wert), oder die Beobachtung erfolgte innerhalb eines bestimmten Zeitraums, usw
