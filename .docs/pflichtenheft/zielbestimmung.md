@@ -21,6 +21,10 @@
 * Das Gerät mit dem die Beobachtungen durchgeführt wurden kann definiert und erfasst werden
 * Leistungserbringer und Geräte können dann als Suchkriterien verwendet werden
 * Man kann nach spezifischen Beobachtungen suchen, die bestimmten Kriterien erfüllen: z.B. das Ziel wurde erreicht bzw. nicht erreicht (oder zu einem bestimmten %-Wert), oder die Beobachtung erfolgte innerhalb eines bestimmten Zeitraums, usw
+* Eine automatisches Schrittracking per Sensoren
+* Verschlüsselung der lokalen Daten
+* Entschlüsselung der lokalen Daten per Fingerprint Sensor
+* Frontend und minimale Funktionalität über Smart Watch
 
 # Abgrenzungskriterien
 * Es sollen keine anderen Gesundheitsziele als Gelaufene Schritte innerhalb 24 Stunden und Gewicht getrackt werden
