@@ -30,4 +30,5 @@
 * Es sollen keine anderen Gesundheitsziele als Gelaufene Schritte innerhalb 24 Stunden und Gewicht getrackt werden
 * Es sollen keine aufwendigen Datenanalysen durchgeführt werden
 * Erfasste Daten dürfen nicht zu Marktanalysen oder Werbezwecken missbraucht werden
-* Es sollen keine Medizinischen oder Gesundheitlichen Tipps und Analysen durchgeführt werden
+* Es sollen keine Medizinischen oder Gesundheitlichen Tipps gegeben werden
+* Es sollen keine Medizinischen oder Gesundheitlichen Analysen durchgeführt werden
