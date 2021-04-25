@@ -17,6 +17,6 @@
 - Betriebssystem: Android
 - Android 6.0 API Level 23 (Marshmallow)
 - Java Virtual Machine
-- Aktuelle FHIR Version: 5.X
+- Server, welcher die FHIR Spezifikation Version R4 benutzt
 - ggf. Degoogled Phone
 - App Store: Google Play oder F-Droid
