@@ -6,4 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".DeviceCreationActivity">
 
+    <EditText
+        android:id="@+id/txtDeviceName"
+        android:layout_width="365dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="64dp"
+        android:ems="10"
+        android:hint="Gerätename"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
