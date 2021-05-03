@@ -36,7 +36,8 @@
         android:text="Diagnosegerät erstellen"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/secondary"/>
 
     <EditText
         android:id="@+id/txtManufacturer"
@@ -67,7 +68,8 @@
         android:layout_marginTop="24dp"
         android:text="Gerätestatus"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtManufacturer" />
+        app:layout_constraintTop_toBottomOf="@+id/txtManufacturer"
+        android:textColor="@color/secondary"/>
 
     <TextView
         android:id="@+id/txtViewDeviceType"
@@ -77,7 +79,8 @@
         android:layout_marginTop="24dp"
         android:text="Gerätetyp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerStatus" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerStatus"
+        android:textColor="@color/secondary"/>
 
     <EditText
         android:id="@+id/txtNote"
