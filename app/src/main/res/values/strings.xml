@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">StepUp</string>
+
+    <string-array name="genders">
+        <item>Männlich</item>
+        <item>Weiblich</item>
+        <item>Divers</item>
+        <item>Unbekannt</item>
+    </string-array>
 </resources>
