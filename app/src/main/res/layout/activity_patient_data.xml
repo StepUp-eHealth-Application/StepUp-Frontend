@@ -15,7 +15,8 @@
         android:text="Meine Daten"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/secondary" />
 
     <EditText
         android:id="@+id/txtFirstName"
@@ -114,7 +115,8 @@
         android:layout_marginTop="24dp"
         android:text="Geschlecht"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtLastName" />
+        app:layout_constraintTop_toBottomOf="@+id/txtLastName"
+        android:textColor="@color/secondary" />
 
     <Spinner
         android:id="@+id/spinnerGender"
@@ -136,7 +138,8 @@
         android:text="Addresse"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerGender" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerGender"
+        android:textColor="@color/secondary" />
 
     <Button
         android:id="@+id/btnSave"
