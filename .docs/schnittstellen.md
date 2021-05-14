@@ -1,7 +1,7 @@
 # Preferences
-- Preferenz um eigene Patienten ID abzuspeichern (Name: patientID, String)
-- Preferenz um ausgewählten Patienten ID abzuspeichern (Name: selectedPatientID, String)
-- FHIR Server URL wird in einer Preferenz abgespeichert (Name: fhirServerUrl, String)
+- Preferenz um eigene Patienten ID abzuspeichern (Name: PATIENT_ID, String)
+- Preferenz um ausgewählten Patienten ID abzuspeichern (Name: SELECTED_PATIENT_ID, String)
+- FHIR Server URL wird in einer Preferenz abgespeichert (Name: FHIR_SERVER_URL, String)
 
 # Activities
 - Einstellungen werden auf jeder Activity angezeigt
