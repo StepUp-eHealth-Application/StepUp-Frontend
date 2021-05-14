@@ -9,4 +9,3 @@
 - Patient suchen -> Hauptmenü
 - Hauptmenü -> Einstellungen, Zusammenfassungen erstellen, Beobachtungen erfassen, Gesundheitsziele anzeigen, Patientendaten anzeigen, Patientendaten eingeben, Beobachtungen anzeigen, Gesundheitsziele setzen, Diagnosegerät erstellen
 - Gesundheitsziele anzeigen -> Gesundheitsziele ändern (Gleiche Activity wie Gesundheitsziele setzen)
-- Beobachtungen anzeigen -> Beobachtungen ändern (Gleiche Activity wie Beobachtungen hinzufügen)
