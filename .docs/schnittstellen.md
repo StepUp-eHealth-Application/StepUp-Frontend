@@ -1,6 +1,7 @@
 # Preferences
 - Preferenz um eigene Patienten ID abzuspeichern
 - Preferenz um ausgewählten Patienten abzuspeichern
+- FHIR Server URL wird in einer Preferenz abgespeichert
 
 # Activities
 - Einstellungen werden auf jeder Activity angezeigt
