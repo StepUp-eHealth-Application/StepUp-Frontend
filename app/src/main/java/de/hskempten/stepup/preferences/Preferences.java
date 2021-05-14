@@ -16,33 +16,34 @@ public class Preferences {
     }
 
     public static void saveFhirServerUrl(String fhirServerUrl, Activity activity) {
-        SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(FHIR_SERVER_URL, fhirServerUrl);
-        editor.apply();
+        savePreference(fhirServerUrl, activity, FHIR_SERVER_URL);
     }
 
     public static String loadPatientID(Activity activity) {
-        SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
-        return sharedPref.getString(PATIENT_ID, null);
+        return loadStringPreference(activity, PATIENT_ID);
     }
 
     public static void savePatientID(String patientID, Activity activity) {
-        SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(PATIENT_ID, patientID);
-        editor.apply();
+        savePreference(patientID, activity, PATIENT_ID);
     }
 
     public static String loadSelectedPatientID(Activity activity) {
-        SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
-        return sharedPref.getString(SELECTED_PATIENT_ID, null);
+        return loadStringPreference(activity, SELECTED_PATIENT_ID);
     }
 
     public static void saveSelectedPatientID(String selectedPatientID, Activity activity) {
+        savePreference(selectedPatientID, activity, SELECTED_PATIENT_ID);
+    }
+
+    private static String loadStringPreference(Activity activity, String key) {
+        SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
+        return sharedPref.getString(key, null);
+    }
+
+    private static void savePreference(String value, Activity activity, String key) {
         SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(SELECTED_PATIENT_ID, selectedPatientID);
+        editor.putString(key, value);
         editor.apply();
     }
 }
