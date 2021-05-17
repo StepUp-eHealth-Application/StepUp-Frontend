@@ -10,23 +10,10 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 public class MainActivity extends AppCompatActivity {
-    private Button button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        button = (Button) findViewById(R.id.button2);
-        button.setOnClickListener(new View.OnClickListener(){
-           @Override
-           public void onClick(View v){
-               openActivity();
-           }
-        });
-
-    }
-    public void openActivity(){
-        Intent intent = new Intent(this, gesundheitszieleSetztenAendern.class);
-        startActivity(intent);
     }
 }
