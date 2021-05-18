@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.StepUp">
-        <activity android:name=".gesundheitszieleSetztenAendern"></activity>
+        <activity android:name=".gesundheitsziel_Gewicht_setzen_aendern"></activity>
+        <activity android:name=".gesundheitszieleSetztenAendern" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

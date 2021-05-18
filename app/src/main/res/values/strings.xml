@@ -2,8 +2,7 @@
     <string name="app_name">StepUp</string>
 
     <string-array name="einheiten">
-        <item>Schritte/24h</item>
-        <item>Schritte/Woche</item>
-        <item>Schritte/Stunde</item>
+        <item>Kilogramm</item>
+        <item>Pfund</item>
     </string-array>
 </resources>
