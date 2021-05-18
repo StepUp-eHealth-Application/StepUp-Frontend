@@ -9,10 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.StepUp">
-
-        <activity android:name=".PatientDataActivity"></activity>
-        <activity android:name=".DeviceCreationActivity"></activity>
-        
+        <activity android:name=".beobachtung_erfassen_gewicht"></activity>
+        <activity android:name=".beobachtungen_erfassen" />
+        <activity android:name=".PatientDataActivity" />
+        <activity android:name=".DeviceCreationActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
