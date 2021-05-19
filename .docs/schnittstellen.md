@@ -9,3 +9,9 @@
 - Patient suchen -> Hauptmenü
 - Hauptmenü -> Einstellungen, Zusammenfassungen erstellen, Beobachtungen erfassen, Gesundheitsziele anzeigen, Patientendaten anzeigen, Patientendaten eingeben, Beobachtungen anzeigen, Gesundheitsziele setzen, Diagnosegerät erstellen
 - Gesundheitsziele anzeigen -> Gesundheitsziele ändern (Gleiche Activity wie Gesundheitsziele setzen)
+
+# Datenaustausch zwischen Activities
+- Wechsel zu Gesundheitsziele ändern, diese Daten müssen mitgegeben werden:
+    - ggf. Name des Gesundheitsziels (Key: HEALTH_GOAL_NAME)
+    - geplante Schritte bzw. geplantes Zielgewicht (Key: HEALTH_GOAL_VALUE)
+    - Datum (Key: HEALTH_GOAL_DATE)
