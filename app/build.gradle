@@ -6,6 +6,10 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+    }
+
     defaultConfig {
         applicationId "de.hskempten.stepup"
         minSdkVersion 23
@@ -36,4 +40,9 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    implementation group: 'ca.uhn.hapi.fhir', name: 'hapi-fhir-base', version: '5.3.0'
+    implementation group: 'ca.uhn.hapi.fhir', name: 'hapi-fhir-structures-r4', version: '5.3.0'
+    implementation group: 'ca.uhn.hapi.fhir', name: 'hapi-fhir-client', version: '5.3.0'
+
 }
