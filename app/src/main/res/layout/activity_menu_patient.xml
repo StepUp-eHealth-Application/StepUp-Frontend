@@ -218,6 +218,18 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:backgroundTint="@color/white"
+            android:textAllCaps="false"
+            android:text="Zusammenfassung"
+            android:textColor="@color/secondary"
+            android:textSize="16sp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:backgroundTint="@color/white"
+            android:textAllCaps="false"
             android:text="Persönliche Daten"
             android:textColor="@color/secondary"
             android:textSize="16sp" />
@@ -228,6 +240,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:backgroundTint="@color/white"
+            android:textAllCaps="false"
             android:text="Servereinstellungen"
             android:textColor="@color/secondary"
             android:textSize="16sp" />
