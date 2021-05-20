@@ -11,7 +11,11 @@
 - Gesundheitsziele anzeigen -> Gesundheitsziele ändern (Gleiche Activity wie Gesundheitsziele setzen)
 
 # Datenaustausch zwischen Activities
-- Wechsel zu Gesundheitsziele ändern, diese Daten müssen mitgegeben werden:
+- Option 1: Wechsel zu Gesundheitsziele ändern, diese Daten müssen mitgegeben werden:#
+    - ID des Gesundheitsziel weiter geben (Key: HEALTH_GOAL_ID)
     - ggf. Name des Gesundheitsziels (Key: HEALTH_GOAL_NAME)
     - geplante Schritte bzw. geplantes Zielgewicht (Key: HEALTH_GOAL_VALUE)
     - Datum (Key: HEALTH_GOAL_DATE)
+- Option 2: Wechsel zu Gesundheitsziele ändern, diese Daten müssen mitgegeben werden:
+    - ID des Gesundheitsziel weiter geben (Key: HEALTH_GOAL_ID)
+    - Daten anhand der ID vom FHIR Server anfragen
