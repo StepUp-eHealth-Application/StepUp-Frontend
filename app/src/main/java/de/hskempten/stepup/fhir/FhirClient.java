@@ -1,5 +1,7 @@
 package de.hskempten.stepup.fhir;
 
+import android.app.Activity;
+
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import de.hskempten.stepup.preferences.Preferences;
@@ -10,10 +12,11 @@ public class FhirClient {
 
     private FhirContext ctx;
     private IGenericClient client;
+    private String url;
 
-    public static FhirClient getInstance() {
+    public static FhirClient getInstance(Activity activity) {
         if (instance == null) {
-            instance = new FhirClient();
+            instance = new FhirClient(activity);
         }
 
         return instance;
@@ -23,8 +26,9 @@ public class FhirClient {
         return client;
     }
 
-    private FhirClient() {
+    private FhirClient(Activity activity) {
         ctx = FhirContext.forR4();
-        client = ctx.newRestfulGenericClient(Preferences.loadFhirServerUrl());
+        url = Preferences.loadFhirServerUrl(activity);
+        client = ctx.newRestfulGenericClient(url);
     }
 }
