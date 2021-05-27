@@ -103,7 +103,7 @@ public class DeviceController {
         }
 
         if (!fhirDevice.getNote().isEmpty()) {
-            deviceDTO.setNote(fhirDevice.getNote().get(0).getText()));
+            deviceDTO.setNote(fhirDevice.getNote().get(0).getText());
         }
 
         deviceDTO.setFhirServer(fhirServer);
