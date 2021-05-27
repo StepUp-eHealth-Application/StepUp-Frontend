@@ -10,9 +10,8 @@ public class Preferences {
     private static String FHIR_SERVER_URL = "FHIR_SERVER_URL";
     private static String SELECTED_PATIENT_ID = "SELECTED_PATIENT_ID";
 
-    public static String loadFhirServerUrl() {
-        // TODO: load from preference
-        return "http://hapi.fhir.org/baseR4/";
+    public static String loadFhirServerUrl(Activity activity) {
+        return loadStringPreference(activity, FHIR_SERVER_URL);
     }
 
     public static void saveFhirServerUrl(String fhirServerUrl, Activity activity) {
