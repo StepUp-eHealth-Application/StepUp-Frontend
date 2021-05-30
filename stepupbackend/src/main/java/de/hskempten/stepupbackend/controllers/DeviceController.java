@@ -68,7 +68,7 @@ public class DeviceController {
 
         Device createDevice = (Device) client.create().resource(fhirDevice).execute().getResource();
 
-        device.id = createDevice.getId();
+        device.id = createDevice.getIdElement().getIdPart();
         return device;
     }
 
