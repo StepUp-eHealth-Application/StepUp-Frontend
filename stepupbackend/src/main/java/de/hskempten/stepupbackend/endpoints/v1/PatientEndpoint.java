@@ -17,7 +17,7 @@ public class PatientEndpoint {
     @Autowired
     PatientController patientController;
 
-    @GetMapping
+    @GetMapping("/{id}")
     public HttpEntity<PatientDTO> getPatientById(@RequestParam String id) {
         PatientDTO patientDTO = patientController.getPatientById(id);
         if (patientDTO == null) {

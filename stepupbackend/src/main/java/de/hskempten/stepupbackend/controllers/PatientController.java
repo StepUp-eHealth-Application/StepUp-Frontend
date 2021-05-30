@@ -4,6 +4,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import de.hskempten.stepupbackend.dto.PatientDTO;
 import de.hskempten.stepupbackend.helpers.FhirHelpers;
+import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Enumerations;
 import org.hl7.fhir.r4.model.HumanName;
 import org.hl7.fhir.r4.model.Patient;
@@ -53,17 +54,20 @@ public class PatientController {
     public PatientDTO getPatientById(String id) {
         String fhirServer = "http://hapi.fhir.org/baseR4/"; // TODO: get fhir server from database
 
-        Patient patient = new Patient();
-        patient.setId(id);
 
         FhirContext ctx = FhirContext.forR4();
         IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
 
-        Patient retPatient = (Patient) client.create().resource(patient).execute().getResource();
-        if (patient == null) {
+        String searchUrl = fhirServer + "/Patient?_id=" + id;
+        Bundle response = client.search()
+            .byUrl(searchUrl)
+            .returnBundle(Bundle.class)
+            .execute();
+        if (response.getTotal() <= 0) {
             return null;
         }
 
+        Patient retPatient = (Patient) response.getEntryFirstRep().getResource();
         FhirHelpers.PrettyPrint(retPatient, ctx);
 
         PatientDTO patientDTO = new PatientDTO();
@@ -82,7 +86,13 @@ public class PatientController {
         patientDTO.setCity(retPatient.getAddressFirstRep().getCity());
         patientDTO.setCountry(retPatient.getAddressFirstRep().getCountry());
         patientDTO.setPostalCode(retPatient.getAddressFirstRep().getPostalCode());
-        patientDTO.setStreet(retPatient.getAddressFirstRep().getText().split(",")[0]);
+
+        if (retPatient.getAddressFirstRep() != null && retPatient.getAddressFirstRep().getText() != null) {
+            String[] addr = retPatient.getAddressFirstRep().getText().split(",");
+            if (addr != null && addr.length > 0) {
+                patientDTO.setStreet(addr[0]);
+            }
+        }
 
         patientDTO.setFhirServer(fhirServer);
 
