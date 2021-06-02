@@ -22,6 +22,9 @@ public class ObservationController {
     @Autowired
     private PatientController patientController;
 
+    @Autowired
+    private SettingsController settingsController;
+
     public WeightObservationDTO addWeightObservation(WeightObservationDTO weightObservationDTO) {
         FhirContext ctx = FhirContext.forR4();
         String serverBase = weightObservationDTO.getFhirServer();
@@ -66,7 +69,7 @@ public class ObservationController {
     }
 
     public List<WeightObservationDTO> getWeightsByPatientId(String id) {
-        String fhirServer = "http://hapi.fhir.org/baseR4/"; // TODO: get fhir server from database
+        String fhirServer = settingsController.getFhirServerUrl();
 
         FhirContext ctx = FhirContext.forR4();
         IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
@@ -161,7 +164,7 @@ public class ObservationController {
     }
 
     public List<StepsObservationDTO> getStepsByPatientId(String id) {
-        String fhirServer = "http://hapi.fhir.org/baseR4/"; // TODO: get fhir server from database
+        String fhirServer = settingsController.getFhirServerUrl();
 
         FhirContext ctx = FhirContext.forR4();
         IGenericClient client = ctx.newRestfulGenericClient(fhirServer);

@@ -17,6 +17,9 @@ import java.util.HashMap;
 @Controller
 public class PatientController {
 
+    @Autowired
+    private SettingsController settingsController;
+
     public PatientDTO createPatient(PatientDTO patientDTO) {
         FhirContext ctx = FhirContext.forR4();
         String serverBase = patientDTO.getFhirServer();
@@ -52,7 +55,7 @@ public class PatientController {
     }
 
     public PatientDTO getPatientById(String id) {
-        String fhirServer = "http://hapi.fhir.org/baseR4/"; // TODO: get fhir server from database
+        String fhirServer = settingsController.getFhirServerUrl();
 
         FhirContext ctx = FhirContext.forR4();
         IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
