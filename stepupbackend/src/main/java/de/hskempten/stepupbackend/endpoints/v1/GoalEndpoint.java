@@ -29,4 +29,10 @@ public class GoalEndpoint {
         weightGoalDTO = goalController.addWeightGoal(weightGoalDTO);
         return new ResponseEntity<>(weightGoalDTO, HttpStatus.CREATED);
     }
+
+    @PutMapping("weight/{id}/")
+    public HttpEntity<WeightGoalDTO> updateWeightGoal(@PathVariable String id, @RequestBody WeightGoalDTO weightGoalDTO) {
+        weightGoalDTO = goalController.updateWeightGoal(id, weightGoalDTO);
+        return new ResponseEntity<>(weightGoalDTO, HttpStatus.OK);
+    }
 }

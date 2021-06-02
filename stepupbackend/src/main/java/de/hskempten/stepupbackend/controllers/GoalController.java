@@ -103,7 +103,6 @@ public class GoalController {
         goal.addCategory().addCoding()
             .setSystem("http://terminology.hl7.org/CodeSystem/goal-category")
             .setCode("behavioral")
-            .setDisplay("Behavioral")
             .setDisplay("Goals related to the manner in which the subject acts.");
 
         Goal createGoal = (Goal) client.create().resource(goal).execute().getResource();
@@ -112,5 +111,59 @@ public class GoalController {
         weightGoalDTO.setId(createGoal.getIdElement().getIdPart());
 
         return weightGoalDTO;
+    }
+
+    public WeightGoalDTO updateWeightGoal(String id, WeightGoalDTO weightGoalDTO) {
+        weightGoalDTO.setId(id);
+        String fhirServer = settingsController.getFhirServerUrl();
+
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        Patient patient = (Patient) patientController.searchPatientById(weightGoalDTO.getPatientId(), fhirServer, client).getEntryFirstRep().getResource();
+
+        Goal goal = (Goal) searchGoalById(id, fhirServer, client).getEntryFirstRep().getResource();
+
+        CodeableConcept concept = new CodeableConcept();
+        concept.addCoding().setDisplay(weightGoalDTO.getDescription());
+        goal.setDescription(concept);
+
+        Reference patientRef = new Reference(patient.getIdElement().getValue());
+        patientRef.setType("Patient");
+        goal.setSubject(patientRef);
+
+        goal.getTarget().get(0)
+            .setDetail(
+                new Quantity()
+                    .setValue(weightGoalDTO.getWeightGoal())
+                    .setUnit("kg")
+                    .setSystem("http://unitsofmeasure.org")
+            )
+            .setDue(
+                new DateType().setValue(weightGoalDTO.getDueDate())
+            );
+
+        goal.setLifecycleStatus(Goal.GoalLifecycleStatus.ACTIVE);
+        goal.getCategory().get(0).getCoding().get(0)
+            .setSystem("http://terminology.hl7.org/CodeSystem/goal-category")
+            .setCode("behavioral")
+            .setDisplay("Goals related to the manner in which the subject acts.");
+
+        Goal createGoal = (Goal) client.update().resource(goal).execute().getResource();
+        FhirHelpers.PrettyPrint(createGoal, ctx);
+
+        return weightGoalDTO;
+    }
+
+    public Bundle searchGoalById(String id, String fhirServer, IGenericClient client) {
+        String searchUrl = fhirServer + "/Goal?_id=" + id;
+        Bundle response = client.search()
+            .byUrl(searchUrl)
+            .returnBundle(Bundle.class)
+            .execute();
+        if (response.getTotal() <= 0) {
+            return null;
+        }
+        return response;
     }
 }
