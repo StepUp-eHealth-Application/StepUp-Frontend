@@ -1,6 +1,7 @@
 package de.hskempten.stepupbackend.endpoints.v1;
 
 import de.hskempten.stepupbackend.controllers.ObservationController;
+import de.hskempten.stepupbackend.dto.StepsObservationDTO;
 import de.hskempten.stepupbackend.dto.WeightObservationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -29,5 +30,11 @@ public class ObservationEndpoint {
         List<WeightObservationDTO> observations = observationController.getWeightsByPatientId(id);
 
         return new ResponseEntity<>(observations, HttpStatus.OK);
+    }
+
+    @PostMapping("steps")
+    public HttpEntity<StepsObservationDTO> addStepsObservation(@RequestBody StepsObservationDTO stepsObservationDTO) {
+        stepsObservationDTO = observationController.addStepsObservation(stepsObservationDTO);
+        return new ResponseEntity<>(stepsObservationDTO, HttpStatus.CREATED);
     }
 }

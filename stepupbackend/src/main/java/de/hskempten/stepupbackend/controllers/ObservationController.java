@@ -2,6 +2,7 @@ package de.hskempten.stepupbackend.controllers;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
+import de.hskempten.stepupbackend.dto.StepsObservationDTO;
 import de.hskempten.stepupbackend.dto.WeightObservationDTO;
 import de.hskempten.stepupbackend.helpers.FhirHelpers;
 import org.apache.tomcat.jni.Local;
@@ -105,5 +106,47 @@ public class ObservationController {
         }
 
         return retObervations;
+    }
+
+    public StepsObservationDTO addStepsObservation(StepsObservationDTO stepsObservationDTO) {
+        FhirContext ctx = FhirContext.forR4();
+        String serverBase = stepsObservationDTO.getFhirServer();
+
+        IGenericClient client = ctx.newRestfulGenericClient(serverBase);
+
+        Observation observation = new Observation();
+
+        // Setting patient reference
+        Patient patient = (Patient) patientController.searchPatientById(
+            stepsObservationDTO.getPatientID(),
+            stepsObservationDTO.getFhirServer(),
+            client).getEntryFirstRep().getResource();
+
+        Reference patientRef = new Reference(patient.getIdElement().getValue());
+        patientRef.setType("Patient");
+        observation.setSubject(patientRef);
+
+        // Setting concept
+        observation
+            .getCode()
+            .addCoding()
+            .setSystem("http://loinc.org")
+            .setCode("41950-7")
+            .setDisplay("Number of Steps in 24 Hours, Measured at " + stepsObservationDTO.getDate().toString());
+
+        // Setting value
+        // TODO: add date when possible
+        observation.setValue(
+            new Quantity()
+                .setValue(stepsObservationDTO.getSteps())
+                .setUnit("Number of Steps in 25 Hours")
+        );
+
+        Observation createObservation = (Observation) client.create().resource(observation).execute().getResource();
+        FhirHelpers.PrettyPrint(createObservation, ctx);
+
+        stepsObservationDTO.setId(createObservation.getIdElement().getIdPart());
+
+        return stepsObservationDTO;
     }
 }
