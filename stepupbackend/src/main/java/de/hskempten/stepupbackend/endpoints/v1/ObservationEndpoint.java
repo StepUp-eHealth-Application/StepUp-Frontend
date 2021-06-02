@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/v1/observation/")
@@ -20,5 +22,12 @@ public class ObservationEndpoint {
     public HttpEntity<WeightObservationDTO> createWeightObservation(@RequestBody WeightObservationDTO weightObservationDTO) {
         weightObservationDTO = observationController.addWeightObservation(weightObservationDTO);
         return new ResponseEntity<>(weightObservationDTO, HttpStatus.CREATED);
+    }
+
+    @GetMapping("weight/patient/{id}")
+    public HttpEntity<List<WeightObservationDTO>> getWeightsByPatientId(@RequestParam String id) {
+        List<WeightObservationDTO> observations = observationController.getWeightsByPatientId(id);
+
+        return new ResponseEntity<>(observations, HttpStatus.OK);
     }
 }

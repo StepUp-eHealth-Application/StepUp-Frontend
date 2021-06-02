@@ -3,7 +3,7 @@ package de.hskempten.stepupbackend.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,12 +14,12 @@ public class WeightObservationDTO {
 
     private String id;
     private float weight; // in kg
-    private Date date;
+    private LocalDate date;
     private String patientID;
     private String fhirServer;
 
     public WeightObservationDTO(@JsonProperty("weight") float weight,
-                                @JsonProperty("date") Date date,
+                                @JsonProperty("date") LocalDate date,
                                 @JsonProperty("patientID") String patientID,
                                 @JsonProperty("fhirServer") String fhirServer) {
         this.weight = weight;
