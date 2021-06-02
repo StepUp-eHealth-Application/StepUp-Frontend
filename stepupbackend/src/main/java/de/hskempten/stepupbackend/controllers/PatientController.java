@@ -58,14 +58,8 @@ public class PatientController {
         FhirContext ctx = FhirContext.forR4();
         IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
 
-        String searchUrl = fhirServer + "/Patient?_id=" + id;
-        Bundle response = client.search()
-            .byUrl(searchUrl)
-            .returnBundle(Bundle.class)
-            .execute();
-        if (response.getTotal() <= 0) {
-            return null;
-        }
+        Bundle response = searchPatientById(id, fhirServer, client);
+        if (response == null) return null;
 
         Patient retPatient = (Patient) response.getEntryFirstRep().getResource();
         FhirHelpers.PrettyPrint(retPatient, ctx);
@@ -97,5 +91,17 @@ public class PatientController {
         patientDTO.setFhirServer(fhirServer);
 
         return patientDTO;
+    }
+
+    public Bundle searchPatientById(String id, String fhirServer, IGenericClient client) {
+        String searchUrl = fhirServer + "/Patient?_id=" + id;
+        Bundle response = client.search()
+            .byUrl(searchUrl)
+            .returnBundle(Bundle.class)
+            .execute();
+        if (response.getTotal() <= 0) {
+            return null;
+        }
+        return response;
     }
 }
