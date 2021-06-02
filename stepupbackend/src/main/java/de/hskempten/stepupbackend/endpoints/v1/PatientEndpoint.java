@@ -18,7 +18,7 @@ public class PatientEndpoint {
     PatientController patientController;
 
     @GetMapping("/{id}")
-    public HttpEntity<PatientDTO> getPatientById(@RequestParam String id) {
+    public HttpEntity<PatientDTO> getPatientById(@PathVariable String id) {
         PatientDTO patientDTO = patientController.getPatientById(id);
         if (patientDTO == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

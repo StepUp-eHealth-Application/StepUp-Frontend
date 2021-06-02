@@ -26,7 +26,7 @@ public class ObservationEndpoint {
     }
 
     @GetMapping("weight/patient/{id}")
-    public HttpEntity<List<WeightObservationDTO>> getWeightsByPatientId(@RequestParam String id) {
+    public HttpEntity<List<WeightObservationDTO>> getWeightsByPatientId(@PathVariable String id) {
         List<WeightObservationDTO> observations = observationController.getWeightsByPatientId(id);
 
         return new ResponseEntity<>(observations, HttpStatus.OK);
@@ -36,5 +36,12 @@ public class ObservationEndpoint {
     public HttpEntity<StepsObservationDTO> addStepsObservation(@RequestBody StepsObservationDTO stepsObservationDTO) {
         stepsObservationDTO = observationController.addStepsObservation(stepsObservationDTO);
         return new ResponseEntity<>(stepsObservationDTO, HttpStatus.CREATED);
+    }
+
+    @GetMapping("setps/patient/{id}")
+    public HttpEntity<List<StepsObservationDTO>> getStepsByPatientId(@PathVariable String id) {
+        List<StepsObservationDTO> observations = observationController.getStepsByPatientId(id);
+
+        return new ResponseEntity<>(observations, HttpStatus.OK);
     }
 }

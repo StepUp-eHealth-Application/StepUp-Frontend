@@ -87,6 +87,11 @@ public class ObservationController {
         for (Bundle.BundleEntryComponent entry : observations.getEntry()) {
             Observation observation = (Observation) entry.getResource();
 
+            // Skipping step observations
+            if (!observation.getCode().getCoding().get(0).getDisplay().contains("Body weight measured at")) {
+                continue;
+            }
+
             WeightObservationDTO weightObservationDTO = new WeightObservationDTO();
             weightObservationDTO.setId(observation.getIdElement().getIdPart());
             weightObservationDTO.setPatientID(patient.getIdElement().getIdPart());
@@ -101,6 +106,11 @@ public class ObservationController {
                 System.out.println("Could not parse date time");
                 weightObservationDTO.setDate(null);
             }
+
+            // Setting value
+            Quantity value = (Quantity) observation.getValue();
+            float steps = value.getValue().floatValue();
+            weightObservationDTO.setWeight(steps);
 
             retObervations.add(weightObservationDTO);
         }
@@ -139,7 +149,7 @@ public class ObservationController {
         observation.setValue(
             new Quantity()
                 .setValue(stepsObservationDTO.getSteps())
-                .setUnit("Number of Steps in 25 Hours")
+                .setUnit("Number of Steps in 24 Hours")
         );
 
         Observation createObservation = (Observation) client.create().resource(observation).execute().getResource();
@@ -148,5 +158,58 @@ public class ObservationController {
         stepsObservationDTO.setId(createObservation.getIdElement().getIdPart());
 
         return stepsObservationDTO;
+    }
+
+    public List<StepsObservationDTO> getStepsByPatientId(String id) {
+        String fhirServer = "http://hapi.fhir.org/baseR4/"; // TODO: get fhir server from database
+
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        // Getting patient
+        Patient patient = (Patient) patientController.searchPatientById(
+            id,
+            fhirServer,
+            client).getEntryFirstRep().getResource();
+
+        Bundle observations = client.search()
+            .forResource(Observation.class)
+            .where(Observation.SUBJECT.hasId(patient.getIdElement().getValue()))
+            .returnBundle(Bundle.class)
+            .execute();
+
+        List<StepsObservationDTO> retObervations = new ArrayList<>();
+        for (Bundle.BundleEntryComponent entry : observations.getEntry()) {
+            Observation observation = (Observation) entry.getResource();
+
+            // Skipping weight observations
+            if (!observation.getCode().getCoding().get(0).getDisplay().contains("Number of Steps in 24 Hours, Measured at ")) {
+                continue;
+            }
+
+            StepsObservationDTO stepsObservationDto = new StepsObservationDTO();
+            stepsObservationDto.setId(observation.getIdElement().getIdPart());
+            stepsObservationDto.setPatientID(patient.getIdElement().getIdPart());
+            stepsObservationDto.setFhirServer(fhirServer);
+
+            try {
+                String dateStr = observation.getCode().getCoding().get(0).getDisplay().replace("Number of Steps in 24 Hours, Measured at ", "");
+                System.out.println("Date String: " + dateStr);
+                LocalDate date = LocalDate.parse(dateStr);
+                stepsObservationDto.setDate(date);
+            } catch (DateTimeParseException exception) {
+                System.out.println("Could not parse date time");
+                stepsObservationDto.setDate(null);
+            }
+
+            // Setting value
+            Quantity value = (Quantity) observation.getValue();
+            int steps = value.getValue().intValue();
+            stepsObservationDto.setSteps(steps);
+
+            retObervations.add(stepsObservationDto);
+        }
+
+        return retObervations;
     }
 }

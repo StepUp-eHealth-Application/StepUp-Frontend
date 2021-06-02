@@ -17,7 +17,7 @@ public class DeviceEndpoint {
     DeviceController deviceController;
 
     @GetMapping("/{id}")
-    public HttpEntity<DeviceDTO> getDeviceById(@RequestParam("id") String id) {
+    public HttpEntity<DeviceDTO> getDeviceById(@PathVariable("id") String id) {
         System.out.println("ID: " + id);
         DeviceDTO device = deviceController.getDeviceById(id);
 

@@ -13,12 +13,12 @@ import java.time.LocalDate;
 public class StepsObservationDTO {
 
     private String id;
-    private float steps; // per day
+    private int steps; // per day
     private LocalDate date;
     private String patientID;
     private String fhirServer;
 
-    public StepsObservationDTO(@JsonProperty("steps") float steps,
+    public StepsObservationDTO(@JsonProperty("steps") int steps,
                                 @JsonProperty("date") LocalDate date,
                                 @JsonProperty("patientID") String patientID,
                                 @JsonProperty("fhirServer") String fhirServer) {
