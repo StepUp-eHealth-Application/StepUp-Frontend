@@ -49,8 +49,6 @@ public class SettingsActivity extends AppCompatActivity {
         String fhirServerURL = Preferences.loadFhirServerUrl(SettingsActivity.this);
         if (fhirServerURL != null) {
                 txtFhirServerURL.setText(fhirServerURL);
-        } else {
-            txtFhirServerURL.setError("FHIR Server URL muss mit einem \"/\" enden");
         }
 
         // Displaying Backend URL if already provided
