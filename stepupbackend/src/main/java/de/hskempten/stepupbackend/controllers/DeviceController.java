@@ -4,12 +4,17 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import de.hskempten.stepupbackend.dto.DeviceDTO;
 import org.hl7.fhir.r4.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.util.HashMap;
 
 @Controller
 public class DeviceController {
+
+    @Autowired
+    private SettingsController settingsController;
+
     public DeviceDTO createDevice(DeviceDTO device) {
         Device fhirDevice = new Device();
 
@@ -73,7 +78,7 @@ public class DeviceController {
     }
 
     public DeviceDTO getDeviceById(String id) {
-        String fhirServer = "http://hapi.fhir.org/baseR4/"; // TODO: get fhir server from database
+        String fhirServer = settingsController.getFhirServerUrl();
 
         Device device = new Device();
         device.setId(id);
