@@ -23,7 +23,7 @@ public class StepsGoalDTO {
                          @JsonProperty("description") String description,
                          @JsonProperty("patientId") String patientId,
                          @JsonProperty("dueDate") Date dueDate,
-                         @JsonProperty("weightGoal") int stepsGoal) {
+                         @JsonProperty("stepsGoal") int stepsGoal) {
         this.id = id;
         this.description = description;
         this.patientId = patientId;

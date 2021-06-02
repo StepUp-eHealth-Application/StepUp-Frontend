@@ -43,7 +43,7 @@ public class GoalController {
         for (Bundle.BundleEntryComponent entry : goalsBundle.getEntry()) {
             Goal goal = (Goal) entry.getResource();
 
-            if (!goal.getDescription().getText().contains("Gesundheitsziel Gewicht")) {
+            if (goal.getDescription().getCoding().get(0).getDisplay().contains("Gesundheitsziel Schritte")) {
                 continue;
             }
 
@@ -86,7 +86,7 @@ public class GoalController {
         Goal goal = new Goal();
 
         CodeableConcept concept = new CodeableConcept();
-        concept.addCoding().setDisplay(weightGoalDTO.getDescription());
+        concept.addCoding().setDisplay("Gesundheitsziel Gewicht");
         goal.setDescription(concept);
 
         Reference patientRef = new Reference(patient.getIdElement().getValue());
@@ -129,10 +129,6 @@ public class GoalController {
 
         Goal goal = (Goal) searchGoalById(id, fhirServer, client).getEntryFirstRep().getResource();
 
-        CodeableConcept concept = new CodeableConcept();
-        concept.addCoding().setDisplay("Gesundheitsziel Gewicht");
-        goal.setDescription(concept);
-
         Reference patientRef = new Reference(patient.getIdElement().getValue());
         patientRef.setType("Patient");
         goal.setSubject(patientRef);
@@ -148,11 +144,7 @@ public class GoalController {
                 new DateType().setValue(weightGoalDTO.getDueDate())
             );
 
-        goal.setLifecycleStatus(Goal.GoalLifecycleStatus.ACTIVE);
-        goal.getCategory().get(0).getCoding().get(0)
-            .setSystem("http://terminology.hl7.org/CodeSystem/goal-category")
-            .setCode("behavioral")
-            .setDisplay("Goals related to the manner in which the subject acts.");
+        goal.setLifecycleStatus(Goal.GoalLifecycleStatus.ACTIVE);  // TODO: change
 
         Goal createGoal = (Goal) client.update().resource(goal).execute().getResource();
         FhirHelpers.PrettyPrint(createGoal, ctx);
@@ -192,7 +184,7 @@ public class GoalController {
         for (Bundle.BundleEntryComponent entry : goalsBundle.getEntry()) {
             Goal goal = (Goal) entry.getResource();
 
-            if (goal.getDescription().getText().contains("Gesundheitsziel Schritte")) {
+            if (!goal.getDescription().getCoding().get(0).getDisplay().contains("Gesundheitsziel Schritte")) {
                 continue;
             }
 
@@ -207,12 +199,92 @@ public class GoalController {
         StepsGoalDTO stepsGoalDTO = new StepsGoalDTO();
 
         stepsGoalDTO.setId(goal.getIdElement().getIdPart());
-        stepsGoalDTO.setDescription(goal.getDescription().getText());
+        stepsGoalDTO.setDescription(
+            goal.getDescription().getCodingFirstRep().getDisplay()
+        );
         stepsGoalDTO.setPatientId(patientId);
         stepsGoalDTO.setDueDate(goal.getTarget().get(0).getDue().dateTimeValue().getValue());
         stepsGoalDTO.setStepsGoal(
             goal.getTargetFirstRep().getDetailQuantity().getValue().intValue()
         );
+
+        return stepsGoalDTO;
+    }
+
+    public StepsGoalDTO addStepsGoal(StepsGoalDTO stepsGoalDTO) {
+        String fhirServer = settingsController.getFhirServerUrl();
+
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        Patient patient = (Patient) patientController.searchPatientById(stepsGoalDTO.getPatientId(), fhirServer, client).getEntryFirstRep().getResource();
+        Goal goal = new Goal();
+
+        CodeableConcept concept = new CodeableConcept();
+        concept.addCoding().setDisplay("Gesundheitsziel Schritte");
+        goal.setDescription(concept);
+
+        Reference patientRef = new Reference(patient.getIdElement().getValue());
+        patientRef.setType("Patient");
+        goal.setSubject(patientRef);
+
+        goal.addTarget()
+            .setDetail(
+                new Quantity()
+                    .setValue(stepsGoalDTO.getStepsGoal())
+                    .setUnit("Number of steps in 24 hour Measured")
+                    .setSystem("https://loinc.org/41950-7/")
+                    .setCode("41950-7")
+            )
+            .setDue(
+                new DateType().setValue(stepsGoalDTO.getDueDate())
+            );
+
+        goal.setLifecycleStatus(Goal.GoalLifecycleStatus.ACTIVE);
+        goal.addCategory().addCoding()
+            .setSystem("http://terminology.hl7.org/CodeSystem/goal-category")
+            .setCode("behavioral")
+            .setDisplay("Goals related to the manner in which the subject acts.");
+
+        Goal createGoal = (Goal) client.create().resource(goal).execute().getResource();
+        FhirHelpers.PrettyPrint(createGoal, ctx);
+
+        stepsGoalDTO.setId(createGoal.getIdElement().getIdPart());
+
+        return stepsGoalDTO;
+    }
+
+    public StepsGoalDTO updateStepsGoal(String id, StepsGoalDTO stepsGoalDTO) {
+        String fhirServer = settingsController.getFhirServerUrl();
+
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        Patient patient = (Patient) patientController.searchPatientById(stepsGoalDTO.getPatientId(), fhirServer, client).getEntryFirstRep().getResource();
+        Goal goal = (Goal) searchGoalById(id, fhirServer, client).getEntryFirstRep().getResource();
+
+        Reference patientRef = new Reference(patient.getIdElement().getValue());
+        patientRef.setType("Patient");
+        goal.setSubject(patientRef);
+
+        goal.getTarget().get(0)
+            .setDetail(
+                new Quantity()
+                    .setValue(stepsGoalDTO.getStepsGoal())
+                    .setUnit("Number of steps in 24 hour Measured")
+                    .setSystem("https://loinc.org/41950-7/")
+                    .setCode("41950-7")
+            )
+            .setDue(
+                new DateType().setValue(stepsGoalDTO.getDueDate())
+            );
+
+        goal.setLifecycleStatus(Goal.GoalLifecycleStatus.ACTIVE); // TODO: change
+
+        Goal updateGoal = (Goal) client.update().resource(goal).execute().getResource();
+        FhirHelpers.PrettyPrint(updateGoal, ctx);
+
+        stepsGoalDTO.setId(id);
 
         return stepsGoalDTO;
     }

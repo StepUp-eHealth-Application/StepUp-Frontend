@@ -43,4 +43,16 @@ public class GoalEndpoint {
 
         return new ResponseEntity<>(weightGoals, HttpStatus.OK);
     }
+
+    @PostMapping("steps")
+    public HttpEntity<StepsGoalDTO> addStepsGoal(@RequestBody StepsGoalDTO stepsGoalDTO) {
+        stepsGoalDTO = goalController.addStepsGoal(stepsGoalDTO);
+        return new ResponseEntity<>(stepsGoalDTO, HttpStatus.CREATED);
+    }
+
+    @PutMapping("steps/{id}/")
+    public HttpEntity<StepsGoalDTO> updateStepsGoal(@PathVariable String id, @RequestBody StepsGoalDTO stepsGoalDTO) {
+        stepsGoalDTO = goalController.updateStepsGoal(id, stepsGoalDTO);
+        return new ResponseEntity<>(stepsGoalDTO, HttpStatus.OK);
+    }
 }
