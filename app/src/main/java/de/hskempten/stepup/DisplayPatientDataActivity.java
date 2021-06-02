@@ -46,7 +46,6 @@ public class DisplayPatientDataActivity extends AppCompatActivity {
         if (patientId == null || patientId == "") {
             patientId = Preferences.loadPatientID(getApplicationContext());
         }
-        patientId = "2160747"; // TODO: delete
         String backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + APIEndpoints.PATIENT + patientId;
         Log.d(TAG, "Backend URL: " + backendUrl);
 
