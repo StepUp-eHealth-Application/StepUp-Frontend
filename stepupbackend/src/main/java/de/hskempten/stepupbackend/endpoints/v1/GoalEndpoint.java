@@ -1,6 +1,7 @@
 package de.hskempten.stepupbackend.endpoints.v1;
 
 import de.hskempten.stepupbackend.controllers.GoalController;
+import de.hskempten.stepupbackend.dto.StepsGoalDTO;
 import de.hskempten.stepupbackend.dto.WeightGoalDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -34,5 +35,12 @@ public class GoalEndpoint {
     public HttpEntity<WeightGoalDTO> updateWeightGoal(@PathVariable String id, @RequestBody WeightGoalDTO weightGoalDTO) {
         weightGoalDTO = goalController.updateWeightGoal(id, weightGoalDTO);
         return new ResponseEntity<>(weightGoalDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("steps/patient/{patientId}")
+    public HttpEntity<List<StepsGoalDTO>> getAllStepsGoalsByPatientId(@PathVariable String patientId) {
+        List<StepsGoalDTO> weightGoals = goalController.getAllStepsGoalsByPatientId(patientId);
+
+        return new ResponseEntity<>(weightGoals, HttpStatus.OK);
     }
 }

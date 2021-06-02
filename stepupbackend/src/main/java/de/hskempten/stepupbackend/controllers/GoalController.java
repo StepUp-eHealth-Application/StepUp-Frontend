@@ -2,6 +2,7 @@ package de.hskempten.stepupbackend.controllers;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
+import de.hskempten.stepupbackend.dto.StepsGoalDTO;
 import de.hskempten.stepupbackend.dto.WeightGoalDTO;
 import de.hskempten.stepupbackend.helpers.FhirHelpers;
 import org.hl7.fhir.r4.model.*;
@@ -41,6 +42,10 @@ public class GoalController {
         List<WeightGoalDTO> retGoals = new ArrayList<>();
         for (Bundle.BundleEntryComponent entry : goalsBundle.getEntry()) {
             Goal goal = (Goal) entry.getResource();
+
+            if (!goal.getDescription().getText().contains("Gesundheitsziel Gewicht")) {
+                continue;
+            }
 
             WeightGoalDTO weightGoalDTO = convertGoalToWeightGoalDto(goal, patientId);
             retGoals.add(weightGoalDTO);
@@ -125,7 +130,7 @@ public class GoalController {
         Goal goal = (Goal) searchGoalById(id, fhirServer, client).getEntryFirstRep().getResource();
 
         CodeableConcept concept = new CodeableConcept();
-        concept.addCoding().setDisplay(weightGoalDTO.getDescription());
+        concept.addCoding().setDisplay("Gesundheitsziel Gewicht");
         goal.setDescription(concept);
 
         Reference patientRef = new Reference(patient.getIdElement().getValue());
@@ -165,5 +170,50 @@ public class GoalController {
             return null;
         }
         return response;
+    }
+
+    public List<StepsGoalDTO> getAllStepsGoalsByPatientId(String patientId) {
+        String fhirServer = settingsController.getFhirServerUrl();
+
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        Patient patient =
+            (Patient) patientController.searchPatientById(patientId, fhirServer, client)
+                .getEntryFirstRep().getResource();
+
+        Bundle goalsBundle = client.search()
+            .forResource(Goal.class)
+            .where(Observation.SUBJECT.hasId(patient.getIdElement().getValue()))
+            .returnBundle(Bundle.class)
+            .execute();
+
+        List<StepsGoalDTO> retGoals = new ArrayList<>();
+        for (Bundle.BundleEntryComponent entry : goalsBundle.getEntry()) {
+            Goal goal = (Goal) entry.getResource();
+
+            if (goal.getDescription().getText().contains("Gesundheitsziel Schritte")) {
+                continue;
+            }
+
+            StepsGoalDTO stepsGoalDTO = convertGoalToStepsDTO(goal, patientId);
+            retGoals.add(stepsGoalDTO);
+        }
+
+        return retGoals;
+    }
+
+    private StepsGoalDTO convertGoalToStepsDTO(Goal goal, String patientId) {
+        StepsGoalDTO stepsGoalDTO = new StepsGoalDTO();
+
+        stepsGoalDTO.setId(goal.getIdElement().getIdPart());
+        stepsGoalDTO.setDescription(goal.getDescription().getText());
+        stepsGoalDTO.setPatientId(patientId);
+        stepsGoalDTO.setDueDate(goal.getTarget().get(0).getDue().dateTimeValue().getValue());
+        stepsGoalDTO.setStepsGoal(
+            goal.getTargetFirstRep().getDetailQuantity().getValue().intValue()
+        );
+
+        return stepsGoalDTO;
     }
 }
