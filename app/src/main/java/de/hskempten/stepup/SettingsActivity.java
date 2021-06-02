@@ -15,6 +15,7 @@ import de.hskempten.stepup.preferences.Preferences;
 public class SettingsActivity extends AppCompatActivity {
 
     EditText txtFhirServerURL;
+    EditText txtBackendUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,11 +23,18 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         txtFhirServerURL = findViewById(R.id.etxtFhirServer);
+        txtBackendUrl = findViewById(R.id.eTxtBackendServer);
 
         // Displaying FHIR Server URL if already provided
         String fhirServerURL = Preferences.loadFhirServerUrl(SettingsActivity.this);
         if (fhirServerURL != null) {
             txtFhirServerURL.setText(fhirServerURL);
+        }
+
+        // Displaying Backend URL if already provided
+        String backendUrl = Preferences.loadBackendUrl(SettingsActivity.this);
+        if (backendUrl != null) {
+            txtBackendUrl.setText(backendUrl);
         }
 
         // Saving FHIR Server URL into preference
@@ -39,13 +47,15 @@ public class SettingsActivity extends AppCompatActivity {
                 int duration = Toast.LENGTH_SHORT;
 
                 String url = txtFhirServerURL.getText().toString();
+                String backendUrl = txtBackendUrl.getText().toString();
 
                 // Checking if given URL is valid
-                if (UrlUtil.isValid(url)) {
-                    text = "Successfully saved URL";
+                if (UrlUtil.isValid(url) && UrlUtil.isValid(backendUrl)) {
+                    text = "URLs wurden gespeichert";
                     Preferences.saveFhirServerUrl(url, SettingsActivity.this);
+                    Preferences.saveBackendUrl(backendUrl, SettingsActivity.this);
                 } else {
-                    text = "The URL is not valid";
+                    text = "Einer der URLs ist nicht gültig";
                 }
 
                 Toast.makeText(context, text, duration).show();
