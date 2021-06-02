@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+//DEVELOPMETN
+import android.content.Intent;
 
 import ca.uhn.fhir.util.UrlUtil;
 import de.hskempten.stepup.preferences.Preferences;
@@ -59,7 +61,13 @@ public class SettingsActivity extends AppCompatActivity {
                 }
 
                 Toast.makeText(context, text, duration).show();
+                //DEVELOPMENT
+                openActivity();
             }
         });
+    }
+    public void openActivity(){
+        Intent intent = new Intent(this, PatientDataActivity.class);
+        startActivity(intent);
     }
 }
