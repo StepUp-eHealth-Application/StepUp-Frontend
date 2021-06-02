@@ -1,0 +1,116 @@
+package de.hskempten.stepupbackend.controllers;
+
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.rest.client.api.IGenericClient;
+import de.hskempten.stepupbackend.dto.WeightGoalDTO;
+import de.hskempten.stepupbackend.helpers.FhirHelpers;
+import org.hl7.fhir.r4.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+
+@Controller
+public class GoalController {
+
+    @Autowired
+    private PatientController patientController;
+
+    @Autowired
+    private SettingsController settingsController;
+
+    public List<WeightGoalDTO> getAllWeightGoalsByPatientId(String patientId) {
+        String fhirServer = settingsController.getFhirServerUrl();
+
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        Patient patient =
+            (Patient) patientController.searchPatientById(patientId, fhirServer, client)
+                .getEntryFirstRep().getResource();
+
+        Bundle goalsBundle = client.search()
+            .forResource(Goal.class)
+            .where(Observation.SUBJECT.hasId(patient.getIdElement().getValue()))
+            .returnBundle(Bundle.class)
+            .execute();
+
+        List<WeightGoalDTO> retGoals = new ArrayList<>();
+        for (Bundle.BundleEntryComponent entry : goalsBundle.getEntry()) {
+            Goal goal = (Goal) entry.getResource();
+
+            WeightGoalDTO weightGoalDTO = convertGoalToWeightGoalDto(goal, patientId);
+            retGoals.add(weightGoalDTO);
+        }
+
+        return retGoals;
+    }
+
+    private WeightGoalDTO convertGoalToWeightGoalDto(Goal goal, String patientId) {
+        WeightGoalDTO weightGoalDTO = new WeightGoalDTO();
+
+        weightGoalDTO.setId(goal.getIdElement().getIdPart());
+        weightGoalDTO.setDescription(goal.getDescription().getCodingFirstRep().getDisplay());
+        weightGoalDTO.setPatientId(patientId);
+
+        // Setting due date
+        var dueDate = goal.getTarget().get(0).getDue().dateTimeValue();
+        Date date = new Date();
+        date.setDate(dueDate.getDay());
+        date.setMonth(dueDate.getMonth());
+        date.setYear(dueDate.getValue().getYear());
+        weightGoalDTO.setDueDate(date);
+
+        weightGoalDTO.setWeightGoal(
+            goal.getTargetFirstRep().getDetailQuantity().getValue().floatValue()
+        );
+
+        return weightGoalDTO;
+    }
+
+    public WeightGoalDTO addWeightGoal(WeightGoalDTO weightGoalDTO) {
+        String fhirServer = settingsController.getFhirServerUrl();
+
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        Patient patient = (Patient) patientController.searchPatientById(weightGoalDTO.getPatientId(), fhirServer, client).getEntryFirstRep().getResource();
+        Goal goal = new Goal();
+
+        CodeableConcept concept = new CodeableConcept();
+        concept.addCoding().setDisplay(weightGoalDTO.getDescription());
+        goal.setDescription(concept);
+
+        Reference patientRef = new Reference(patient.getIdElement().getValue());
+        patientRef.setType("Patient");
+        goal.setSubject(patientRef);
+
+        goal.addTarget()
+                .setDetail(
+                    new Quantity()
+                        .setValue(weightGoalDTO.getWeightGoal())
+                        .setUnit("kg")
+                        .setSystem("http://unitsofmeasure.org")
+                )
+                .setDue(
+                    new DateType().setValue(weightGoalDTO.getDueDate())
+                );
+
+        goal.setLifecycleStatus(Goal.GoalLifecycleStatus.ACTIVE);
+        goal.addCategory().addCoding()
+            .setSystem("http://terminology.hl7.org/CodeSystem/goal-category")
+            .setCode("behavioral")
+            .setDisplay("Behavioral")
+            .setDisplay("Goals related to the manner in which the subject acts.");
+
+        Goal createGoal = (Goal) client.create().resource(goal).execute().getResource();
+        FhirHelpers.PrettyPrint(createGoal, ctx);
+
+        weightGoalDTO.setId(createGoal.getIdElement().getIdPart());
+
+        return weightGoalDTO;
+    }
+}
