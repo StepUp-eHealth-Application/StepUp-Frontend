@@ -41,17 +41,26 @@ public class DisplayPatientDataActivity extends AppCompatActivity {
         setContentView(R.layout.activity_display_patient_data);
 
         findViews();
+        String backendUrl = getBackendUrl();
+        setupQueue();
+        getPatientDataFromBackend(backendUrl);
+    }
 
+    private String getBackendUrl() {
         String patientId = Preferences.loadSelectedPatientID(getApplicationContext());
         if (patientId == null || patientId == "") {
             patientId = Preferences.loadPatientID(getApplicationContext());
         }
         String backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + APIEndpoints.PATIENT + patientId;
         Log.d(TAG, "Backend URL: " + backendUrl);
+        return backendUrl;
+    }
 
+    private void setupQueue() {
         requestQueue = Volley.newRequestQueue(getApplicationContext());
+    }
 
-        // Sending data to backend
+    private void getPatientDataFromBackend(String backendUrl) {
         JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.GET, backendUrl, new JSONObject(),
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -82,8 +91,6 @@ public class DisplayPatientDataActivity extends AppCompatActivity {
 
         };
         requestQueue.add(jsonobj);
-
-
     }
 
     private void findViews() {
