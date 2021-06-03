@@ -2,7 +2,6 @@ package de.hskempten.stepupbackend.endpoints.v1;
 
 import de.hskempten.stepupbackend.controllers.DeviceController;
 import de.hskempten.stepupbackend.dto.DeviceDTO;
-import org.hl7.fhir.r4.model.Device;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;

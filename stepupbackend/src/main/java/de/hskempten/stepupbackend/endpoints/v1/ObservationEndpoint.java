@@ -38,7 +38,7 @@ public class ObservationEndpoint {
         return new ResponseEntity<>(stepsObservationDTO, HttpStatus.CREATED);
     }
 
-    @GetMapping("setps/patient/{id}")
+    @GetMapping("steps/patient/{id}")
     public HttpEntity<List<StepsObservationDTO>> getStepsByPatientId(@PathVariable String id) {
         List<StepsObservationDTO> observations = observationController.getStepsByPatientId(id);
 
