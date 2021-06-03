@@ -8,12 +8,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/device")
 public class DeviceEndpoint {
 
     @Autowired
     DeviceController deviceController;
+
+    @GetMapping
+    public HttpEntity<List<DeviceDTO>> getAllDevices() {
+        List<DeviceDTO> devices = deviceController.getAllDevices();
+
+        return new ResponseEntity<>(devices, HttpStatus.OK);
+    }
 
     @GetMapping("/{id}")
     public HttpEntity<DeviceDTO> getDeviceById(@PathVariable("id") String id) {
