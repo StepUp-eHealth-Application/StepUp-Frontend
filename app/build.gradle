@@ -45,4 +45,5 @@ dependencies {
     implementation group: 'ca.uhn.hapi.fhir', name: 'hapi-fhir-structures-r4', version: '5.3.0'
     implementation group: 'ca.uhn.hapi.fhir', name: 'hapi-fhir-client', version: '5.3.0'
 
+    implementation 'com.android.volley:volley:1.2.0'
 }
