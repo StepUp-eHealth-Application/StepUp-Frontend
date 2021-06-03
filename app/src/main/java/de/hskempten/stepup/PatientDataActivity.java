@@ -109,7 +109,7 @@ public class PatientDataActivity extends AppCompatActivity {
 
 
                         String fhirServer = Preferences.loadFhirServerUrl(PatientDataActivity.this);
-                        String backendServer = Preferences.loadBackendUrl(PatientDataActivity.this);
+                        String backendServer = Preferences.loadBackendUrl(PatientDataActivity.this) + APIEndpoints.PATIENT;
 
 
 
