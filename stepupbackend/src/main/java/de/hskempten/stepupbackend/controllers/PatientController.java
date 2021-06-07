@@ -11,11 +11,16 @@ import org.hl7.fhir.r4.model.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 @Controller
 public class PatientController {
+
+    @Autowired
+    private SettingsController settingsController;
 
     public PatientDTO createPatient(PatientDTO patientDTO) {
         FhirContext ctx = FhirContext.forR4();
@@ -52,36 +57,30 @@ public class PatientController {
     }
 
     public PatientDTO getPatientById(String id) {
-        String fhirServer = "http://hapi.fhir.org/baseR4/"; // TODO: get fhir server from database
-
+        String fhirServer = settingsController.getFhirServerUrl();
 
         FhirContext ctx = FhirContext.forR4();
         IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
 
-        String searchUrl = fhirServer + "/Patient?_id=" + id;
-        Bundle response = client.search()
-            .byUrl(searchUrl)
-            .returnBundle(Bundle.class)
-            .execute();
-        if (response.getTotal() <= 0) {
-            return null;
-        }
+        Bundle response = searchPatientById(id, fhirServer, client);
+        if (response == null) return null;
 
         Patient retPatient = (Patient) response.getEntryFirstRep().getResource();
         FhirHelpers.PrettyPrint(retPatient, ctx);
 
+        PatientDTO patientDTO = convertToPatientDTO(fhirServer, retPatient);
+
+        return patientDTO;
+    }
+
+    private PatientDTO convertToPatientDTO(String fhirServer, Patient retPatient) {
         PatientDTO patientDTO = new PatientDTO();
         patientDTO.setId(retPatient.getIdElement().getIdPart());
 
         patientDTO.setFirstName(retPatient.getNameFirstRep().getGivenAsSingleString());
         patientDTO.setLastName(retPatient.getNameFirstRep().getFamily());
 
-        HashMap<Enumerations.AdministrativeGender, String> genders = new HashMap<>();
-        genders.put(Enumerations.AdministrativeGender.MALE, "Männlich");
-        genders.put(Enumerations.AdministrativeGender.FEMALE, "Weiblich");
-        genders.put(Enumerations.AdministrativeGender.OTHER, "Divers");
-        genders.put(Enumerations.AdministrativeGender.UNKNOWN, "Unbekannt");
-        patientDTO.setGender(genders.get(retPatient.getGender()));
+        setPatientGender(retPatient, patientDTO);
 
         patientDTO.setCity(retPatient.getAddressFirstRep().getCity());
         patientDTO.setCountry(retPatient.getAddressFirstRep().getCountry());
@@ -97,5 +96,49 @@ public class PatientController {
         patientDTO.setFhirServer(fhirServer);
 
         return patientDTO;
+    }
+
+    private void setPatientGender(Patient retPatient, PatientDTO patientDTO) {
+        HashMap<Enumerations.AdministrativeGender, String> genders = new HashMap<>();
+        genders.put(Enumerations.AdministrativeGender.MALE, "Männlich");
+        genders.put(Enumerations.AdministrativeGender.FEMALE, "Weiblich");
+        genders.put(Enumerations.AdministrativeGender.OTHER, "Divers");
+        genders.put(Enumerations.AdministrativeGender.UNKNOWN, "Unbekannt");
+        patientDTO.setGender(genders.get(retPatient.getGender()));
+    }
+
+    public Bundle searchPatientById(String id, String fhirServer, IGenericClient client) {
+        String searchUrl = fhirServer + "/Patient?_id=" + id;
+        Bundle response = client.search()
+            .byUrl(searchUrl)
+            .returnBundle(Bundle.class)
+            .execute();
+        if (response.getTotal() <= 0) {
+            return null;
+        }
+        return response;
+    }
+
+    public List<PatientDTO> getPatients() {
+        String fhirServer = settingsController.getFhirServerUrl();
+
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        Bundle bundle = client
+            .search()
+            .forResource(Patient.class)
+            .returnBundle(Bundle.class)
+            .execute();
+
+        List<PatientDTO> retPatients = new ArrayList<>();
+        for (Bundle.BundleEntryComponent entry : bundle.getEntry()) {
+            Patient retPatient = (Patient) entry.getResource();
+
+            PatientDTO patientDTO = convertToPatientDTO(fhirServer, retPatient);
+            retPatients.add(patientDTO);
+        }
+
+        return retPatients;
     }
 }
