@@ -75,7 +75,7 @@ public class SettingsActivity extends AppCompatActivity {
                     checked = false;
                 }
 
-                if (!(fhirServerURL.endsWith("/"))) {
+                if (!(url.endsWith("/"))) {
                     txtFhirServerURL.setError("URL muss mit einem \"/\" enden");
                     checked = false;
                 }
