@@ -28,6 +28,9 @@ public class DeviceEndpoint {
     public HttpEntity<DeviceDTO> getDeviceById(@PathVariable("id") String id) {
         System.out.println("ID: " + id);
         DeviceDTO device = deviceController.getDeviceById(id);
+        if (device == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
         return new ResponseEntity<>(device, HttpStatus.OK);
     }
