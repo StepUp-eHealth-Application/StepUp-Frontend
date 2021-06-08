@@ -96,7 +96,16 @@ public class DeviceController {
         FhirContext ctx = FhirContext.forR4();
         IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
 
-        Device fhirDevice = (Device) searchDeviceById(id, fhirServer, client).getEntryFirstRep().getResource();
+        Bundle bundle = searchDeviceById(id, fhirServer, client);
+        if (bundle == null) {
+            return null;
+        }
+
+        var entry = bundle.getEntryFirstRep();
+        if (entry == null) {
+            return null;
+        }
+        Device fhirDevice = (Device) entry.getResource();
 
         DeviceDTO deviceDTO = convertToDeviceDTO(fhirServer, fhirDevice);
 
