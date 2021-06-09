@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.net.ssl.HttpsURLConnection;
 import java.util.List;
 
 @RestController
@@ -32,6 +31,24 @@ public class PatientEndpoint {
         }
 
         return new ResponseEntity<>(patientDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("name/{name}")
+    public HttpEntity<List<PatientDTO>> getPatientByName(@PathVariable("name") String name) {
+        List<PatientDTO> patientDTO = patientController.getPatientByName(name);
+        return new ResponseEntity<>(patientDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("address/{address}")
+    public HttpEntity<List<PatientDTO>> getPatientByStreet(@PathVariable("address") String address) {
+        List<PatientDTO> patientDTOS = patientController.getPatientsByAddress(address);
+        return new ResponseEntity<>(patientDTOS, HttpStatus.OK);
+    }
+
+    @GetMapping("gender/{gender}")
+    public HttpEntity<List<PatientDTO>> getPatientByGender(@PathVariable String gender) {
+        List<PatientDTO> patientDTOS = patientController.getPatientsByGender(gender);
+        return new ResponseEntity<>(patientDTOS, HttpStatus.OK);
     }
 
     @PostMapping
