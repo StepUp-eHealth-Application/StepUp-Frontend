@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:text="geplannte Schritte/24h"
-        app:layout_constraintBottom_toTopOf="@+id/editTextNumber"
+        app:layout_constraintBottom_toTopOf="@+id/eTxtNumberSteps"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
@@ -32,7 +32,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <DatePicker
-        android:id="@+id/datePicker1"
+        android:id="@+id/dpObservationSteps"
         android:layout_width="260dp"
         android:layout_height="148dp"
         android:layout_marginStart="48dp"
@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:text="Datum des Gesundheitsziel"
-        app:layout_constraintBottom_toTopOf="@+id/datePicker1"
+        app:layout_constraintBottom_toTopOf="@+id/dpObservationSteps"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
@@ -70,7 +70,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnSaveObservationSteps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="44dp"
@@ -81,7 +81,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/editTextNumber"
+        android:id="@+id/eTxtNumberSteps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
