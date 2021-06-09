@@ -40,7 +40,7 @@ public class PatientEndpoint {
     }
 
     @GetMapping("address/{address}")
-    public HttpEntity<List<PatientDTO>> getPatientByStreet(@PathVariable("address") String address) {
+    public HttpEntity<List<PatientDTO>> getPatientByAddress(@PathVariable("address") String address) {
         List<PatientDTO> patientDTOS = patientController.getPatientsByAddress(address);
         return new ResponseEntity<>(patientDTOS, HttpStatus.OK);
     }
