@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import de.hskempten.stepup.preferences.Preferences;
+
 public class MenuLeActivity extends AppCompatActivity {
 
     TextView txtTitle;
@@ -24,11 +26,9 @@ public class MenuLeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu_le);
 
         // getting patient
-        Bundle b = getIntent().getExtras();
-        patientId = b.getString("patientID");
-        patientName = b.getString("patientName");
+        patientId = Preferences.loadSelectedPatientID(getApplicationContext());
         txtTitle = findViewById(R.id.txtTitle);
-        txtTitle.setText("Gesundheitsziele von\n" + patientName);
+        txtTitle.setText("Gesundheitsziele von\n" + patientId);
 
         // setting variables
         btnSettings = findViewById(R.id.btnSettings);

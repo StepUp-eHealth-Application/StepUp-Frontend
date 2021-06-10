@@ -7,6 +7,8 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import de.hskempten.stepup.preferences.Preferences;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, MenuPatientActivity.class);
+                Preferences.saveSelectedPatientID(null, getApplicationContext());
                 openNewActivity(intent);
             }
         });

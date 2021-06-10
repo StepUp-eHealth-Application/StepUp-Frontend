@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
+import de.hskempten.stepup.preferences.Preferences;
+
 public class SearchPatientActivity extends AppCompatActivity {
 
     SearchView searchView;
@@ -64,12 +66,8 @@ public class SearchPatientActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 Intent intent = new Intent(SearchPatientActivity.this, MenuLeActivity.class);
-                Bundle b = new Bundle();
-                b.putString("patientID", listId.get(position));
-                b.putString("patientName", listName.get(position));
-                intent.putExtras(b);
+                Preferences.saveSelectedPatientID(listId.get(position), getApplicationContext());
                 startActivity(intent);
-                finish();
             }
         });
     }
