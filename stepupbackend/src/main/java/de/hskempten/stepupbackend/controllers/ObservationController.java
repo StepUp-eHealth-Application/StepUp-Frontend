@@ -195,30 +195,38 @@ public class ObservationController {
                 continue;
             }
 
-            StepsObservationDTO stepsObservationDto = new StepsObservationDTO();
-            stepsObservationDto.setId(observation.getIdElement().getIdPart());
-            stepsObservationDto.setPatientID(patient.getIdElement().getIdPart());
-            stepsObservationDto.setFhirServer(fhirServer);
-
-            try {
-                String dateStr = observation.getCode().getCoding().get(0).getDisplay().replace("Number of Steps in 24 Hours, Measured at ", "");
-                System.out.println("Date String: " + dateStr);
-                LocalDate date = LocalDate.parse(dateStr);
-                stepsObservationDto.setDate(date);
-            } catch (DateTimeParseException exception) {
-                System.out.println("Could not parse date time");
-                stepsObservationDto.setDate(null);
-            }
-
-            // Setting value
-            Quantity value = (Quantity) observation.getValue();
-            int steps = value.getValue().intValue();
-            stepsObservationDto.setSteps(steps);
+            StepsObservationDTO stepsObservationDto = convertObservationToStepsDto(fhirServer, patient, observation);
 
             retObervations.add(stepsObservationDto);
         }
 
         return retObervations;
+    }
+
+    private StepsObservationDTO convertObservationToStepsDto(String fhirServer, Patient patient, Observation observation) {
+        StepsObservationDTO stepsObservationDto = new StepsObservationDTO();
+        stepsObservationDto.setId(observation.getIdElement().getIdPart());
+        stepsObservationDto.setPatientID(patient.getIdElement().getIdPart());
+        stepsObservationDto.setFhirServer(fhirServer);
+
+        try {
+            String dateStr = observation.getCode().getCoding().get(0).getDisplay().replace("Number of Steps in 24 Hours, Measured at ", "");
+            System.out.println("Date String: " + dateStr);
+            LocalDate date = LocalDate.parse(dateStr);
+            stepsObservationDto.setDate(date);
+        } catch (DateTimeParseException exception) {
+            System.out.println("Could not parse date time");
+            stepsObservationDto.setDate(null);
+        } catch (NullPointerException nullPointerException) {
+            System.out.println("Could not parse date time (null pointer)");
+            stepsObservationDto.setDate(null);
+        }
+
+        // Setting value
+        Quantity value = (Quantity) observation.getValue();
+        int steps = value.getValue().intValue();
+        stepsObservationDto.setSteps(steps);
+        return stepsObservationDto;
     }
 
     public WeightObservationDTO getWeightObservationById(String id) {
@@ -250,5 +258,24 @@ public class ObservationController {
             return null;
         }
         return response;
+    }
+
+    public StepsObservationDTO getStepsObservationById(String id) {
+        String fhirServer = settingsController.getFhirServerUrl();
+
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        Bundle bundle = searchObservationById(id, fhirServer, client);
+        if (bundle.getEntryFirstRep() == null) {
+            return null;
+        }
+
+        Observation observation = (Observation) bundle.getEntryFirstRep().getResource();
+
+        Patient patient = (Patient) patientController.searchPatientById(observation.getSubject().getIdElement().getValue(), fhirServer, client).getEntryFirstRep().getResource();
+        StepsObservationDTO stepsObservationDTO = convertObservationToStepsDto(fhirServer, patient, observation);
+
+        return stepsObservationDTO;
     }
 }

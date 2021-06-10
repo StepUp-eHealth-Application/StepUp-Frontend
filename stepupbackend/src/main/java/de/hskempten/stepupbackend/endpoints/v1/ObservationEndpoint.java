@@ -1,6 +1,7 @@
 package de.hskempten.stepupbackend.endpoints.v1;
 
 import de.hskempten.stepupbackend.controllers.ObservationController;
+import de.hskempten.stepupbackend.dto.StepsGoalDTO;
 import de.hskempten.stepupbackend.dto.StepsObservationDTO;
 import de.hskempten.stepupbackend.dto.WeightGoalDTO;
 import de.hskempten.stepupbackend.dto.WeightObservationDTO;
@@ -37,6 +38,12 @@ public class ObservationEndpoint {
         List<WeightObservationDTO> observations = observationController.getWeightsByPatientId(patientId);
 
         return new ResponseEntity<>(observations, HttpStatus.OK);
+    }
+
+    @GetMapping("steps/{id}")
+    public HttpEntity<StepsObservationDTO> getStepsById(@PathVariable String id) {
+        StepsObservationDTO stepsObservationDTO = observationController.getStepsObservationById(id);
+        return new ResponseEntity<>(stepsObservationDTO, HttpStatus.OK);
     }
 
     @PostMapping("steps")
