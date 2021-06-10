@@ -303,4 +303,19 @@ public class GoalController {
         WeightGoalDTO weightGoalDTO = convertGoalToWeightGoalDto((Goal) goal.getEntryFirstRep().getResource(), fhirServer);
         return weightGoalDTO;
     }
+
+    public StepsGoalDTO getStepsGoalById(String id) {
+        String fhirServer = settingsController.getFhirServerUrl();
+
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        Bundle goal = searchGoalById(id, fhirServer, client);
+        if (goal.getEntryFirstRep() == null) {
+            return null;
+        }
+
+        StepsGoalDTO stepsGoalDto = convertGoalToStepsDTO((Goal) goal.getEntryFirstRep().getResource(), fhirServer);
+        return stepsGoalDto;
+    }
 }

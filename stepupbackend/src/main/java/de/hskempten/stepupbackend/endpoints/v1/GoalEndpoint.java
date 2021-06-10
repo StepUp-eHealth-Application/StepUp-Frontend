@@ -24,6 +24,12 @@ public class GoalEndpoint {
         return new ResponseEntity<>(weightGoalDTO, HttpStatus.OK);
     }
 
+    @GetMapping("steps/{id}")
+    public HttpEntity<StepsGoalDTO> getStepsGoalById(@PathVariable String id) {
+        StepsGoalDTO stepsGoalDTO = goalController.getStepsGoalById(id);
+        return new ResponseEntity<>(stepsGoalDTO, HttpStatus.OK);
+    }
+
     @GetMapping("weight/patient/{patientId}")
     public HttpEntity<List<WeightGoalDTO>> getAllWeightGoalsByPatientId(@PathVariable String patientId) {
         List<WeightGoalDTO> weightGoals = goalController.getAllWeightGoalsByPatientId(patientId);
