@@ -38,6 +38,7 @@ public class SearchPatientActivity extends AppCompatActivity {
         listId.add("0000000001");
         listId.add("0000000002");
         listId.add("0000000003");
+        listId.add("0000000004");
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listName);
         listView.setAdapter(adapter);
