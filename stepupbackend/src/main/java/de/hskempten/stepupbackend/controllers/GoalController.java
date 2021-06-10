@@ -288,4 +288,19 @@ public class GoalController {
 
         return stepsGoalDTO;
     }
+
+    public WeightGoalDTO getWeightGoalById(String id) {
+        String fhirServer = settingsController.getFhirServerUrl();
+
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        Bundle goal = searchGoalById(id, fhirServer, client);
+        if (goal.getEntryFirstRep() == null) {
+            return null;
+        }
+
+        WeightGoalDTO weightGoalDTO = convertGoalToWeightGoalDto((Goal) goal.getEntryFirstRep().getResource(), fhirServer);
+        return weightGoalDTO;
+    }
 }
