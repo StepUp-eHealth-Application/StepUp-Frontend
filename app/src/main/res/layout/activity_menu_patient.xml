@@ -21,10 +21,10 @@
         android:id="@+id/btnSettings"
         android:layout_width="48sp"
         android:layout_height="48sp"
-        android:background="@color/secondary"
+        android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_info_details"
+        app:srcCompat="@drawable/ic_baseline_format_list_bulleted_24"
         android:contentDescription="Einstellungen" />
 
     <ScrollView
@@ -206,7 +206,7 @@
         android:id="@+id/viewSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/secondary"
+        android:background="@color/tertiary"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnSettings"
