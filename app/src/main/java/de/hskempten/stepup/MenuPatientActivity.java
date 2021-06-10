@@ -1,13 +1,13 @@
 package de.hskempten.stepup;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MenuPatientActivity extends AppCompatActivity {
 
@@ -28,6 +28,26 @@ public class MenuPatientActivity extends AppCompatActivity {
 
         // setting the OnClick Listener
         btnSettings.setOnClickListener(v -> toggleVisibility());
+
+        // Opening Summary Activity
+        Button btnSummary = findViewById(R.id.btnSummary);
+        btnSummary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuPatientActivity.this, SummaryActivity.class);
+                MenuPatientActivity.this.startActivity(intent);
+            }
+        });
+
+        // Opening Patient Data Activity
+        Button btnPatientData = findViewById(R.id.btnPatientData);
+        btnPatientData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuPatientActivity.this, PatientDataActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Opening FHIR Settings Activity when "Servereinstellungen" Button clicked
         Button btnFHIRServerSettings = findViewById(R.id.btnFHIRServerSettings);

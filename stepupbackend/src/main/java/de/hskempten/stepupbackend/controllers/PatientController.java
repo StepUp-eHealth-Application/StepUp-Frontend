@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -140,5 +141,85 @@ public class PatientController {
         }
 
         return retPatients;
+    }
+
+    public List<PatientDTO> getPatientByName(String name) {
+        String fhirServer = settingsController.getFhirServerUrl();
+
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        Bundle patients = client.search()
+            .forResource(Patient.class)
+            .where(Patient.NAME.matches().value(name))
+            .returnBundle(Bundle.class)
+            .execute();
+
+        List<PatientDTO> patientDTOs = new ArrayList<>();
+        for (var entry : patients.getEntry()) {
+            Patient patient = (Patient) entry.getResource();
+            PatientDTO patientDTO = convertToPatientDTO(fhirServer, patient);
+            patientDTOs.add(patientDTO);
+        }
+
+        return patientDTOs;
+    }
+
+    public List<PatientDTO> getPatientsByAddress(String address) {
+        String fhirServer = settingsController.getFhirServerUrl();
+
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        Bundle patients = client.search()
+            .forResource(Patient.class)
+            .where(Patient.ADDRESS.matches().value(address))
+            .returnBundle(Bundle.class)
+            .execute();
+
+        List<PatientDTO> patientDTOs = new ArrayList<>();
+        for (var entry : patients.getEntry()) {
+            Patient patient = (Patient) entry.getResource();
+            PatientDTO patientDTO = convertToPatientDTO(fhirServer, patient);
+
+            if (patientDTO.getDisplayAddress().contains(address)) {
+                patientDTOs.add(patientDTO);
+            }
+
+        }
+
+        return patientDTOs;
+    }
+
+    public List<PatientDTO> getPatientsByGender(String gender) {
+        String fhirServer = settingsController.getFhirServerUrl();
+
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        HashMap<String, Enumerations.AdministrativeGender> genders = new HashMap<>();
+        genders.put("Männlich", Enumerations.AdministrativeGender.MALE);
+        genders.put("Weiblich", Enumerations.AdministrativeGender.FEMALE);
+        genders.put("Divers", Enumerations.AdministrativeGender.OTHER);
+        genders.put("Unbekannt", Enumerations.AdministrativeGender.UNKNOWN);
+
+        Enumerations.AdministrativeGender g = genders.get(gender);
+
+        Bundle patients = client.search()
+            .forResource(Patient.class)
+            .where(Patient.GENDER.hasSystemWithAnyCode(g.getSystem()))
+            .returnBundle(Bundle.class)
+            .execute();
+
+        List<PatientDTO> patientDTOs = new ArrayList<>();
+        for (var entry : patients.getEntry()) {
+            Patient patient = (Patient) entry.getResource();
+            PatientDTO patientDTO = convertToPatientDTO(fhirServer, patient);
+
+            if (patientDTO.getGender().equals(gender))
+                patientDTOs.add(patientDTO);
+        }
+
+        return patientDTOs;
     }
 }
