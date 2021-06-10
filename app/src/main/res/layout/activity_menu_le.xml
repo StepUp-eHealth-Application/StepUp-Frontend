@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16sp"
-        android:text="Gesundheitsziele von\nM. Mustermann"
+        android:text="Kein Patient ausgewählt!"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,10 +21,10 @@
         android:id="@+id/btnSettings"
         android:layout_width="48sp"
         android:layout_height="48sp"
-        android:background="@color/secondary"
+        android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_info_details"
+        app:srcCompat="@drawable/ic_baseline_format_list_bulleted_24"
         android:contentDescription="Einstellungen" />
 
     <ScrollView
@@ -194,12 +194,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/secondary"
+        android:background="@color/tertiary"
         app:srcCompat="@android:drawable/menu_frame"
         app:layout_constraintTop_toBottomOf="@id/btnSettings"
         app:layout_constraintEnd_toEndOf="parent">
 
         <Button
+            android:id="@+id/btnSummary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -211,6 +212,7 @@
             android:text="Zusammenfassung" />
 
         <Button
+            android:id="@+id/btnPatientData"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"

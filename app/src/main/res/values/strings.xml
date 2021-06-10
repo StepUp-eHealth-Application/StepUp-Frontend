@@ -5,7 +5,7 @@
         <item>Kilogramm</item>
         <item>Pfund</item>
     </string-array>
-    
+
     <string-array name="genders">
         <item>Männlich</item>
         <item>Weiblich</item>
