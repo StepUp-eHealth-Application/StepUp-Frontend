@@ -95,30 +95,35 @@ public class ObservationController {
                 continue;
             }
 
-            WeightObservationDTO weightObservationDTO = new WeightObservationDTO();
-            weightObservationDTO.setId(observation.getIdElement().getIdPart());
-            weightObservationDTO.setPatientID(patient.getIdElement().getIdPart());
-            weightObservationDTO.setFhirServer(fhirServer);
-
-            try {
-                String dateStr = observation.getCode().getCoding().get(0).getDisplay().replace("Body weight measured at ", "");
-                System.out.println("Date String: " + dateStr);
-                LocalDate date = LocalDate.parse(dateStr);
-                weightObservationDTO.setDate(date);
-            } catch (DateTimeParseException exception) {
-                System.out.println("Could not parse date time");
-                weightObservationDTO.setDate(null);
-            }
-
-            // Setting value
-            Quantity value = (Quantity) observation.getValue();
-            float steps = value.getValue().floatValue();
-            weightObservationDTO.setWeight(steps);
+            WeightObservationDTO weightObservationDTO = convertObservationToWeightObservation(fhirServer, patient, observation);
 
             retObervations.add(weightObservationDTO);
         }
 
         return retObervations;
+    }
+
+    private WeightObservationDTO convertObservationToWeightObservation(String fhirServer, Patient patient, Observation observation) {
+        WeightObservationDTO weightObservationDTO = new WeightObservationDTO();
+        weightObservationDTO.setId(observation.getIdElement().getIdPart());
+        weightObservationDTO.setPatientID(patient.getIdElement().getIdPart());
+        weightObservationDTO.setFhirServer(fhirServer);
+
+        try {
+            String dateStr = observation.getCode().getCoding().get(0).getDisplay().replace("Body weight measured at ", "");
+            System.out.println("Date String: " + dateStr);
+            LocalDate date = LocalDate.parse(dateStr);
+            weightObservationDTO.setDate(date);
+        } catch (DateTimeParseException exception) {
+            System.out.println("Could not parse date time");
+            weightObservationDTO.setDate(null);
+        }
+
+        // Setting value
+        Quantity value = (Quantity) observation.getValue();
+        float steps = value.getValue().floatValue();
+        weightObservationDTO.setWeight(steps);
+        return weightObservationDTO;
     }
 
     public StepsObservationDTO addStepsObservation(StepsObservationDTO stepsObservationDTO) {
@@ -214,5 +219,36 @@ public class ObservationController {
         }
 
         return retObervations;
+    }
+
+    public WeightObservationDTO getWeightObservationById(String id) {
+        String fhirServer = settingsController.getFhirServerUrl();
+
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        Bundle bundle = searchObservationById(id, fhirServer, client);
+        if (bundle.getEntryFirstRep() == null) {
+            return null;
+        }
+
+        Observation observation = (Observation) bundle.getEntryFirstRep().getResource();
+
+        Patient patient = (Patient) patientController.searchPatientById(observation.getSubject().getIdElement().getValue(), fhirServer, client).getEntryFirstRep().getResource();
+        WeightObservationDTO weightObservationDTO = convertObservationToWeightObservation(fhirServer, patient, observation);
+
+        return weightObservationDTO;
+    }
+
+    public Bundle searchObservationById(String id, String fhirServer, IGenericClient client) {
+        String searchUrl = fhirServer + "/Observation?_id=" + id;
+        Bundle response = client.search()
+            .byUrl(searchUrl)
+            .returnBundle(Bundle.class)
+            .execute();
+        if (response.getTotal() <= 0) {
+            return null;
+        }
+        return response;
     }
 }
