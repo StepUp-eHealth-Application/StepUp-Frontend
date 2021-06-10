@@ -300,7 +300,9 @@ public class GoalController {
             return null;
         }
 
-        WeightGoalDTO weightGoalDTO = convertGoalToWeightGoalDto((Goal) goal.getEntryFirstRep().getResource(), fhirServer);
+        Goal g = (Goal) goal.getEntryFirstRep().getResource();
+        String patientId = g.getSubject().getReference().split("/")[1];
+        WeightGoalDTO weightGoalDTO = convertGoalToWeightGoalDto((Goal) goal.getEntryFirstRep().getResource(), patientId);
         return weightGoalDTO;
     }
 
@@ -315,7 +317,9 @@ public class GoalController {
             return null;
         }
 
-        StepsGoalDTO stepsGoalDto = convertGoalToStepsDTO((Goal) goal.getEntryFirstRep().getResource(), fhirServer);
+        Goal g = (Goal) goal.getEntryFirstRep().getResource();
+        String patientId = g.getSubject().getReference().split("/")[1];
+        StepsGoalDTO stepsGoalDto = convertGoalToStepsDTO(g, patientId);
         return stepsGoalDto;
     }
 }
