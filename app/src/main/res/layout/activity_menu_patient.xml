@@ -213,6 +213,7 @@
         app:srcCompat="@android:drawable/menu_frame">
 
         <Button
+            android:id="@+id/btnSummary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -224,6 +225,7 @@
             android:textSize="16sp" />
 
         <Button
+            android:id="@+id/btnPatientData"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
