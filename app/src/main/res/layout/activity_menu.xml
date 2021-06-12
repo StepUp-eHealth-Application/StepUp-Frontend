@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MenuActivity">
+
+    <LinearLayout
+        android:id="@+id/layoutHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/tertiary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/txtPatientName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16sp"
+            android:text="Patient wird geladen..."
+            android:textColor="@color/secondary"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btnSettings"
+            android:layout_width="48sp"
+            android:layout_height="48sp"
+            android:background="@color/tertiary"
+            app:layout_constraintStart_toEndOf="@id/txtPatientName"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_baseline_format_list_bulleted_24"
+            android:contentDescription="Einstellungen" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16sp"
+        android:text="Gesundheitsziele"
+        android:textColor="@color/secondary"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutHeader" />
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/txtTitle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view"
+                android:layout_width="350dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="20dp">
+
+                <FrameLayout
+                    android:background="#EEEEEE"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+                <TextView
+                    android:id="@+id/info_text"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="8dp"
+                    android:text="Schritte pro Tag"
+                    android:textColor="@color/secondary"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:id="@+id/info_text2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="260dp"
+                    android:paddingTop="18dp"
+                    android:text="02.02.2020"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="65dp"
+                    android:text="Ziel: 1500"
+                    android:textSize="20dp"
+                    android:textColor="@color/secondary"/>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view2"
+                android:layout_width="350dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="20dp">
+
+                <FrameLayout
+                    android:background="#EEEEEE"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+                <TextView
+                    android:id="@+id/info_text4"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="8dp"
+                    android:text="Gewicht"
+                    android:textColor="@color/secondary"
+                    android:textSize="22sp"/>
+
+                <TextView
+                    android:id="@+id/info_text5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="260dp"
+                    android:paddingTop="18dp"
+                    android:text="12.03.2020"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="65dp"
+                    android:text="Ziel: 70kg"
+                    android:textSize="20dp"
+                    android:textColor="@color/secondary"/>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnNewGoal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="24sp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:drawable/ic_input_add"
+        android:contentDescription="Neues Gesundheitsziel erstellen" />
+
+    <LinearLayout
+        android:id="@+id/viewSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/tertiary"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutHeader"
+        app:srcCompat="@android:drawable/menu_frame">
+
+        <Button
+            android:id="@+id/btnSummary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:backgroundTint="@color/white"
+            android:textAllCaps="false"
+            android:text="Zusammenfassung"
+            android:textColor="@color/secondary"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btnPatientData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:backgroundTint="@color/white"
+            android:textAllCaps="false"
+            android:text="Persönliche Daten"
+            android:textColor="@color/secondary"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btnFHIRServerSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:backgroundTint="@color/white"
+            android:text="Servereinstellungen"
+            android:textAllCaps="false"
+            android:textColor="@color/secondary"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
