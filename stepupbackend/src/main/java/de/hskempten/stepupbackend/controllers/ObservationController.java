@@ -140,7 +140,7 @@ public class ObservationController {
             stepsObservationDTO.getFhirServer(),
             client).getEntryFirstRep().getResource();
 
-        Reference patientRef = new Reference(patient.getIdElement().getValue());
+        Reference patientRef = new Reference(patient);
         patientRef.setType("Patient");
         observation.setSubject(patientRef);
 
@@ -273,7 +273,7 @@ public class ObservationController {
 
         Observation observation = (Observation) bundle.getEntryFirstRep().getResource();
 
-        Patient patient = (Patient) patientController.searchPatientById(observation.getSubject().getIdElement().getValue(), fhirServer, client).getEntryFirstRep().getResource();
+        Patient patient = (Patient) patientController.searchPatientById(observation.getSubject().getReference(), fhirServer, client).getEntryFirstRep().getResource();
         StepsObservationDTO stepsObservationDTO = convertObservationToStepsDto(fhirServer, patient, observation);
 
         return stepsObservationDTO;
