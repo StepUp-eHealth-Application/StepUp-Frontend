@@ -6,8 +6,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,6 +41,8 @@ public class SearchPatientActivity extends AppCompatActivity {
     ArrayList<String> listName;
     ArrayList<String> listId;
     ArrayAdapter<String> adapter;
+    Spinner genderSpinner;
+    Button searchByGender;
 
     RequestQueue requestQueue;
     int duration = Toast.LENGTH_SHORT;
@@ -52,12 +56,77 @@ public class SearchPatientActivity extends AppCompatActivity {
         listName = new ArrayList<>();
         listId = new ArrayList<>();
 
+        // filling gender spinner
+        genderSpinner = (Spinner) findViewById(R.id.spinnerPatientGender);
+        ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(this,
+                R.array.genders, android.R.layout.simple_spinner_item);
+        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        genderSpinner.setAdapter(genderAdapter);
+
+        searchByGender = findViewById(R.id.btnSearchByGender);
+        searchByGender.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String gender = genderSpinner.getSelectedItem().toString();
+                String backendServer = Preferences.loadBackendUrl(getApplicationContext()) + APIEndpoints.PATIENT + "gender/" + gender;
+
+                Toast.makeText(getApplicationContext(), "Filtere...", Toast.LENGTH_SHORT).show();
+
+                JsonArrayRequest jsonobj = new JsonArrayRequest(Request.Method.GET, backendServer, null,
+                        new Response.Listener<JSONArray>() {
+                            @Override
+                            public void onResponse(JSONArray response) {
+                                Log.d(LOG_TAG, "onResponse: success");
+
+                                listName.clear();
+                                listId.clear();
+
+                                // Placeholder fill list
+                                for (int i = 0; i < response.length(); i++) {
+                                    try {
+                                        JSONObject patientObj = response.getJSONObject(i);
+
+                                        String firstName = patientObj.getString("firstName");
+                                        String lastName = patientObj.getString("lastName");
+                                        String id = patientObj.getString("id");
+
+                                        listName.add(firstName + " " + lastName);
+                                        listId.add(id);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                adapter.notifyDataSetChanged();
+
+                                Log.d(LOG_TAG, "onClick: search by gender finished");
+                                Toast.makeText(getApplicationContext(), "Nach Geschlecht '" + gender + "' gefiltert", Toast.LENGTH_LONG).show();
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d(LOG_TAG, "onResponse: " + error.getMessage());
+
+                                Toast.makeText(getApplicationContext(), "Fehler beim Laden aller Patienten", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                ){
+
+                };
+                requestQueue.add(jsonobj);
+            }
+        });
+
         requestQueue = Volley.newRequestQueue(getApplicationContext());
 
+        String backendServer = Preferences.loadBackendUrl(getApplicationContext()) + APIEndpoints.PATIENT;
+        getPatients(backendServer);
+    }
+
+    private void getPatients(String backendServer) {
         // Getting all Patients
         Toast.makeText(getApplicationContext(), "Lade alle Patienten. Einen Moment bitte...", Toast.LENGTH_SHORT).show();
-
-        String backendServer = Preferences.loadBackendUrl(getApplicationContext()) + APIEndpoints.PATIENT;
         JsonArrayRequest jsonobj = new JsonArrayRequest(Request.Method.GET, backendServer, null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -124,7 +193,5 @@ public class SearchPatientActivity extends AppCompatActivity {
 
         };
         requestQueue.add(jsonobj);
-
-
     }
 }
