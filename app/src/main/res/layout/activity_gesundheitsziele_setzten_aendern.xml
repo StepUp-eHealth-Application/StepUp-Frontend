@@ -8,18 +8,21 @@
 
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/StepsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginBottom="4dp"
         android:text="geplannte Schritte/24h"
-        app:layout_constraintBottom_toTopOf="@+id/editTextNumber"
+        app:layout_constraintBottom_toTopOf="@+id/txtHealGoalData"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtHealthGoalName" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/txtHealthGoalName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -32,75 +35,56 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <DatePicker
-        android:id="@+id/datePicker1"
+        android:id="@+id/dateHealthGoal"
         android:layout_width="260dp"
         android:layout_height="148dp"
         android:layout_marginStart="48dp"
-        android:layout_marginBottom="200dp"
+        android:layout_marginBottom="254dp"
         android:calendarViewShown="false"
         android:datePickerMode="spinner"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSave"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/DateHealthGoalTextView"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/DateHealthGoalTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
+        android:layout_marginTop="36dp"
         android:text="Datum des Gesundheitsziel"
-        app:layout_constraintBottom_toTopOf="@+id/datePicker1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/editTextTextPersonName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginBottom="528dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Schrittzähler"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtHealGoalData" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="44dp"
         android:text="Speichern"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.884"
+        app:layout_constraintHorizontal_bias="0.945"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/editTextNumber"
+        android:id="@+id/txtHealGoalData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
-        android:layout_marginTop="64dp"
         android:ems="10"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+        app:layout_constraintTop_toBottomOf="@+id/StepsTextView" /><![CDATA[
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:text="Name des Gesundheitsziels"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName"
-        app:layout_constraintStart_toStartOf="parent" /><![CDATA[
+
 
 
 
@@ -118,6 +102,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.084" />
+
 
 
 

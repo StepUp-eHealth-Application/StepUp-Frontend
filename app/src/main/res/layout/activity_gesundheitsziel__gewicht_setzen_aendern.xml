@@ -20,9 +20,9 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <DatePicker
-        android:id="@+id/datePicker"
-        android:layout_width="190dp"
-        android:layout_height="68dp"
+        android:id="@+id/dateHealthGoal_Weight"
+        android:layout_width="252dp"
+        android:layout_height="156dp"
         android:layout_marginStart="48dp"
         android:calendarViewShown="false"
         android:datePickerMode="spinner"
@@ -30,7 +30,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/buttonSave_Weight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="44dp"
@@ -41,38 +41,17 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="70dp"
-        android:text="Name des Gesundheitsziels"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView10" />
-
-    <EditText
-        android:id="@+id/editTextTextPersonName3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
-
-    <TextView
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
         android:text="Zielgewicht"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName3" />
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
     <EditText
-        android:id="@+id/editTextNumber3"
+        android:id="@+id/txtHealthGoalDate_Weight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
@@ -97,7 +76,7 @@
         android:layout_marginTop="30dp"
         android:text="Einheit"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumber3" />
+        app:layout_constraintTop_toBottomOf="@+id/txtHealthGoalDate_Weight" />
 
     <TextView
         android:id="@+id/textView14"
