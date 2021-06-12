@@ -30,10 +30,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:iconifiedByDefault="false"
         android:queryHint="Nach Namen suchen"
-        app:layout_constraintTop_toBottomOf="@+id/btnSearchByGender"
+        app:layout_constraintTop_toBottomOf="@+id/btnFilterByAddress"
         tools:ignore="MissingConstraints" />
 
     <Button
@@ -45,5 +45,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerPatientGender" />
+
+    <EditText
+        android:id="@+id/eTxtAddress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:hint="Nach Adresse suchen"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSearchByGender" />
+
+    <Button
+        android:id="@+id/btnFilterByAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Filter Nach Adresse"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eTxtAddress" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

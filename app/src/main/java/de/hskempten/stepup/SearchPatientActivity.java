@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
@@ -43,6 +44,8 @@ public class SearchPatientActivity extends AppCompatActivity {
     ArrayAdapter<String> adapter;
     Spinner genderSpinner;
     Button searchByGender;
+    Button searchByAddress;
+    EditText eTxtAddress;
 
     RequestQueue requestQueue;
     int duration = Toast.LENGTH_SHORT;
@@ -55,6 +58,7 @@ public class SearchPatientActivity extends AppCompatActivity {
         listView = findViewById(R.id.listView);
         listName = new ArrayList<>();
         listId = new ArrayList<>();
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
 
         // filling gender spinner
         genderSpinner = (Spinner) findViewById(R.id.spinnerPatientGender);
@@ -118,10 +122,70 @@ public class SearchPatientActivity extends AppCompatActivity {
             }
         });
 
-        requestQueue = Volley.newRequestQueue(getApplicationContext());
+
 
         String backendServer = Preferences.loadBackendUrl(getApplicationContext()) + APIEndpoints.PATIENT;
         getPatients(backendServer);
+
+        eTxtAddress = findViewById(R.id.eTxtAddress);
+        searchByAddress = findViewById(R.id.btnFilterByAddress);
+        searchByAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (eTxtAddress.getText() == null) {
+                    eTxtAddress.setError("Addresse darf nicht leer sein!");
+                    return;
+                }
+                String address = eTxtAddress.getText().toString();
+                String backendServer = Preferences.loadBackendUrl(getApplicationContext()) + APIEndpoints.PATIENT + "address/" + address;
+
+                Toast.makeText(getApplicationContext(), "Filtere...", Toast.LENGTH_SHORT).show();
+
+                JsonArrayRequest jsonobj = new JsonArrayRequest(Request.Method.GET, backendServer, null,
+                        new Response.Listener<JSONArray>() {
+                            @Override
+                            public void onResponse(JSONArray response) {
+                                Log.d(LOG_TAG, "onResponse: success");
+
+                                listName.clear();
+                                listId.clear();
+
+                                // Placeholder fill list
+                                for (int i = 0; i < response.length(); i++) {
+                                    try {
+                                        JSONObject patientObj = response.getJSONObject(i);
+
+                                        String firstName = patientObj.getString("firstName");
+                                        String lastName = patientObj.getString("lastName");
+                                        String id = patientObj.getString("id");
+
+                                        listName.add(firstName + " " + lastName);
+                                        listId.add(id);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                adapter.notifyDataSetChanged();
+
+                                Log.d(LOG_TAG, "onClick: search by gender finished");
+                                Toast.makeText(getApplicationContext(), "Nach Adresse '" + address + "' gefiltert", Toast.LENGTH_LONG).show();
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d(LOG_TAG, "onResponse: " + error.getMessage());
+
+                                Toast.makeText(getApplicationContext(), "Fehler beim Laden aller Patienten", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                ){
+
+                };
+                requestQueue.add(jsonobj);
+            }
+        });
     }
 
     private void getPatients(String backendServer) {
