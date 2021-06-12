@@ -2,6 +2,7 @@ package de.hskempten.stepup;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -9,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import de.hskempten.stepup.preferences.Preferences;
 
@@ -19,6 +22,8 @@ public class MenuLeActivity extends AppCompatActivity {
     ImageButton btnSettings;
     String patientId;
     String patientName;
+
+    FloatingActionButton btnNewObservation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,16 @@ public class MenuLeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MenuLeActivity.this, DisplayPatientDataActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        btnNewObservation = findViewById(R.id.btnNewObservation2);
+        Log.d("foo", "onCreate: " + btnNewObservation);
+        btnNewObservation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent settingsIntent = new Intent(getApplicationContext(), ChooseObservationType.class);
+                MenuLeActivity.this.startActivity(settingsIntent);
             }
         });
     }
