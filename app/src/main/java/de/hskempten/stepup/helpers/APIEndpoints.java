@@ -6,5 +6,6 @@ public class APIEndpoints {
     public static final String SETTINGS = "api/v1/settings/";
     public static final String PATIENT = "api/v1/patient/";
     public static final String STEPS_OBSERVATION = "api/v1/observation/steps/";
+    public static final String WEIGHT_OBSERVATION = "api/v1/observation/weight/";
 
 }
