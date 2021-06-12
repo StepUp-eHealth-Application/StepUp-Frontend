@@ -83,6 +83,7 @@ public class SummaryActivity extends AppCompatActivity {
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 Log.i(TAG, "onResponse: " + error.getMessage());
+                                Toast.makeText(getApplicationContext(), "Zusammenfassung konnte nicht erstellt werden!", Toast.LENGTH_LONG).show();
                             }
                         }
                 ){
