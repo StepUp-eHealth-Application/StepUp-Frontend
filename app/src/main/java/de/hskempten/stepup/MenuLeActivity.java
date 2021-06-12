@@ -55,7 +55,7 @@ public class MenuLeActivity extends AppCompatActivity {
         btnPatientData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MenuLeActivity.this, PatientDataActivity.class);
+                Intent intent = new Intent(MenuLeActivity.this, DisplayPatientDataActivity.class);
                 startActivity(intent);
             }
         });
