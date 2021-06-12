@@ -30,7 +30,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/btnSaveWeightObservation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="44dp"
@@ -72,7 +72,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName3" />
 
     <EditText
-        android:id="@+id/editTextNumber3"
+        android:id="@+id/eTxtWeightObservation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
@@ -97,7 +97,7 @@
         android:layout_marginTop="30dp"
         android:text="Einheit"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumber3" />
+        app:layout_constraintTop_toBottomOf="@+id/eTxtWeightObservation" />
 
     <TextView
         android:id="@+id/textView14"
