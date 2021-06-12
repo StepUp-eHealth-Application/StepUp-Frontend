@@ -12,6 +12,15 @@ public class Preferences {
     private static String SELECTED_PATIENT_ID = "SELECTED_PATIENT_ID";
     private static String BACKEND_URL = "BACKEND_URL";
 
+    public static String loadActualPatientID(Context context) {
+        String patientId = Preferences.loadSelectedPatientID(context);
+        if (patientId == null || patientId == "") {
+            patientId = Preferences.loadPatientID(context);
+        }
+
+        return patientId;
+    }
+
     public static String loadFhirServerUrl(Context context) {
         return loadStringPreference(context, FHIR_SERVER_URL);
     }

@@ -203,7 +203,21 @@ public class GoalController {
             goal.getDescription().getCodingFirstRep().getDisplay()
         );
         stepsGoalDTO.setPatientId(patientId);
-        stepsGoalDTO.setDueDate(goal.getTarget().get(0).getDue().dateTimeValue().getValue());
+
+        if (goal.getTarget() != null) {
+            var firstTarget = goal.getTarget().get(0);
+            if (firstTarget != null) {
+                var due = firstTarget.getDue();
+                if (due != null) {
+                    var datetimeValue = due.dateTimeValue();
+                    if (datetimeValue != null) {
+                        var value = datetimeValue.getValue();
+                        stepsGoalDTO.setDueDate(value);
+                    }
+                }
+            }
+        }
+
         stepsGoalDTO.setStepsGoal(
             goal.getTargetFirstRep().getDetailQuantity().getValue().intValue()
         );
@@ -287,5 +301,39 @@ public class GoalController {
         stepsGoalDTO.setId(id);
 
         return stepsGoalDTO;
+    }
+
+    public WeightGoalDTO getWeightGoalById(String id) {
+        String fhirServer = settingsController.getFhirServerUrl();
+
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        Bundle goal = searchGoalById(id, fhirServer, client);
+        if (goal.getEntryFirstRep() == null) {
+            return null;
+        }
+
+        Goal g = (Goal) goal.getEntryFirstRep().getResource();
+        String patientId = g.getSubject().getReference().split("/")[1];
+        WeightGoalDTO weightGoalDTO = convertGoalToWeightGoalDto((Goal) goal.getEntryFirstRep().getResource(), patientId);
+        return weightGoalDTO;
+    }
+
+    public StepsGoalDTO getStepsGoalById(String id) {
+        String fhirServer = settingsController.getFhirServerUrl();
+
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        Bundle goal = searchGoalById(id, fhirServer, client);
+        if (goal.getEntryFirstRep() == null) {
+            return null;
+        }
+
+        Goal g = (Goal) goal.getEntryFirstRep().getResource();
+        String patientId = g.getSubject().getReference().split("/")[1];
+        StepsGoalDTO stepsGoalDto = convertGoalToStepsDTO(g, patientId);
+        return stepsGoalDto;
     }
 }
