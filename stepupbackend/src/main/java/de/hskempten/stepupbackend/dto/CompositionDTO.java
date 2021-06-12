@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -15,12 +16,14 @@ public class CompositionDTO {
 
     String id;
     String patientId;
-    LocalDate date;
+    Date date;
 
     @JsonCreator
     public CompositionDTO(@JsonProperty("patientId") String patientId,
-                          @JsonProperty("date") LocalDate date) {
+                          @JsonProperty("date") Date date,
+                          @JsonProperty("id") String id) {
         this.patientId = patientId;
         this.date = date;
+        this.id = id;
     }
 }
