@@ -32,8 +32,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".SearchPatientActivity" />
-        <activity android:name=".MenuPatientActivity" />
-        <activity android:name=".MenuLeActivity" />
+        <activity android:name=".MenuActivity" />
     </application>
 
 </manifest>
