@@ -7,7 +7,7 @@
     tools:context=".beobachtung_erfassen_gewicht">
 
     <Button
-        android:id="@+id/buttonSave_Weight"
+        android:id="@+id/btnSaveWeightObservation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="60dp"
@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <DatePicker
-        android:id="@+id/datePicker2"
+        android:id="@+id/dpWeightObservationDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
@@ -34,10 +34,10 @@
         android:layout_marginTop="30dp"
         android:text="Datum der Beobachtung"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtHealthGoalDate_Weight" />
+        app:layout_constraintTop_toBottomOf="@+id/eTxtWeightObservation" />
 
     <EditText
-        android:id="@+id/txtHealthGoalDate_Weight"
+        android:id="@+id/eTxtWeightObservation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"

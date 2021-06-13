@@ -16,20 +16,15 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.util.HashMap;
-import java.util.Map;
 
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.hskempten.stepup.helpers.APIEndpoints;
 import de.hskempten.stepup.preferences.Preferences;
 
 
@@ -61,10 +56,6 @@ public class gesundheitsziel_Gewicht_setzen_aendern extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gesundheitsziel__gewicht_setzen_aendern);
 
-        //get User Action
-        if(getIntent().hasExtra("previousPage")){
-            previousPage = getIntent().getExtras().getString("previousPage");
-        }
 
 
         //Spinner
@@ -83,7 +74,7 @@ public class gesundheitsziel_Gewicht_setzen_aendern extends AppCompatActivity {
             getHealthGoalDataFromBackend(backendUrl);
         }
 
-        buttonSave = (Button) findViewById(R.id.buttonSave_Weight);
+        buttonSave = (Button) findViewById(R.id.btnSaveWeightObservation);
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -282,6 +273,6 @@ public class gesundheitsziel_Gewicht_setzen_aendern extends AppCompatActivity {
     private void findViews(){
         //healthGoalName = (TextView) findViewById(R.id.txtHealthGoalName);
         dateHealthGoal = findViewById(R.id.dateHealthGoal_Weight);
-        healthGoalData = findViewById(R.id.txtHealthGoalDate_Weight);
+        healthGoalData = findViewById(R.id.eTxtWeightObservation);
     }
 }

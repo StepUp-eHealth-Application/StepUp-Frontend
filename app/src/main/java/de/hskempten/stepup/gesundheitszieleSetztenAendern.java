@@ -15,29 +15,25 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.util.HashMap;
-import java.util.Map;
 
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.hskempten.stepup.helpers.APIEndpoints;
 import de.hskempten.stepup.preferences.Preferences;
 
 public class gesundheitszieleSetztenAendern extends AppCompatActivity {
 
     private static final String LOG_TAG = "HealthGoalsSteps";
-    public String previousPage = "aendern"; //leer lassen und von vorheriger View beschreiben lassen
+    String previousPage = "aendern"; //leer lassen und von vorheriger View beschreiben lassen
+    String goalType = "stepsGoal";//leer lassen und von vorheriger View beschreiben lassen
     String backendUrl;
 
-   // TextView healthGoalName;
+   TextView healthGoalName;
     DatePicker dateHealthGoal;
     EditText healthGoalData;
 
@@ -52,13 +48,29 @@ public class gesundheitszieleSetztenAendern extends AppCompatActivity {
 
     int duration = Toast.LENGTH_SHORT;
 
-    String goalType = "stepsGoal";
+
     private Button buttonSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gesundheitsziele_setzten_aendern);
+        //get User Action
+        if(getIntent().hasExtra("previousPage")){
+            previousPage = getIntent().getExtras().getString("previousPage");
+        }
+        if(getIntent().hasExtra("goalType")){
+            goalType = getIntent().getExtras().getString("goalType");
+        }
+        //set correct heading for HelatGoal-View
+        healthGoalName = (TextView) findViewById(R.id.txtHealthGoalName);
+        String healthGoalWeight = "Gesundheitsziel Gewicht";
+        String healthGoalSteps = "Gesundheitsziel Schrittzähler";
+        if(goalType == "weightGoal"){
+            healthGoalName.setText(healthGoalWeight);
+        }else if (goalType == "stepsGoal"){
+            healthGoalName.setText(healthGoalSteps);
+        }
 
 
         findViews();
@@ -277,7 +289,7 @@ public class gesundheitszieleSetztenAendern extends AppCompatActivity {
     private void findViews(){
        //healthGoalName = (TextView) findViewById(R.id.txtHealthGoalName);
         dateHealthGoal = findViewById(R.id.dateHealthGoal);
-        healthGoalData = findViewById(R.id.txtHealGoalData);
+        healthGoalData = findViewById(R.id.eTxtNumberSteps);
     }
 
 }

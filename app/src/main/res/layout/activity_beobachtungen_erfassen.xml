@@ -8,7 +8,7 @@
 
 
     <TextView
-        android:id="@+id/txtHealthGoalName"
+        android:id="@+id/txtBeaobachtungErfassenName"
         android:layout_width="306dp"
         android:layout_height="83dp"
         android:layout_marginTop="5dp"
@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <DatePicker
-        android:id="@+id/datePicker1"
+        android:id="@+id/dpObservationSteps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
@@ -37,7 +37,7 @@
         android:layout_marginTop="30dp"
         android:text="Datum der Beobachtung"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtHealGoalData" />
+        app:layout_constraintTop_toBottomOf="@+id/eTxtNumberSteps" />
 
     <TextView
         android:id="@+id/textView4"
@@ -47,10 +47,10 @@
         android:layout_marginTop="30dp"
         android:text="Anzahl Schritte"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtHealthGoalName" />
+        app:layout_constraintTop_toBottomOf="@+id/txtBeaobachtungErfassenName" />
 
     <EditText
-        android:id="@+id/txtHealGoalData"
+        android:id="@+id/eTxtNumberSteps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
@@ -60,7 +60,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnSaveObservationSteps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="60dp"
