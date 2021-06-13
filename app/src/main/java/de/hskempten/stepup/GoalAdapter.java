@@ -1,8 +1,6 @@
 package de.hskempten.stepup;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class GoalAdapter extends ArrayAdapter<DataModelGoal> implements View.OnClickListener {
+public class GoalAdapter extends ArrayAdapter<DataModelGoal> {
 
     private static final String TAG = "GoalAdapter";
 
@@ -33,7 +31,7 @@ public class GoalAdapter extends ArrayAdapter<DataModelGoal> implements View.OnC
         Log.d(TAG, "created GoalAdapter");
     }
 
-    @Override
+    /*@Override
     public void onClick(View v) {
         int position = (Integer) v.getTag();
         Object object = getItem(position);
@@ -42,11 +40,7 @@ public class GoalAdapter extends ArrayAdapter<DataModelGoal> implements View.OnC
         String goalId = dataModelGoal.getId();
 
         Intent intent = new Intent(mContext.getApplicationContext(), beobachtung_anzeigen.class);
-        Bundle b = null;
-        b.putString("HEALTH_GOAL_ID", goalId);
-        intent.putExtras(b);
-        mContext.startActivity(intent);
-    }
+    }*/
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

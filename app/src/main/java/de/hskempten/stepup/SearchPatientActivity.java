@@ -20,7 +20,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -28,7 +27,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import de.hskempten.stepup.helpers.APIEndpoints;
 import de.hskempten.stepup.preferences.Preferences;
@@ -90,8 +88,17 @@ public class SearchPatientActivity extends AppCompatActivity {
                                     try {
                                         JSONObject patientObj = response.getJSONObject(i);
 
-                                        String firstName = patientObj.getString("firstName");
-                                        String lastName = patientObj.getString("lastName");
+                                        // get name without catch on missing data
+                                        String firstName = "[VORNAME]";
+                                        String lastName = "[NACHNAME]";
+                                        if(patientObj.has("firstName") && !patientObj.isNull("firstName")) {
+                                            firstName = patientObj.getString("firstName");
+                                        }
+                                        if(patientObj.has("lastName") && !patientObj.isNull("lastName")) {
+                                            lastName = patientObj.getString("lastName");
+                                        }
+                                        firstName = patientObj.getString("firstName");
+                                        lastName = patientObj.getString("lastName");
                                         String id = patientObj.getString("id");
 
                                         listName.add(firstName + " " + lastName);
@@ -238,7 +245,7 @@ public class SearchPatientActivity extends AppCompatActivity {
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                                Intent intent = new Intent(SearchPatientActivity.this, MenuLeActivity.class);
+                                Intent intent = new Intent(SearchPatientActivity.this, MenuActivity.class);
                                 Preferences.saveSelectedPatientID(listId.get(position), getApplicationContext());
                                 startActivity(intent);
                             }

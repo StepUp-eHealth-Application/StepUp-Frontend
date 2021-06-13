@@ -1,5 +1,7 @@
 package de.hskempten.stepup;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +32,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import de.hskempten.stepup.helpers.APIEndpoints;
+import de.hskempten.stepup.helpers.ActivityInterfaceKeys;
 import de.hskempten.stepup.preferences.Preferences;
 
 public class MenuActivity extends AppCompatActivity {
@@ -38,6 +42,7 @@ public class MenuActivity extends AppCompatActivity {
     TextView txtTitle;
     LinearLayout viewSettings;
     ImageButton btnSettings;
+    FloatingActionButton btnNew;
     String patientId;
     ArrayList<DataModelGoal> arrayList;
     ListView listView;
@@ -61,11 +66,13 @@ public class MenuActivity extends AppCompatActivity {
         txtTitle = findViewById(R.id.txtPatientName);
         String backendUrlName = getBackendUrlName();
         getPatientNameFromBackend(backendUrlName);
+        String backendUrlGoalSteps = getBackendUrlGoalSteps();
+        String backendUrlGoalWeight = getBackendUrlGoalWeight();
+        getPatientGoalsFromBackend(backendUrlGoalSteps, backendUrlGoalWeight);
 
         // getting patient goals
         listView = (ListView) findViewById(R.id.lstGoals);
         arrayList = new ArrayList<>();
-        addListItem("id","des", "date", "goal", "acc");
         adapter = new GoalAdapter(arrayList, getApplicationContext());
         listView.setAdapter(adapter);
 
@@ -74,9 +81,7 @@ public class MenuActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 DataModelGoal dataModelGoal = arrayList.get(position);
                 Intent intent = new Intent(getApplicationContext(), beobachtung_anzeigen.class);
-                Bundle b = null;
-                b.putString("HEALTH_GOAL_ID", dataModelGoal.getId());
-                intent.putExtras(b);
+                intent.putExtra(ActivityInterfaceKeys.HEALTH_GOAL_ID, dataModelGoal.getId());
                 MenuActivity.this.startActivity(intent);
             }
         });
@@ -118,6 +123,39 @@ public class MenuActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent settingsIntent = new Intent(MenuActivity.this, SettingsActivity.class);
                 MenuActivity.this.startActivity(settingsIntent);
+            }
+        });
+
+        //Alert Dialog Button
+        AlertDialog.Builder builder = new AlertDialog.Builder(MenuActivity.this);
+        builder.setCancelable(true)
+                .setTitle("Auswahl")
+                .setMessage("Möchten Sie eine neue Beobachtung oder ein neues Gesunheitsziel erstellen?");
+        builder.setNegativeButton("Beobachtung",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(MenuActivity.this, ChooseObservationType.class);
+                        MenuActivity.this.startActivity(intent);
+                    }
+                });
+        builder.setPositiveButton("Gesundheitsziel",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(MenuActivity.this, gesundheitszieleSetztenAendern.class);
+                        MenuActivity.this.startActivity(intent);
+                    }
+                });
+
+        btnNew = findViewById(R.id.btnNew);
+        Log.d(TAG, "onCreate: " + btnNew);
+        btnNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "createAlertDialog");
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
     }
@@ -166,32 +204,32 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private String getBackendUrlGoalSteps() {
-        String backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + "api/v1/goal/steps/" + patientId;
+        String backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + APIEndpoints.STEPS_GOAL + patientId;
         Log.d(TAG, "Backend URL: " + backendUrl);
         return backendUrl;
     }
 
     private String getBackendUrlGoalWeight() {
-        String backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + "api/v1/goal/weight/" + patientId;
+        String backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + APIEndpoints.WEIGHT_GOAL + patientId;
         Log.d(TAG, "Backend URL: " + backendUrl);
         return backendUrl;
     }
 
     private void getPatientGoalsFromBackend(String backendUrlGoalSteps, String backendUrlGoalWeight) {
-        JsonArrayRequest jsonarr = new JsonArrayRequest(Request.Method.GET, backendUrlGoalSteps, new JSONArray(),
+        // get all step goals
+        JsonArrayRequest stepsArr = new JsonArrayRequest(Request.Method.GET, backendUrlGoalSteps, new JSONArray(),
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
-                            // Get all goals
                             for(int i=0; i<response.length(); i++) {
-                                JSONObject jsonobj = response.getJSONObject(i);
+                                JSONObject stepsObj = response.getJSONObject(i);
 
                                 // Get ID
-                                String id = jsonobj.getString("id");
-                                String description = jsonobj.getString("description");
-                                String dueDate = jsonobj.getString("dueDate");
-                                String stepsGoal = jsonobj.getString("stepsGoal");
+                                String id = stepsObj.getString("id");
+                                String description = stepsObj.getString("description");
+                                String dueDate = stepsObj.getString("dueDate");
+                                String stepsGoal = stepsObj.getString("stepsGoal");
 
                                 // calculate accomplishment
                                 String accomplished = "foo";
@@ -203,7 +241,6 @@ public class MenuActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         Log.d(TAG, "onResponse: success");
-                        //exe
                         Toast.makeText(getApplicationContext(), "Gesundheitsziele 'Schritte' wurden erfolgreich geladen!", duration).show();
                     }
                 },
@@ -214,7 +251,44 @@ public class MenuActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Gesundheitsziele 'Schritte' konnten nicht geladen werden!", duration).show();
                     }
                 });
-        requestQueue.add(jsonarr);
+        requestQueue.add(stepsArr);
+        // get all weight goals
+        JsonArrayRequest weightArr = new JsonArrayRequest(Request.Method.GET, backendUrlGoalWeight, new JSONArray(),
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            // Get all goals
+                            for(int i=0; i<response.length(); i++) {
+                                JSONObject stepsObj = response.getJSONObject(i);
+
+                                // Get ID
+                                String id = stepsObj.getString("id");
+                                String description = stepsObj.getString("description");
+                                String dueDate = stepsObj.getString("dueDate");
+                                String weightGoal = stepsObj.getString("weightGoal");
+
+                                // calculate accomplishment
+                                String accomplished = "foo";
+
+                                // create new widget
+                                addListItem(id, description, dueDate, weightGoal, accomplished);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Log.d(TAG, "onResponse: success");
+                        Toast.makeText(getApplicationContext(), "Gesundheitsziele 'Gewicht' wurden erfolgreich geladen!", duration).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d(TAG, "onResponse: " + error.getMessage());
+                        Toast.makeText(getApplicationContext(), "Gesundheitsziele 'Gewicht' konnten nicht geladen werden!", duration).show();
+                    }
+                });
+        requestQueue.add(weightArr);
     }
 
     private void changeName(String firstName, String lastName) {
