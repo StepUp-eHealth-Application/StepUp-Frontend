@@ -1,10 +1,7 @@
 package de.hskempten.stepupbackend.endpoints.v1;
 
 import de.hskempten.stepupbackend.controllers.ObservationController;
-import de.hskempten.stepupbackend.dto.StepsGoalDTO;
-import de.hskempten.stepupbackend.dto.StepsObservationDTO;
-import de.hskempten.stepupbackend.dto.WeightGoalDTO;
-import de.hskempten.stepupbackend.dto.WeightObservationDTO;
+import de.hskempten.stepupbackend.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -40,6 +37,13 @@ public class ObservationEndpoint {
         return new ResponseEntity<>(observations, HttpStatus.OK);
     }
 
+    @PostMapping("weight/date")
+    public HttpEntity<List<WeightObservationDTO>> getWeightsByDate(@RequestBody DateDTO dateDTO) {
+        List<WeightObservationDTO> observations = observationController.getWeightsByDate(dateDTO);
+
+        return new ResponseEntity<>(observations, HttpStatus.OK);
+    }
+
     @GetMapping("steps/{id}")
     public HttpEntity<StepsObservationDTO> getStepsById(@PathVariable String id) {
         StepsObservationDTO stepsObservationDTO = observationController.getStepsObservationById(id);
@@ -55,6 +59,13 @@ public class ObservationEndpoint {
     @GetMapping("steps/patient/{patientId}")
     public HttpEntity<List<StepsObservationDTO>> getStepsByPatientId(@PathVariable String patientId) {
         List<StepsObservationDTO> observations = observationController.getStepsByPatientId(patientId);
+
+        return new ResponseEntity<>(observations, HttpStatus.OK);
+    }
+
+    @PostMapping("steps/date")
+    public HttpEntity<List<StepsObservationDTO>> getStepsByDate(@RequestBody DateDTO dateDTO) {
+        List<StepsObservationDTO> observations = observationController.getStepsByDate(dateDTO);
 
         return new ResponseEntity<>(observations, HttpStatus.OK);
     }
