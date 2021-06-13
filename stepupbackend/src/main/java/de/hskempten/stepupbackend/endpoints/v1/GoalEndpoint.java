@@ -1,6 +1,7 @@
 package de.hskempten.stepupbackend.endpoints.v1;
 
 import de.hskempten.stepupbackend.controllers.GoalController;
+import de.hskempten.stepupbackend.dto.DateDTO;
 import de.hskempten.stepupbackend.dto.StepsGoalDTO;
 import de.hskempten.stepupbackend.dto.WeightGoalDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,12 @@ public class GoalEndpoint {
         return new ResponseEntity<>(weightGoals, HttpStatus.OK);
     }
 
+    @PostMapping("weight/date")
+    public HttpEntity<List<WeightGoalDTO>> getAllWeightGoalsByDate(@RequestBody DateDTO dateDTO) {
+        List<WeightGoalDTO> weightGoals = goalController.getWeightGoalsByDate(dateDTO);
+        return new ResponseEntity<>(weightGoals, HttpStatus.OK);
+    }
+
     @PostMapping("weight")
     public HttpEntity<WeightGoalDTO> addWeightGoal(@RequestBody WeightGoalDTO weightGoalDTO) {
         weightGoalDTO = goalController.addWeightGoal(weightGoalDTO);
@@ -54,6 +61,12 @@ public class GoalEndpoint {
         List<StepsGoalDTO> weightGoals = goalController.getAllStepsGoalsByPatientId(patientId);
 
         return new ResponseEntity<>(weightGoals, HttpStatus.OK);
+    }
+
+    @PostMapping("steps/date")
+    public HttpEntity<List<StepsGoalDTO>> getAllStepsGoalsByDate(@RequestBody DateDTO dateDTO) {
+        List<StepsGoalDTO> stepsGoal = goalController.getStepsGoalsByDate(dateDTO);
+        return new ResponseEntity<>(stepsGoal, HttpStatus.OK);
     }
 
     @PostMapping("steps")

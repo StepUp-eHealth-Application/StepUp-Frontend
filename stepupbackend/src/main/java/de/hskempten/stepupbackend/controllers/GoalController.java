@@ -2,6 +2,7 @@ package de.hskempten.stepupbackend.controllers;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
+import de.hskempten.stepupbackend.dto.DateDTO;
 import de.hskempten.stepupbackend.dto.StepsGoalDTO;
 import de.hskempten.stepupbackend.dto.WeightGoalDTO;
 import de.hskempten.stepupbackend.helpers.FhirHelpers;
@@ -9,6 +10,7 @@ import org.hl7.fhir.r4.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -212,6 +214,7 @@ public class GoalController {
                     var datetimeValue = due.dateTimeValue();
                     if (datetimeValue != null) {
                         var value = datetimeValue.getValue();
+                        value.setDate(value.getDate() + 1);
                         stepsGoalDTO.setDueDate(value);
                     }
                 }
@@ -335,5 +338,83 @@ public class GoalController {
         String patientId = g.getSubject().getReference().split("/")[1];
         StepsGoalDTO stepsGoalDto = convertGoalToStepsDTO(g, patientId);
         return stepsGoalDto;
+    }
+
+    public List<WeightGoalDTO> getWeightGoalsByDate(DateDTO dateDTO) {
+        String fhirServer = settingsController.getFhirServerUrl();
+
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        ZoneId defaultZoneId = ZoneId.systemDefault();
+        Date date = Date.from(dateDTO.getDate().atStartOfDay(defaultZoneId).toInstant());
+
+        Bundle patientBundle = patientController.searchPatientById(dateDTO.getPatientId(), fhirServer, client);
+        if (patientBundle.getEntryFirstRep() == null) {
+            return new ArrayList<>();
+        }
+
+        Patient patient = (Patient) patientBundle.getEntryFirstRep().getResource();
+
+        System.out.println("Date: " + date.toString());
+        Bundle goalsBundle = client.search()
+            .forResource(Goal.class)
+            .where(Goal.TARGET_DATE.exactly().day(date))
+            .and(Goal.SUBJECT.hasId(patient.getIdElement().getValue()))
+            .returnBundle(Bundle.class)
+            .execute();
+
+        List<WeightGoalDTO> retGoals = new ArrayList<>();
+        for (Bundle.BundleEntryComponent entry : goalsBundle.getEntry()) {
+            Goal goal = (Goal) entry.getResource();
+
+            if (goal.getDescription().getCoding().get(0).getDisplay().contains("Gesundheitsziel Schritte")) {
+                continue;
+            }
+
+            WeightGoalDTO weightGoalDTO = convertGoalToWeightGoalDto(goal, dateDTO.getPatientId());
+            retGoals.add(weightGoalDTO);
+        }
+
+        return retGoals;
+    }
+
+    public List<StepsGoalDTO> getStepsGoalsByDate(DateDTO dateDTO) {
+        String fhirServer = settingsController.getFhirServerUrl();
+
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        ZoneId defaultZoneId = ZoneId.systemDefault();
+        Date date = Date.from(dateDTO.getDate().atStartOfDay(defaultZoneId).toInstant());
+
+        Bundle patientBundle = patientController.searchPatientById(dateDTO.getPatientId(), fhirServer, client);
+        if (patientBundle.getEntryFirstRep() == null) {
+            return new ArrayList<>();
+        }
+
+        Patient patient = (Patient) patientBundle.getEntryFirstRep().getResource();
+
+        System.out.println("Date: " + date.toString());
+        Bundle goalsBundle = client.search()
+            .forResource(Goal.class)
+            .where(Goal.TARGET_DATE.exactly().day(date))
+            .and(Goal.SUBJECT.hasId(patient.getIdElement().getValue()))
+            .returnBundle(Bundle.class)
+            .execute();
+
+        List<StepsGoalDTO> retGoals = new ArrayList<>();
+        for (Bundle.BundleEntryComponent entry : goalsBundle.getEntry()) {
+            Goal goal = (Goal) entry.getResource();
+
+            if (!goal.getDescription().getCoding().get(0).getDisplay().contains("Gesundheitsziel Schritte")) {
+                continue;
+            }
+
+            StepsGoalDTO stepsGoalDTO = convertGoalToStepsDTO(goal, dateDTO.getPatientId());
+            retGoals.add(stepsGoalDTO);
+        }
+
+        return retGoals;
     }
 }

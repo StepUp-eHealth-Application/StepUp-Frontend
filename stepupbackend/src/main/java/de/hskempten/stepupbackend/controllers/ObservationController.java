@@ -2,6 +2,8 @@ package de.hskempten.stepupbackend.controllers;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
+import de.hskempten.stepupbackend.dto.DateDTO;
+import de.hskempten.stepupbackend.dto.StepsGoalDTO;
 import de.hskempten.stepupbackend.dto.StepsObservationDTO;
 import de.hskempten.stepupbackend.dto.WeightObservationDTO;
 import de.hskempten.stepupbackend.helpers.FhirHelpers;
@@ -277,5 +279,85 @@ public class ObservationController {
         StepsObservationDTO stepsObservationDTO = convertObservationToStepsDto(fhirServer, patient, observation);
 
         return stepsObservationDTO;
+    }
+
+    public List<WeightObservationDTO> getWeightsByDate(DateDTO dateDTO) {
+        String fhirServer = settingsController.getFhirServerUrl();
+
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        String id = dateDTO.getPatientId();
+        // Getting patient
+        Patient patient = (Patient) patientController.searchPatientById(
+            id,
+            fhirServer,
+            client).getEntryFirstRep().getResource();
+
+        Bundle observations = client.search()
+            .forResource(Observation.class)
+            .where(Observation.SUBJECT.hasId(patient.getIdElement().getValue()))
+            .returnBundle(Bundle.class)
+            .execute();
+
+        List<WeightObservationDTO> retObervations = new ArrayList<>();
+        for (Bundle.BundleEntryComponent entry : observations.getEntry()) {
+            Observation observation = (Observation) entry.getResource();
+
+            // Skipping step observations
+            if (!observation.getCode().getCoding().get(0).getDisplay().contains("Body weight measured at")) {
+                continue;
+            }
+
+            // Skipping wrong dates
+            if (!observation.getCode().getCoding().get(0).getDisplay().contains(dateDTO.getDate().toString())) {
+                continue;
+            }
+            WeightObservationDTO weightObservationDTO = convertObservationToWeightObservation(fhirServer, patient, observation);
+
+            retObervations.add(weightObservationDTO);
+        }
+
+        return retObervations;
+    }
+
+    public List<StepsObservationDTO> getStepsByDate(DateDTO dateDTO) {
+        String fhirServer = settingsController.getFhirServerUrl();
+
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        String id = dateDTO.getPatientId();
+        // Getting patient
+        Patient patient = (Patient) patientController.searchPatientById(
+            id,
+            fhirServer,
+            client).getEntryFirstRep().getResource();
+
+        Bundle observations = client.search()
+            .forResource(Observation.class)
+            .where(Observation.SUBJECT.hasId(patient.getIdElement().getValue()))
+            .returnBundle(Bundle.class)
+            .execute();
+
+        List<StepsObservationDTO> retObervations = new ArrayList<>();
+        for (Bundle.BundleEntryComponent entry : observations.getEntry()) {
+            Observation observation = (Observation) entry.getResource();
+
+            // Skipping step observations
+            if (!observation.getCode().getCoding().get(0).getDisplay().contains("Number of Steps in 24 Hours, Measured at ")) {
+                continue;
+            }
+
+            // Skipping wrong dates
+            if (!observation.getCode().getCoding().get(0).getDisplay().contains(dateDTO.getDate().toString())) {
+                continue;
+            }
+            StepsObservationDTO weightObservationDTO = convertObservationToStepsDto(fhirServer, patient, observation);
+
+            retObervations.add(weightObservationDTO);
+        }
+
+        return retObervations;
     }
 }
