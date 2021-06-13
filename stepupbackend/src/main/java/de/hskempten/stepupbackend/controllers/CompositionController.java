@@ -3,14 +3,12 @@ package de.hskempten.stepupbackend.controllers;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import de.hskempten.stepupbackend.dto.CompositionDTO;
-import de.hskempten.stepupbackend.fhir.FhirClient;
 import de.hskempten.stepupbackend.helpers.FhirHelpers;
 import org.hl7.fhir.r4.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -23,8 +21,6 @@ public class CompositionController {
     SettingsController settingsController;
 
     public CompositionDTO createComposition(CompositionDTO compositionDTO) {
-        Device fhirDevice = new Device();
-
         String fhirServer = settingsController.getFhirServerUrl();
         FhirContext ctx = FhirContext.forR4();
         IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
@@ -133,5 +129,36 @@ public class CompositionController {
 
         compositionDTO.setId(createdComposition.getIdElement().getIdPart());
         return compositionDTO;
+    }
+
+    public CompositionDTO getCompositionById(String id) {
+        String fhirServer = settingsController.getFhirServerUrl();
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        Bundle compositionBundle = searchCompositionById(id, client, fhirServer);
+        if (compositionBundle.getEntryFirstRep() == null) {
+            return null;
+        }
+
+        Composition composition = (Composition) compositionBundle.getEntryFirstRep().getResource();
+        CompositionDTO compositionDTO = new CompositionDTO();
+        compositionDTO.setId(composition.getIdElement().getIdPart());
+        compositionDTO.setPatientId(composition.getSubject().getReference());
+        compositionDTO.setDate(composition.getDate());
+
+        return compositionDTO;
+    }
+
+    private Bundle searchCompositionById(String id, IGenericClient client, String fhirServer) {
+        String searchUrl = fhirServer + "/Composition?_id=" + id;
+        Bundle response = client.search()
+            .byUrl(searchUrl)
+            .returnBundle(Bundle.class)
+            .execute();
+        if (response.getTotal() <= 0) {
+            return null;
+        }
+        return response;
     }
 }
