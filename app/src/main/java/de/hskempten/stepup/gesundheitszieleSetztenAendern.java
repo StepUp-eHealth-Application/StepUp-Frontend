@@ -29,11 +29,12 @@ import de.hskempten.stepup.preferences.Preferences;
 public class gesundheitszieleSetztenAendern extends AppCompatActivity {
 
     private static final String LOG_TAG = "HealthGoalsSteps";
-    String previousPage = "aendern"; //leer lassen und von vorheriger View beschreiben lassen
-    String goalType = "stepsGoal";//leer lassen und von vorheriger View beschreiben lassen
+    String previousPage;// = "aendern"; //leer lassen und von vorheriger View beschreiben lassen
+    String goalType;// = "stepsGoal";//leer lassen und von vorheriger View beschreiben lassen
     String backendUrl;
 
-   TextView healthGoalName;
+    TextView healthGoalName;
+    TextView healtGoalDataDescription;
     DatePicker dateHealthGoal;
     EditText healthGoalData;
 
@@ -64,12 +65,17 @@ public class gesundheitszieleSetztenAendern extends AppCompatActivity {
         }
         //set correct heading for HelatGoal-View
         healthGoalName = (TextView) findViewById(R.id.txtHealthGoalName);
+        healtGoalDataDescription = (TextView) findViewById(R.id.txtHealtGoalDataDescription);
         String healthGoalWeight = "Gesundheitsziel Gewicht";
         String healthGoalSteps = "Gesundheitsziel Schrittzähler";
+        String dataDesriptionSteps = "geplannte Schritte in 24h";
+        String dataDescriptionWeight = "geplanntes Gewicht in Kg";
         if(goalType == "weightGoal"){
             healthGoalName.setText(healthGoalWeight);
+            healtGoalDataDescription.setText(dataDescriptionWeight);
         }else if (goalType == "stepsGoal"){
             healthGoalName.setText(healthGoalSteps);
+            healtGoalDataDescription.setText(dataDesriptionSteps);
         }
 
 
@@ -114,13 +120,19 @@ public class gesundheitszieleSetztenAendern extends AppCompatActivity {
         //goalId = HEALTH_GOAL_ID;
         goalId = "2181788";
 
+        String goalTypeForUrl = "";
+        if(goalType == "weightGoal"){
+            goalTypeForUrl = "weight";
+        }else if(goalType == "stepsGoal"){
+            goalTypeForUrl = "steps";
+        }
         //get correct Url
         if(previousPage == "aendern"){
-            backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + "api/v1/goal/steps/" + goalId;
+            backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + "api/v1/goal/" + goalTypeForUrl + "/" + goalId;
         }else if(previousPage == "neu"){
-            backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + "api/v1/goal/steps";
+            backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + "api/v1/goal/" + goalTypeForUrl + "/";
         }else if (previousPage == "put"){
-            backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + "api/v1/goal/steps/" + goalId + "/";
+            backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + "api/v1/goal/" + goalTypeForUrl + "/"  + goalId + "/";
         }
         Log.d(LOG_TAG, "Backend URL: " + backendUrl);
         return backendUrl;
