@@ -203,7 +203,21 @@ public class GoalController {
             goal.getDescription().getCodingFirstRep().getDisplay()
         );
         stepsGoalDTO.setPatientId(patientId);
-        stepsGoalDTO.setDueDate(goal.getTarget().get(0).getDue().dateTimeValue().getValue());
+
+        if (goal.getTarget() != null) {
+            var firstTarget = goal.getTarget().get(0);
+            if (firstTarget != null) {
+                var due = firstTarget.getDue();
+                if (due != null) {
+                    var datetimeValue = due.dateTimeValue();
+                    if (datetimeValue != null) {
+                        var value = datetimeValue.getValue();
+                        stepsGoalDTO.setDueDate(value);
+                    }
+                }
+            }
+        }
+
         stepsGoalDTO.setStepsGoal(
             goal.getTargetFirstRep().getDetailQuantity().getValue().intValue()
         );

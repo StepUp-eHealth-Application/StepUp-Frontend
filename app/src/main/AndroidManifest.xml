@@ -24,6 +24,7 @@
         <activity android:name=".beobachtungen_erfassen" />
         <activity android:name=".PatientDataActivity" />
         <activity android:name=".DeviceCreationActivity" />
+        <activity android:name=".ChooseObservationType" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

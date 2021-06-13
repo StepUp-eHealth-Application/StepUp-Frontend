@@ -6,8 +6,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +20,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -24,22 +28,26 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import de.hskempten.stepup.helpers.APIEndpoints;
 import de.hskempten.stepup.preferences.Preferences;
 
 public class SearchPatientActivity extends AppCompatActivity {
 
-    private static final String TAG = "SearchPatient";
+    private static final String LOG_TAG = "SearchPatientActivity";
 
     SearchView searchView;
     ListView listView;
     ArrayList<String> listName;
     ArrayList<String> listId;
     ArrayAdapter<String> adapter;
+    Spinner genderSpinner;
+    Button searchByGender;
+    Button searchByAddress;
+    EditText eTxtAddress;
 
     RequestQueue requestQueue;
-
     int duration = Toast.LENGTH_SHORT;
 
     @Override
@@ -50,98 +58,204 @@ public class SearchPatientActivity extends AppCompatActivity {
         listView = findViewById(R.id.listView);
         listName = new ArrayList<>();
         listId = new ArrayList<>();
-
-        String backendUrl = getBackendUrl();
-        setupQueue();
-        getPatientsFromBackend(backendUrl);
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                if(listName.contains(query)){
-                    adapter.getFilter().filter(query);
-                }else{
-                    Toast.makeText(SearchPatientActivity.this, "Keine Übereinstimmung gefunden.",Toast.LENGTH_LONG).show();
-                }
-                return false;
-            }
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
-                return false;
-            }
-        });
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                Intent intent = new Intent(SearchPatientActivity.this, MenuLeActivity.class);
-                Preferences.saveSelectedPatientID(listId.get(position), getApplicationContext());
-                startActivity(intent);
-            }
-        });
-    }
-
-    private void setupQueue() {
         requestQueue = Volley.newRequestQueue(getApplicationContext());
+
+        // filling gender spinner
+        genderSpinner = (Spinner) findViewById(R.id.spinnerPatientGender);
+        ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(this,
+                R.array.genders, android.R.layout.simple_spinner_item);
+        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        genderSpinner.setAdapter(genderAdapter);
+
+        searchByGender = findViewById(R.id.btnSearchByGender);
+        searchByGender.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String gender = genderSpinner.getSelectedItem().toString();
+                String backendServer = Preferences.loadBackendUrl(getApplicationContext()) + APIEndpoints.PATIENT + "gender/" + gender;
+
+                Toast.makeText(getApplicationContext(), "Filtere...", Toast.LENGTH_SHORT).show();
+
+                JsonArrayRequest jsonobj = new JsonArrayRequest(Request.Method.GET, backendServer, null,
+                        new Response.Listener<JSONArray>() {
+                            @Override
+                            public void onResponse(JSONArray response) {
+                                Log.d(LOG_TAG, "onResponse: success");
+
+                                listName.clear();
+                                listId.clear();
+
+                                // Placeholder fill list
+                                for (int i = 0; i < response.length(); i++) {
+                                    try {
+                                        JSONObject patientObj = response.getJSONObject(i);
+
+                                        String firstName = patientObj.getString("firstName");
+                                        String lastName = patientObj.getString("lastName");
+                                        String id = patientObj.getString("id");
+
+                                        listName.add(firstName + " " + lastName);
+                                        listId.add(id);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                adapter.notifyDataSetChanged();
+
+                                Log.d(LOG_TAG, "onClick: search by gender finished");
+                                Toast.makeText(getApplicationContext(), "Nach Geschlecht '" + gender + "' gefiltert", Toast.LENGTH_LONG).show();
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d(LOG_TAG, "onResponse: " + error.getMessage());
+
+                                Toast.makeText(getApplicationContext(), "Fehler beim Laden aller Patienten", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                ){
+
+                };
+                requestQueue.add(jsonobj);
+            }
+        });
+
+
+
+        String backendServer = Preferences.loadBackendUrl(getApplicationContext()) + APIEndpoints.PATIENT;
+        getPatients(backendServer);
+
+        eTxtAddress = findViewById(R.id.eTxtAddress);
+        searchByAddress = findViewById(R.id.btnFilterByAddress);
+        searchByAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (eTxtAddress.getText() == null) {
+                    eTxtAddress.setError("Addresse darf nicht leer sein!");
+                    return;
+                }
+                String address = eTxtAddress.getText().toString();
+                String backendServer = Preferences.loadBackendUrl(getApplicationContext()) + APIEndpoints.PATIENT + "address/" + address;
+
+                Toast.makeText(getApplicationContext(), "Filtere...", Toast.LENGTH_SHORT).show();
+
+                JsonArrayRequest jsonobj = new JsonArrayRequest(Request.Method.GET, backendServer, null,
+                        new Response.Listener<JSONArray>() {
+                            @Override
+                            public void onResponse(JSONArray response) {
+                                Log.d(LOG_TAG, "onResponse: success");
+
+                                listName.clear();
+                                listId.clear();
+
+                                // Placeholder fill list
+                                for (int i = 0; i < response.length(); i++) {
+                                    try {
+                                        JSONObject patientObj = response.getJSONObject(i);
+
+                                        String firstName = patientObj.getString("firstName");
+                                        String lastName = patientObj.getString("lastName");
+                                        String id = patientObj.getString("id");
+
+                                        listName.add(firstName + " " + lastName);
+                                        listId.add(id);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                adapter.notifyDataSetChanged();
+
+                                Log.d(LOG_TAG, "onClick: search by gender finished");
+                                Toast.makeText(getApplicationContext(), "Nach Adresse '" + address + "' gefiltert", Toast.LENGTH_LONG).show();
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d(LOG_TAG, "onResponse: " + error.getMessage());
+
+                                Toast.makeText(getApplicationContext(), "Fehler beim Laden aller Patienten", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                ){
+
+                };
+                requestQueue.add(jsonobj);
+            }
+        });
     }
 
-    private String getBackendUrl() {
-        String backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + APIEndpoints.PATIENT;
-        Log.d(TAG, "Backend URL: " + backendUrl);
-        return backendUrl;
-    }
-
-    private void getPatientsFromBackend(String backendUrl) {
-        JsonArrayRequest jsonarr = new JsonArrayRequest(Request.Method.GET, backendUrl, new JSONArray(),
+    private void getPatients(String backendServer) {
+        // Getting all Patients
+        Toast.makeText(getApplicationContext(), "Lade alle Patienten. Einen Moment bitte...", Toast.LENGTH_SHORT).show();
+        JsonArrayRequest jsonobj = new JsonArrayRequest(Request.Method.GET, backendServer, null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        try {
-                            for(int i=0; i<response.length(); i++) {
-                                JSONObject jsonobj = response.getJSONObject(i);
+                        Log.d(LOG_TAG, "onResponse: success");
 
-                                // Get Patient ID
-                                String patientId = jsonobj.getString("id");
+                        Toast.makeText(getApplicationContext(), "Alle Patienten erfolgreich geladen!", Toast.LENGTH_LONG).show();
 
-                                // Get name without catch on missing data
-                                String firstName = "[firstName]";
-                                String lastName = "[lastName]";
-                                if(jsonobj.has("firstName") && !jsonobj.isNull("firstName")) {
-                                    firstName = jsonobj.getString("firstName");
-                                }
-                                if(jsonobj.has("lastName") && !jsonobj.isNull("lastName")) {
-                                    lastName = jsonobj.getString("lastName");
-                                }
+                        // Placeholder fill list
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject patientObj = response.getJSONObject(i);
 
-                                // Make new list entry
-                                newListEntry(patientId, firstName, lastName);
+                                String firstName = patientObj.getString("firstName");
+                                String lastName = patientObj.getString("lastName");
+                                String id = patientObj.getString("id");
+
+                                listName.add(firstName + " " + lastName);
+                                listId.add(id);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
-                        Log.d(TAG, "onResponse: success");
-                        createList();
-                        Toast.makeText(getApplicationContext(), "Verfügbare Patienten erfolgreich geladen!", duration).show();
+
+                        adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, listName);
+                        listView.setAdapter(adapter);
+
+                        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                            @Override
+                            public boolean onQueryTextSubmit(String query) {
+                                if(listName.contains(query)){
+                                    adapter.getFilter().filter(query);
+                                }else{
+                                    Toast.makeText(SearchPatientActivity.this, "Keine Übereinstimmung gefunden.",Toast.LENGTH_LONG).show();
+                                }
+                                return false;
+                            }
+                            @Override
+                            public boolean onQueryTextChange(String newText) {
+                                adapter.getFilter().filter(newText);
+                                return false;
+                            }
+                        });
+
+                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                                Intent intent = new Intent(SearchPatientActivity.this, MenuLeActivity.class);
+                                Preferences.saveSelectedPatientID(listId.get(position), getApplicationContext());
+                                startActivity(intent);
+                            }
+                        });
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d(TAG, "onResponse: " + error.getMessage());
-                        Toast.makeText(getApplicationContext(), "Patienten konnten nicht geladen werden!", duration).show();
+                        Log.d(LOG_TAG, "onResponse: " + error.getMessage());
+
+                        Toast.makeText(getApplicationContext(), "Fehler beim Laden aller Patienten", Toast.LENGTH_LONG).show();
                     }
-                });
-        requestQueue.add(jsonarr);
-    }
+                }
+        ){
 
-    private void newListEntry(String patientId, String firstName, String lastName) {
-        listId.add(patientId);
-        listName.add(firstName + " " + lastName);
-    }
-
-    private void createList() {
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listName);
-        listView.setAdapter(adapter);
+        };
+        requestQueue.add(jsonobj);
     }
 }

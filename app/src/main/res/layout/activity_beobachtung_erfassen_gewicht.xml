@@ -7,7 +7,7 @@
     tools:context=".beobachtung_erfassen_gewicht">
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/btnSaveWeightObservation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="60dp"
@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <DatePicker
-        android:id="@+id/datePicker2"
+        android:id="@+id/dpWeightObservationDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
@@ -34,15 +34,15 @@
         android:layout_marginTop="30dp"
         android:text="Datum der Beobachtung"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumber3" />
+        app:layout_constraintTop_toBottomOf="@+id/eTxtWeightObservation" />
 
     <EditText
-        android:id="@+id/editTextNumber3"
+        android:id="@+id/eTxtWeightObservation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:ems="10"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginTop="30dp"
-        android:text="aktuelles Gewicht"
+        android:text="aktuelles Gewicht in kg"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
@@ -62,6 +62,7 @@
         android:layout_height="83dp"
         android:layout_marginTop="5dp"
         android:text="Neue Beobachtung zum Gewicht"
+        android:textColor="@color/secondary"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
