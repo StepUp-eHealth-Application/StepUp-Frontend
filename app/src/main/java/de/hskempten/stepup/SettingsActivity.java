@@ -123,14 +123,8 @@ public class SettingsActivity extends AppCompatActivity {
 
                     Toast.makeText(context, "URLs wurden gespeichert", duration).show();
                 }
-                openActivity();
-
             }
         });
-
     }
- public void openActivity(){
-   Intent intent = new Intent(this, MenuPatientActivity.class);
- startActivity(intent);
- }
+
 }

@@ -28,7 +28,7 @@ import de.hskempten.stepup.preferences.Preferences;
 
 public class gesundheitszieleSetztenAendern extends AppCompatActivity {
 
-    private static final String LOG_TAG = "HealthGoalsSteps";
+    private static final String LOG_TAG = "HealthGoals";
     String previousPage;// = "aendern"; //leer lassen und von vorheriger View beschreiben lassen
     String goalType;// = "stepsGoal";//leer lassen und von vorheriger View beschreiben lassen
     String backendUrl;
@@ -57,10 +57,10 @@ public class gesundheitszieleSetztenAendern extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gesundheitsziele_setzten_aendern);
         //get User Action
-        if(getIntent().hasExtra("previousPage")){
-            previousPage = getIntent().getExtras().getString("previousPage");
+        if(getIntent().hasExtra("previousPage") == true){
+            previousPage = (String) getIntent().getExtras().getString("previousPage");
         }
-        if(getIntent().hasExtra("goalType")){
+        if(getIntent().hasExtra("goalType") == true){
             goalType = getIntent().getExtras().getString("goalType");
         }
         //set correct heading for HelatGoal-View
@@ -70,10 +70,10 @@ public class gesundheitszieleSetztenAendern extends AppCompatActivity {
         String healthGoalSteps = "Gesundheitsziel Schrittzähler";
         String dataDesriptionSteps = "geplannte Schritte in 24h";
         String dataDescriptionWeight = "geplanntes Gewicht in Kg";
-        if(goalType == "weightGoal"){
+        if(goalType.equals("weightGoal")){
             healthGoalName.setText(healthGoalWeight);
             healtGoalDataDescription.setText(dataDescriptionWeight);
-        }else if (goalType == "stepsGoal"){
+        }else if (goalType.equals("stepsGoal")){
             healthGoalName.setText(healthGoalSteps);
             healtGoalDataDescription.setText(dataDesriptionSteps);
         }
@@ -82,7 +82,7 @@ public class gesundheitszieleSetztenAendern extends AppCompatActivity {
         findViews();
         setupQueue();
 
-        if(previousPage == "aendern"){
+        if(previousPage.equals("aendern")){
             backendUrl = getBackendUrl(previousPage);
             getHealthGoalDataFromBackend(backendUrl);
         }
@@ -95,12 +95,12 @@ public class gesundheitszieleSetztenAendern extends AppCompatActivity {
               //  setHealthGoalToBackend(backendUrl);
 
 
-                if(previousPage == "aendern"){
+                if(previousPage.equals("aendern")){
                     previousPage = "put";
                     backendUrl = getBackendUrl(previousPage);
                     putHealthGoalDataToBackend(backendUrl);
                 }
-                else if(previousPage == "neu"){
+                else if(previousPage.equals("neu")){
                     backendUrl = getBackendUrl(previousPage);
                     setHealthGoalToBackend(backendUrl);
                 }
@@ -121,17 +121,17 @@ public class gesundheitszieleSetztenAendern extends AppCompatActivity {
         goalId = "2181788";
 
         String goalTypeForUrl = "";
-        if(goalType == "weightGoal"){
+        if(goalType.equals("weightGoal")){
             goalTypeForUrl = "weight";
-        }else if(goalType == "stepsGoal"){
+        }else if(goalType.equals("stepsGoal")){
             goalTypeForUrl = "steps";
         }
         //get correct Url
-        if(previousPage == "aendern"){
+        if(previousPage.equals("aendern")){
             backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + "api/v1/goal/" + goalTypeForUrl + "/" + goalId;
-        }else if(previousPage == "neu"){
+        }else if(previousPage.equals("neu")){
             backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + "api/v1/goal/" + goalTypeForUrl + "/";
-        }else if (previousPage == "put"){
+        }else if (previousPage.equals("put")){
             backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + "api/v1/goal/" + goalTypeForUrl + "/"  + goalId + "/";
         }
         Log.d(LOG_TAG, "Backend URL: " + backendUrl);
@@ -301,7 +301,7 @@ public class gesundheitszieleSetztenAendern extends AppCompatActivity {
     private void findViews(){
        //healthGoalName = (TextView) findViewById(R.id.txtHealthGoalName);
         dateHealthGoal = findViewById(R.id.dateHealthGoal);
-        healthGoalData = findViewById(R.id.eTxtNumberSteps);
+        healthGoalData = findViewById(R.id.txtHealthGoalData);
     }
 
 }
