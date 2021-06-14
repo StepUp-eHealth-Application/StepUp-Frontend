@@ -3,6 +3,7 @@ package de.hskempten.stepup;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -80,6 +81,8 @@ public class SettingsActivity extends AppCompatActivity {
                     checked = false;
                 }
 
+
+
                 if (!UrlUtil.isValid(backendUrl)) {
                     txtBackendUrl.setError("URL ist nicht valide");
                     checked = false;
@@ -120,9 +123,8 @@ public class SettingsActivity extends AppCompatActivity {
 
                     Toast.makeText(context, "URLs wurden gespeichert", duration).show();
                 }
-
-
             }
         });
     }
+
 }

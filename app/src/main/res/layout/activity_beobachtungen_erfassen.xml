@@ -8,12 +8,11 @@
 
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/txtBeaobachtungErfassenName"
         android:layout_width="306dp"
         android:layout_height="83dp"
         android:layout_marginTop="5dp"
         android:text="Neue Beobachtung zum Schrittzähler"
-        android:textColor="@color/secondary"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
@@ -28,10 +27,10 @@
         android:calendarViewShown="false"
         android:datePickerMode="spinner"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/DateHealthGoalTextView" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/DateHealthGoalTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
@@ -48,7 +47,7 @@
         android:layout_marginTop="30dp"
         android:text="Anzahl Schritte"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/txtBeaobachtungErfassenName" />
 
     <EditText
         android:id="@+id/eTxtNumberSteps"
