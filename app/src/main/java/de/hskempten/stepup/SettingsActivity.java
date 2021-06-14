@@ -130,7 +130,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     }
  public void openActivity(){
-   Intent intent = new Intent(this, gesundheitszieleSetztenAendern.class);
+   Intent intent = new Intent(this, MenuPatientActivity.class);
  startActivity(intent);
  }
 }
