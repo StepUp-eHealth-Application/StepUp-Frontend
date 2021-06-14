@@ -44,8 +44,9 @@ public class MenuPatientActivity extends AppCompatActivity {
         btnPatientData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MenuPatientActivity.this, PatientDataActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(MenuPatientActivity.this, DisplayPatientDataActivity.class);
+                //startActivity(intent);
+                MenuPatientActivity.this.startActivity(intent);
             }
         });
 
@@ -56,6 +57,26 @@ public class MenuPatientActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent settingsIntent = new Intent(MenuPatientActivity.this, SettingsActivity.class);
                 MenuPatientActivity.this.startActivity(settingsIntent);
+            }
+        });
+
+        // Opening Create Profile Settings when "Profi erstellen" Button clicked
+        Button btnCreatePatient = findViewById(R.id.btnCreatePatient);
+        btnCreatePatient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuPatientActivity.this, PatientDataActivity.class);
+                MenuPatientActivity.this.startActivity(intent);
+            }
+        });
+
+        // Opening Show Observations when "Beobachtungen anzeigen" Button clicked
+        Button btnShowObservations = findViewById(R.id.btnShowObservations);
+        btnShowObservations.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuPatientActivity.this, beobachtung_anzeigen.class);
+                MenuPatientActivity.this.startActivity(intent);
             }
         });
     }
