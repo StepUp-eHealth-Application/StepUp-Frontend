@@ -27,6 +27,9 @@ public class ObservationController {
     @Autowired
     private SettingsController settingsController;
 
+    @Autowired
+    private DeviceController deviceController;
+
     public WeightObservationDTO addWeightObservation(WeightObservationDTO weightObservationDTO) {
         FhirContext ctx = FhirContext.forR4();
         String serverBase = weightObservationDTO.getFhirServer();
@@ -146,6 +149,16 @@ public class ObservationController {
         patientRef.setType("Patient");
         observation.setSubject(patientRef);
 
+        // Setting device reference
+        Device device = (Device) deviceController
+            .searchDeviceById(stepsObservationDTO.getDeviceID(), stepsObservationDTO.getFhirServer(), client)
+            .getEntryFirstRep()
+            .getResource();
+
+        Reference deviceRef = new Reference(device);
+        deviceRef.setType("Device");
+        observation.setDevice(deviceRef);
+
         // Setting concept
         observation
             .getCode()
@@ -208,7 +221,13 @@ public class ObservationController {
     private StepsObservationDTO convertObservationToStepsDto(String fhirServer, Patient patient, Observation observation) {
         StepsObservationDTO stepsObservationDto = new StepsObservationDTO();
         stepsObservationDto.setId(observation.getIdElement().getIdPart());
-        stepsObservationDto.setPatientID(patient.getIdElement().getIdPart());
+
+        String ref = observation.getSubject().getReference();
+        if (ref.contains("/")) {
+            var refParts = ref.split("/");
+            ref = refParts[refParts.length - 1];
+        }
+        stepsObservationDto.setPatientID(ref);
         stepsObservationDto.setFhirServer(fhirServer);
 
         try {
@@ -223,6 +242,13 @@ public class ObservationController {
             System.out.println("Could not parse date time (null pointer)");
             stepsObservationDto.setDate(null);
         }
+
+        String deviceRef = observation.getDevice().getReference();
+        if (deviceRef.contains("/")) {
+            var refParts = deviceRef.split("/");
+            deviceRef = refParts[refParts.length - 1];
+        }
+        stepsObservationDto.setDeviceID(deviceRef);
 
         // Setting value
         Quantity value = (Quantity) observation.getValue();
@@ -275,8 +301,7 @@ public class ObservationController {
 
         Observation observation = (Observation) bundle.getEntryFirstRep().getResource();
 
-        Patient patient = (Patient) patientController.searchPatientById(observation.getSubject().getReference(), fhirServer, client).getEntryFirstRep().getResource();
-        StepsObservationDTO stepsObservationDTO = convertObservationToStepsDto(fhirServer, patient, observation);
+        StepsObservationDTO stepsObservationDTO = convertObservationToStepsDto(fhirServer, null, observation);
 
         return stepsObservationDTO;
     }
