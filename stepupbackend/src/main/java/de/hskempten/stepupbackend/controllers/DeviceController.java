@@ -50,7 +50,7 @@ public class DeviceController {
 
         HashMap<String, String> deviceTypeCodingValues = new HashMap<>();
         deviceTypeCodingValues.put("Waage", "5042005");
-        deviceTypeCodingValues.put("Schrittzähler", "XXXXXX"); // TODO: find code
+        deviceTypeCodingValues.put("Schrittzähler", "74108008");
 
         Coding deviceTypeCoding = new Coding();
         deviceTypeCoding.setCode(deviceTypeCodingValues.get(device.type));
