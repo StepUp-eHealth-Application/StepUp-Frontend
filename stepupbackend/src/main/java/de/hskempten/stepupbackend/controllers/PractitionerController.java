@@ -59,4 +59,16 @@ public class PractitionerController {
 
         return practitionerDTO;
     }
+
+    public Bundle searchPractitionerById(String id, String fhirServer, IGenericClient client) {
+        String searchUrl = fhirServer + "/Practitioner?_id=" + id;
+        Bundle response = client.search()
+            .byUrl(searchUrl)
+            .returnBundle(Bundle.class)
+            .execute();
+        if (response.getTotal() <= 0) {
+            return null;
+        }
+        return response;
+    }
 }

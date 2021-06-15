@@ -27,6 +27,9 @@ public class ObservationController {
     @Autowired
     private DeviceController deviceController;
 
+    @Autowired
+    private PractitionerController practitionerController;
+
     public WeightObservationDTO addWeightObservation(WeightObservationDTO weightObservationDTO) {
         FhirContext ctx = FhirContext.forR4();
         String serverBase = weightObservationDTO.getFhirServer();
@@ -172,15 +175,18 @@ public class ObservationController {
         patientRef.setType("Patient");
         observation.setSubject(patientRef);
 
-        // Setting device reference
-        Device device = (Device) deviceController
-            .searchDeviceById(stepsObservationDTO.getDeviceID(), stepsObservationDTO.getFhirServer(), client)
-            .getEntryFirstRep()
-            .getResource();
+        String deviceId = stepsObservationDTO.getDeviceID();
+        if (deviceId == null && !deviceId.isEmpty()) {
+            // Setting device reference
+            Device device = (Device) deviceController
+                .searchDeviceById(stepsObservationDTO.getDeviceID(), stepsObservationDTO.getFhirServer(), client)
+                .getEntryFirstRep()
+                .getResource();
 
-        Reference deviceRef = new Reference(device);
-        deviceRef.setType("Device");
-        observation.setDevice(deviceRef);
+            Reference deviceRef = new Reference(device);
+            deviceRef.setType("Device");
+            observation.setDevice(deviceRef);
+        }
 
         // Setting concept
         observation
@@ -266,12 +272,17 @@ public class ObservationController {
             stepsObservationDto.setDate(null);
         }
 
-        String deviceRef = observation.getDevice().getReference();
-        if (deviceRef.contains("/")) {
-            var refParts = deviceRef.split("/");
-            deviceRef = refParts[refParts.length - 1];
+        var dRef = observation.getDevice();
+        if (dRef != null) {
+            String deviceRef = observation.getDevice().getReference();
+            if (deviceRef != null) {
+                if (deviceRef.contains("/")) {
+                    var refParts = deviceRef.split("/");
+                    deviceRef = refParts[refParts.length - 1];
+                }
+                stepsObservationDto.setDeviceID(deviceRef);
+            }
         }
-        stepsObservationDto.setDeviceID(deviceRef);
 
         // Setting value
         Quantity value = (Quantity) observation.getValue();
