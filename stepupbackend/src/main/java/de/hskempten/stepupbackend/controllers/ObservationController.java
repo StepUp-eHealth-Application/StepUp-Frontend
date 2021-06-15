@@ -3,11 +3,9 @@ package de.hskempten.stepupbackend.controllers;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import de.hskempten.stepupbackend.dto.DateDTO;
-import de.hskempten.stepupbackend.dto.StepsGoalDTO;
 import de.hskempten.stepupbackend.dto.StepsObservationDTO;
 import de.hskempten.stepupbackend.dto.WeightObservationDTO;
 import de.hskempten.stepupbackend.helpers.FhirHelpers;
-import org.apache.tomcat.jni.Local;
 import org.hl7.fhir.r4.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -26,6 +23,12 @@ public class ObservationController {
 
     @Autowired
     private SettingsController settingsController;
+
+    @Autowired
+    private DeviceController deviceController;
+
+    @Autowired
+    private PractitionerController practitionerController;
 
     public WeightObservationDTO addWeightObservation(WeightObservationDTO weightObservationDTO) {
         FhirContext ctx = FhirContext.forR4();
@@ -44,6 +47,19 @@ public class ObservationController {
         Reference patientRef = new Reference(patient);
         patientRef.setType("Patient");
         observation.setSubject(patientRef);
+
+        // Setting device reference
+        String deviceId = weightObservationDTO.getDeviceID();
+        if (deviceId != null && !deviceId.isEmpty()) {
+            var deviceEntry = deviceController.searchDeviceById(deviceId, weightObservationDTO.getFhirServer(), client).getEntryFirstRep();
+            if (deviceEntry != null) {
+                Device device = (Device) deviceEntry.getResource();
+
+                Reference deviceRef = new Reference(device);
+                deviceRef.setType("Device");
+                observation.setDevice(deviceRef);
+            }
+        }
 
         // Setting concept
         observation
@@ -108,7 +124,13 @@ public class ObservationController {
     private WeightObservationDTO convertObservationToWeightObservation(String fhirServer, Patient patient, Observation observation) {
         WeightObservationDTO weightObservationDTO = new WeightObservationDTO();
         weightObservationDTO.setId(observation.getIdElement().getIdPart());
-        weightObservationDTO.setPatientID(patient.getIdElement().getIdPart());
+
+        String patientId = observation.getSubject().getReference();
+        if (patientId != null && !patientId.isEmpty() && patientId.contains("/")) {
+            var patientParts = patientId.split("/");
+            patientId = patientParts[patientParts.length - 1];
+        }
+        weightObservationDTO.setPatientID(patientId);
         weightObservationDTO.setFhirServer(fhirServer);
 
         try {
@@ -120,6 +142,13 @@ public class ObservationController {
             System.out.println("Could not parse date time");
             weightObservationDTO.setDate(null);
         }
+
+        String deviceId = observation.getDevice().getReference();
+        if (deviceId != null && !deviceId.isEmpty() && deviceId.contains("/")) {
+            var deviceParts = deviceId.split("/");
+            deviceId = deviceParts[deviceParts.length - 1];
+        }
+        weightObservationDTO.setDeviceID(deviceId);
 
         // Setting value
         Quantity value = (Quantity) observation.getValue();
@@ -145,6 +174,19 @@ public class ObservationController {
         Reference patientRef = new Reference(patient);
         patientRef.setType("Patient");
         observation.setSubject(patientRef);
+
+        String deviceId = stepsObservationDTO.getDeviceID();
+        if (deviceId == null && !deviceId.isEmpty()) {
+            // Setting device reference
+            Device device = (Device) deviceController
+                .searchDeviceById(stepsObservationDTO.getDeviceID(), stepsObservationDTO.getFhirServer(), client)
+                .getEntryFirstRep()
+                .getResource();
+
+            Reference deviceRef = new Reference(device);
+            deviceRef.setType("Device");
+            observation.setDevice(deviceRef);
+        }
 
         // Setting concept
         observation
@@ -208,7 +250,13 @@ public class ObservationController {
     private StepsObservationDTO convertObservationToStepsDto(String fhirServer, Patient patient, Observation observation) {
         StepsObservationDTO stepsObservationDto = new StepsObservationDTO();
         stepsObservationDto.setId(observation.getIdElement().getIdPart());
-        stepsObservationDto.setPatientID(patient.getIdElement().getIdPart());
+
+        String ref = observation.getSubject().getReference();
+        if (ref.contains("/")) {
+            var refParts = ref.split("/");
+            ref = refParts[refParts.length - 1];
+        }
+        stepsObservationDto.setPatientID(ref);
         stepsObservationDto.setFhirServer(fhirServer);
 
         try {
@@ -222,6 +270,18 @@ public class ObservationController {
         } catch (NullPointerException nullPointerException) {
             System.out.println("Could not parse date time (null pointer)");
             stepsObservationDto.setDate(null);
+        }
+
+        var dRef = observation.getDevice();
+        if (dRef != null) {
+            String deviceRef = observation.getDevice().getReference();
+            if (deviceRef != null) {
+                if (deviceRef.contains("/")) {
+                    var refParts = deviceRef.split("/");
+                    deviceRef = refParts[refParts.length - 1];
+                }
+                stepsObservationDto.setDeviceID(deviceRef);
+            }
         }
 
         // Setting value
@@ -244,8 +304,7 @@ public class ObservationController {
 
         Observation observation = (Observation) bundle.getEntryFirstRep().getResource();
 
-        Patient patient = (Patient) patientController.searchPatientById(observation.getSubject().getReference(), fhirServer, client).getEntryFirstRep().getResource();
-        WeightObservationDTO weightObservationDTO = convertObservationToWeightObservation(fhirServer, patient, observation);
+        WeightObservationDTO weightObservationDTO = convertObservationToWeightObservation(fhirServer, null, observation);
 
         return weightObservationDTO;
     }
@@ -275,8 +334,7 @@ public class ObservationController {
 
         Observation observation = (Observation) bundle.getEntryFirstRep().getResource();
 
-        Patient patient = (Patient) patientController.searchPatientById(observation.getSubject().getReference(), fhirServer, client).getEntryFirstRep().getResource();
-        StepsObservationDTO stepsObservationDTO = convertObservationToStepsDto(fhirServer, patient, observation);
+        StepsObservationDTO stepsObservationDTO = convertObservationToStepsDto(fhirServer, null, observation);
 
         return stepsObservationDTO;
     }

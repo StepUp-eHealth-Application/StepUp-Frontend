@@ -66,20 +66,22 @@ public class DeviceController {
         Annotation deviceNote = new Annotation();
         deviceNote.setText(device.note);
 
-        Patient patient = (Patient) patientController.searchPatientById(device.patientID, device.fhirServer, client).getEntryFirstRep().getResource();
+        var patientEntry = patientController.searchPatientById(device.patientID, device.fhirServer, client).getEntryFirstRep();
 
-        // Creating reference to patient
-        Reference patientReference;
-        patientReference = new Reference(patient.getId());
-        patientReference.setType("Patient");
+        if (patientEntry != null) {
+            // Creating reference to patient
+            Patient patient = (Patient) patientEntry.getResource();
 
-        deviceNote.setAuthor(patientReference);
-        fhirDevice.setPatient(patientReference);
+            Reference patientReference;
+            patientReference = new Reference(patient);
+            patientReference.setType("Patient");
+
+            deviceNote.setAuthor(patientReference);
+            fhirDevice.setPatient(patientReference);
+        }
 
         // Setting note for device
         fhirDevice.addNote(deviceNote);
-
-
 
         Device createDevice = (Device) client.create().resource(fhirDevice).execute().getResource();
 
