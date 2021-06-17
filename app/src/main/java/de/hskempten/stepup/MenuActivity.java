@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -111,7 +112,7 @@ public class MenuActivity extends AppCompatActivity {
         btnPatientData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MenuActivity.this, PatientDataActivity.class);
+                Intent intent = new Intent(MenuActivity.this, DisplayPatientDataActivity.class);
                 startActivity(intent);
             }
         });
@@ -125,6 +126,25 @@ public class MenuActivity extends AppCompatActivity {
                 MenuActivity.this.startActivity(settingsIntent);
             }
         });
+        //Alert Dialog Button, Choose beetween Steps and Weight Helath Goal
+        AlertDialog.Builder builderWeight_Steps = new AlertDialog.Builder(MenuActivity.this);
+        builderWeight_Steps.setTitle("Auswahl")
+                .setPositiveButton("Gesundheitsziel Schritte", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(MenuActivity.this, gesundheitszieleSetztenAendern.class);
+                        intent.putExtra("goalType", "stepsGoal");
+                        intent.putExtra("previousPage", "neu");
+                        MenuActivity.this.startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Gesundheitsziel Gewicht", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(MenuActivity.this, gesundheitszieleSetztenAendern.class);
+                        intent.putExtra("goalType", "weightGoal");
+                        intent.putExtra("previousPage", "neu");
+                        MenuActivity.this.startActivity(intent);
+                    }
+                });
 
         //Alert Dialog Button
         AlertDialog.Builder builder = new AlertDialog.Builder(MenuActivity.this);
@@ -143,8 +163,13 @@ public class MenuActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        /*
                         Intent intent = new Intent(MenuActivity.this, gesundheitszieleSetztenAendern.class);
                         MenuActivity.this.startActivity(intent);
+
+                         */
+                        AlertDialog dialogHealthGoal = builderWeight_Steps.create();
+                        dialogHealthGoal.show();
                     }
                 });
 
@@ -167,7 +192,27 @@ public class MenuActivity extends AppCompatActivity {
                 MenuActivity.this.startActivity(intent);
             }
         });
+        // Opening Create Profile Settings when "Profi erstellen" Button clicked
+        Button btnCreatePatient = findViewById(R.id.btnCreatePatient);
+        btnCreatePatient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuActivity.this, PatientDataActivity.class);
+                MenuActivity.this.startActivity(intent);
+            }
+        });
+
+        // Opening Show Observations when "Beobachtungen anzeigen" Button clicked
+        Button btnShowObservations = findViewById(R.id.btnShowObservations);
+        btnShowObservations.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuActivity.this, beobachtung_anzeigen.class);
+                MenuActivity.this.startActivity(intent);
+            }
+        });
     }
+
 
     protected void toggleVisibility() {
         if (viewSettings.getVisibility() == View.GONE) viewSettings.setVisibility(View.VISIBLE);
