@@ -1,6 +1,7 @@
 package de.hskempten.stepupbackend.endpoints.v1;
 
 import de.hskempten.stepupbackend.controllers.GoalController;
+import de.hskempten.stepupbackend.dto.DateDTO;
 import de.hskempten.stepupbackend.dto.StepsGoalDTO;
 import de.hskempten.stepupbackend.dto.WeightGoalDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,28 @@ public class GoalEndpoint {
     @Autowired
     private GoalController goalController;
 
+    @GetMapping("weight/{id}")
+    public HttpEntity<WeightGoalDTO> getWeightGoalById(@PathVariable String id) {
+        WeightGoalDTO weightGoalDTO = goalController.getWeightGoalById(id);
+        return new ResponseEntity<>(weightGoalDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("steps/{id}")
+    public HttpEntity<StepsGoalDTO> getStepsGoalById(@PathVariable String id) {
+        StepsGoalDTO stepsGoalDTO = goalController.getStepsGoalById(id);
+        return new ResponseEntity<>(stepsGoalDTO, HttpStatus.OK);
+    }
+
     @GetMapping("weight/patient/{patientId}")
     public HttpEntity<List<WeightGoalDTO>> getAllWeightGoalsByPatientId(@PathVariable String patientId) {
         List<WeightGoalDTO> weightGoals = goalController.getAllWeightGoalsByPatientId(patientId);
 
+        return new ResponseEntity<>(weightGoals, HttpStatus.OK);
+    }
+
+    @PostMapping("weight/date")
+    public HttpEntity<List<WeightGoalDTO>> getAllWeightGoalsByDate(@RequestBody DateDTO dateDTO) {
+        List<WeightGoalDTO> weightGoals = goalController.getWeightGoalsByDate(dateDTO);
         return new ResponseEntity<>(weightGoals, HttpStatus.OK);
     }
 
@@ -42,6 +61,12 @@ public class GoalEndpoint {
         List<StepsGoalDTO> weightGoals = goalController.getAllStepsGoalsByPatientId(patientId);
 
         return new ResponseEntity<>(weightGoals, HttpStatus.OK);
+    }
+
+    @PostMapping("steps/date")
+    public HttpEntity<List<StepsGoalDTO>> getAllStepsGoalsByDate(@RequestBody DateDTO dateDTO) {
+        List<StepsGoalDTO> stepsGoal = goalController.getStepsGoalsByDate(dateDTO);
+        return new ResponseEntity<>(stepsGoal, HttpStatus.OK);
     }
 
     @PostMapping("steps")

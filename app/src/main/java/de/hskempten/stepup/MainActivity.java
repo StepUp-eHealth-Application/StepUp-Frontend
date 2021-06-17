@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         btnPatient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MenuPatientActivity.class);
+                Intent intent = new Intent(MainActivity.this, MenuActivity.class);
                 Preferences.saveSelectedPatientID(null, getApplicationContext());
                 openNewActivity(intent);
             }
