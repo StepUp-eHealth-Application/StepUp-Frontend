@@ -130,7 +130,7 @@ public class MenuActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(MenuActivity.this);
         builder.setCancelable(true)
                 .setTitle("Auswahl")
-                .setMessage("Möchten Sie eine neue Beobachtung oder ein neues Gesunheitsziel erstellen?");
+                .setMessage("Möchten Sie eine neue Beobachtung oder ein neues Gesundheitsziel erstellen?");
         builder.setNegativeButton("Beobachtung",
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -156,6 +156,15 @@ public class MenuActivity extends AppCompatActivity {
                 Log.d(TAG, "createAlertDialog");
                 AlertDialog dialog = builder.create();
                 dialog.show();
+            }
+        });
+
+        Button addDevice = findViewById(R.id.btnAddDevice);
+        addDevice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuActivity.this, DeviceCreationActivity.class);
+                MenuActivity.this.startActivity(intent);
             }
         });
     }
