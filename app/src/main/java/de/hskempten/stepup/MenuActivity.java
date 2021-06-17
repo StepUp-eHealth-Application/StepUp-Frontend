@@ -158,6 +158,15 @@ public class MenuActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+
+        Button addDevice = findViewById(R.id.btnAddDevice);
+        addDevice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuActivity.this, DeviceCreationActivity.class);
+                MenuActivity.this.startActivity(intent);
+            }
+        });
     }
 
     protected void toggleVisibility() {
