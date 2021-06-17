@@ -7,5 +7,14 @@ services:
       - "8080:8080"
     volumes:
       - hapi-data:/data/hapi
+  backend:
+    image: korkmatik/stepup-backend:latest
+    ports: 
+      - "8000:8000"
+    depends_on:
+      - web
+    volumes:
+      - ./stepupbackend/fhir_settings.dat:/fhir_settings.dat
 volumes:
     hapi-data:
+    backend-data:

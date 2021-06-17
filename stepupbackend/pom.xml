@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>de.hskempten</groupId>
 	<artifactId>stepupbackend</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>app</version>
 	<name>stepupbackend</name>
 	<description>Backend of StepUp E-Health Android App</description>
 	<properties>
