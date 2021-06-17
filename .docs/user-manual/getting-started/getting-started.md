@@ -36,4 +36,7 @@
 
 ![](pic9.png)
 
-10. Nun ist die Konfiguration der App abgeschlossen. Sie können ab jetzt die restliche Funktionalität nutzen!
+10. Navigieren Sie zurück zur Rollenauswahl
+![](pic10.png)
+
+11. Nun ist die Konfiguration der App abgeschlossen. Sie können ab jetzt eine Rolle auswählen und die restliche Funktionalität nutzen!
