@@ -130,7 +130,7 @@ public class MenuActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(MenuActivity.this);
         builder.setCancelable(true)
                 .setTitle("Auswahl")
-                .setMessage("Möchten Sie eine neue Beobachtung oder ein neues Gesunheitsziel erstellen?");
+                .setMessage("Möchten Sie eine neue Beobachtung oder ein neues Gesundheitsziel erstellen?");
         builder.setNegativeButton("Beobachtung",
                 new DialogInterface.OnClickListener() {
                     @Override
