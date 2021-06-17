@@ -44,7 +44,7 @@
         android:layout_marginStart="48dp"
         android:layout_marginTop="4dp"
         android:ems="10"
-        android:inputType="number"
+        android:inputType="numberDecimal|numberSigned"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
@@ -83,8 +83,8 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="22dp"
         android:layout_marginStart="48dp"
         android:layout_marginTop="16dp"
         android:text="Gerät"
