@@ -98,12 +98,13 @@ public class SettingsActivity extends AppCompatActivity {
                     Preferences.saveFhirServerUrl(url, SettingsActivity.this);
                     Preferences.saveBackendUrl(backendUrl, SettingsActivity.this);
 
-                    String backendServer = backendUrl + APIEndpoints.SETTINGS;
+                    String backendServer = backendUrl + APIEndpoints.SETTINGS + "fhirserver";
 
                     HashMap<String, String> data = new HashMap<>();
                     data.put("fhirUrl", url);
+
                     // Sending data to backend
-                    JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.GET, backendServer, new JSONObject(data),
+                    JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, backendServer, new JSONObject(data),
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
