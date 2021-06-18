@@ -47,6 +47,11 @@ public class MenuActivity extends AppCompatActivity {
     ArrayList<DataModelGoal> arrayList;
     ListView listView;
     private static GoalAdapter adapter;
+    String backendUrlGoalSteps;
+    String backendUrlGoalWeight;
+
+    String goalType;
+    String goalId;
 
     RequestQueue requestQueue;
 
@@ -66,9 +71,8 @@ public class MenuActivity extends AppCompatActivity {
         txtTitle = findViewById(R.id.txtPatientName);
         String backendUrlName = getBackendUrlName();
         getPatientNameFromBackend(backendUrlName);
-        String backendUrlGoalSteps = getBackendUrlGoalSteps();
-        String backendUrlGoalWeight = getBackendUrlGoalWeight();
-        getPatientGoalsFromBackend(backendUrlGoalSteps, backendUrlGoalWeight);
+        backendUrlGoalSteps = getBackendUrlGoalSteps();
+        backendUrlGoalWeight = getBackendUrlGoalWeight();
 
         // getting patient goals
         listView = (ListView) findViewById(R.id.lstGoals);
@@ -80,10 +84,30 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 DataModelGoal dataModelGoal = arrayList.get(position);
-                Intent intent = new Intent(getApplicationContext(), beobachtung_anzeigen.class);
-                intent.putExtra(ActivityInterfaceKeys.HEALTH_GOAL_ID, dataModelGoal.getId());
-                intent.putExtra(ActivityInterfaceKeys.HEALTH_GOAL_TYPE, dataModelGoal.getType());
-                MenuActivity.this.startActivity(intent);
+                goalId = dataModelGoal.getId();
+                goalType = dataModelGoal.getType();
+                //Alert Dialog Button, Choose beetween Steps and Weight Helath Goal
+                AlertDialog.Builder builderEdit_Observations = new AlertDialog.Builder(MenuActivity.this);
+                builderEdit_Observations.setTitle("Aktion Auswählen")
+                        .setPositiveButton("Beobachtungen anzeigen", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent intent = new Intent(getApplicationContext(), beobachtung_anzeigen.class);
+                                intent.putExtra(ActivityInterfaceKeys.HEALTH_GOAL_ID, goalId);
+                                intent.putExtra(ActivityInterfaceKeys.HEALTH_GOAL_TYPE, goalType);
+                                MenuActivity.this.startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("Gesundheitsziel bearbeiten", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent intent = new Intent(getApplicationContext(), gesundheitszieleSetztenAendern.class);
+                                intent.putExtra(ActivityInterfaceKeys.HEALTH_GOAL_ID, goalId);
+                                intent.putExtra(ActivityInterfaceKeys.HEALTH_GOAL_TYPE, goalType + "Goal");
+                                intent.putExtra("previousPage", "aendern");
+                                MenuActivity.this.startActivity(intent);
+                            }
+                        });
+                AlertDialog dialogGoalSelected = builderEdit_Observations.create();
+                dialogGoalSelected.show();
             }
         });
 
@@ -128,11 +152,11 @@ public class MenuActivity extends AppCompatActivity {
         });
         //Alert Dialog Button, Choose beetween Steps and Weight Helath Goal
         AlertDialog.Builder builderWeight_Steps = new AlertDialog.Builder(MenuActivity.this);
-        builderWeight_Steps.setTitle("Auswahl")
+        builderWeight_Steps.setTitle("Neues Gesundheitsziel erstellen")
                 .setPositiveButton("Gesundheitsziel Schritte", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Intent intent = new Intent(MenuActivity.this, gesundheitszieleSetztenAendern.class);
-                        intent.putExtra("goalType", "stepsGoal");
+                        intent.putExtra(ActivityInterfaceKeys.HEALTH_GOAL_TYPE, "stepsGoal");
                         intent.putExtra("previousPage", "neu");
                         MenuActivity.this.startActivity(intent);
                     }
@@ -140,36 +164,9 @@ public class MenuActivity extends AppCompatActivity {
                 .setNegativeButton("Gesundheitsziel Gewicht", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Intent intent = new Intent(MenuActivity.this, gesundheitszieleSetztenAendern.class);
-                        intent.putExtra("goalType", "weightGoal");
+                        intent.putExtra(ActivityInterfaceKeys.HEALTH_GOAL_TYPE, "weightGoal");
                         intent.putExtra("previousPage", "neu");
                         MenuActivity.this.startActivity(intent);
-                    }
-                });
-
-        //Alert Dialog Button
-        AlertDialog.Builder builder = new AlertDialog.Builder(MenuActivity.this);
-        builder.setCancelable(true)
-                .setTitle("Auswahl")
-                .setMessage("Möchten Sie eine neue Beobachtung oder ein neues Gesundheitsziel erstellen?");
-        builder.setNegativeButton("Beobachtung",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(MenuActivity.this, ChooseObservationType.class);
-                        MenuActivity.this.startActivity(intent);
-                    }
-                });
-        builder.setPositiveButton("Gesundheitsziel",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        /*
-                        Intent intent = new Intent(MenuActivity.this, gesundheitszieleSetztenAendern.class);
-                        MenuActivity.this.startActivity(intent);
-
-                         */
-                        AlertDialog dialogHealthGoal = builderWeight_Steps.create();
-                        dialogHealthGoal.show();
                     }
                 });
 
@@ -178,9 +175,8 @@ public class MenuActivity extends AppCompatActivity {
         btnNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "createAlertDialog");
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                AlertDialog dialogHealthGoal = builderWeight_Steps.create();
+                dialogHealthGoal.show();
             }
         });
 
@@ -201,18 +197,15 @@ public class MenuActivity extends AppCompatActivity {
                 MenuActivity.this.startActivity(intent);
             }
         });
-
-        // Opening Show Observations when "Beobachtungen anzeigen" Button clicked
-        Button btnShowObservations = findViewById(R.id.btnShowObservations);
-        btnShowObservations.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MenuActivity.this, beobachtung_anzeigen.class);
-                MenuActivity.this.startActivity(intent);
-            }
-        });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        arrayList.clear();
+        getPatientGoalsFromBackend(backendUrlGoalSteps, backendUrlGoalWeight);
+        adapter.notifyDataSetChanged();
+    }
 
     protected void toggleVisibility() {
         if (viewSettings.getVisibility() == View.GONE) viewSettings.setVisibility(View.VISIBLE);
@@ -242,7 +235,7 @@ public class MenuActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Log.d(TAG, "onResponse: success");
+                        Log.d(TAG, "loadingPatientName: success");
                         changeName(firstName, lastName);
                         Toast.makeText(getApplicationContext(), "Patient erfolgreich geladen!", duration).show();
                     }
@@ -285,17 +278,15 @@ public class MenuActivity extends AppCompatActivity {
                                 String dueDate = stepsObj.getString("dueDate");
                                 String stepsGoal = stepsObj.getString("stepsGoal");
                                 String type = "steps";
-
-                                // calculate accomplishment
-                                String accomplished = "foo";
+                                Log.d(TAG, "Steps loop, iteration: " + i);
 
                                 // create new widget
-                                addListItem(id, description, dueDate, stepsGoal, accomplished, type);
+                                addListItem(id, description, dueDate, stepsGoal, type);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Log.d(TAG, "onResponse: success");
+                        Log.d(TAG, "stepGoals: " + response.length());
                         Toast.makeText(getApplicationContext(), "Gesundheitsziele 'Schritte' wurden erfolgreich geladen!", duration).show();
                     }
                 },
@@ -321,19 +312,17 @@ public class MenuActivity extends AppCompatActivity {
                                 String id = stepsObj.getString("id");
                                 String description = stepsObj.getString("description");
                                 String dueDate = stepsObj.getString("dueDate");
-                                String weightGoal = stepsObj.getString("weightGoal");
+                                String weightGoal = stepsObj.getString("weightGoal") + " kg";
                                 String type = "weight";
-
-                                // calculate accomplishment
-                                String accomplished = "foo";
+                                Log.d(TAG, "Weight loop, iteration: " + i);
 
                                 // create new widget
-                                addListItem(id, description, dueDate, weightGoal, accomplished, type);
+                                addListItem(id, description, dueDate, weightGoal, type);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Log.d(TAG, "onResponse: success");
+                        Log.d(TAG, "weightGoals: " + response.length());
                         Toast.makeText(getApplicationContext(), "Gesundheitsziele 'Gewicht' wurden erfolgreich geladen!", duration).show();
                     }
                 },
@@ -352,7 +341,8 @@ public class MenuActivity extends AppCompatActivity {
         txtTitle.setText(fullName);
     }
 
-    private void addListItem(String id, String description, String dueDate, String goal, String accomplished, String type) {
-        arrayList.add(new DataModelGoal(id, description, dueDate, goal, accomplished, type));
+    private void addListItem(String id, String description, String dueDate, String goal, String type) {
+        arrayList.add(new DataModelGoal(id, description, dueDate, goal, type));
+        adapter.notifyDataSetChanged();
     }
 }

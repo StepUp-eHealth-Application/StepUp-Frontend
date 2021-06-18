@@ -16,7 +16,7 @@ public class DataModelObservation {
         this.device = device;
         this.date = date;
         this.accomplished = accomplished;
-        Log.d(TAG, "new Entry");
+        Log.d(TAG, "new observation");
     }
 
     public String getId() {

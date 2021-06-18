@@ -13,14 +13,13 @@ public class DataModelGoal {
     String accomplished;
     String type;
 
-    public DataModelGoal(String id, String description, String dueDate, String goal, String accomplished, String type) {
+    public DataModelGoal(String id, String description, String dueDate, String goal, String type) {
         this.id = id;
         this.description = description;
         this.dueDate = dueDate;
         this.goal = goal;
-        this.accomplished = accomplished;
         this.type = type;
-        Log.d(TAG, "new Entry");
+        Log.d(TAG, "new goal");
     }
 
     public String getId() {
@@ -37,10 +36,6 @@ public class DataModelGoal {
 
     public String getGoal() {
         return goal;
-    }
-
-    public String getAccomplished() {
-        return accomplished;
     }
 
     public String getType() { return type; }

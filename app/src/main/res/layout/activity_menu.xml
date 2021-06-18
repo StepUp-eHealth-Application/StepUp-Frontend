@@ -133,18 +133,6 @@
             android:textColor="@color/secondary"
             android:textSize="16sp" />
         />
-        <Button
-            android:id="@+id/btnShowObservations"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:backgroundTint="@color/white"
-            android:text="Beobachtungen anzeigen"
-            android:textAllCaps="false"
-            android:textColor="@color/secondary"
-            android:textSize="16sp" />
-        />
 
         <Button
             android:id="@+id/btnFHIRServerSettings"

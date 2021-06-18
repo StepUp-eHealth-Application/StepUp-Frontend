@@ -52,7 +52,6 @@ public class GoalAdapter extends ArrayAdapter<DataModelGoal> {
         viewHolder.description.setText(dataModelGoal.getDescription());
         viewHolder.dueDate.setText(dataModelGoal.getDueDate());
         viewHolder.goal.setText(dataModelGoal.getGoal());
-        viewHolder.accomplished.setText(dataModelGoal.getAccomplished());
         Log.d(TAG, "returning viewHolder");
         return convertView;
     }

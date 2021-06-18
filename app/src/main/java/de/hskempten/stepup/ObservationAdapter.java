@@ -27,7 +27,7 @@ public class ObservationAdapter extends ArrayAdapter<DataModelObservation> {
         super(context, R.layout.listitem_observation, data);
         this.dataSet = data;
         this.mContext = context;
-        Log.d(TAG, "created GoalAdapter");
+        Log.d(TAG, "created ObservationAdapter");
     }
 
     @Override
