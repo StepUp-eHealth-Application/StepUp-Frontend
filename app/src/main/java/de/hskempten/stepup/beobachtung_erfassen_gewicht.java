@@ -60,9 +60,6 @@ public class beobachtung_erfassen_gewicht extends AppCompatActivity implements A
 
         requestQueue = Volley.newRequestQueue(getApplicationContext());
 
-        String patientId = Preferences.loadActualPatientID(getApplicationContext());
-        Log.d(TAG, "onCreate: Patient id: " + patientId);
-
         findViews();
         initDeviceSpinner();
         initGoalSpinner();
