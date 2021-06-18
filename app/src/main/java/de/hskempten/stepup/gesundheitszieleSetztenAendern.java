@@ -1,7 +1,5 @@
 package de.hskempten.stepup;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +9,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -18,12 +18,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import java.util.HashMap;
-
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
+import de.hskempten.stepup.helpers.ActivityInterfaceKeys;
 import de.hskempten.stepup.preferences.Preferences;
 
 public class gesundheitszieleSetztenAendern extends AppCompatActivity {
@@ -57,12 +57,16 @@ public class gesundheitszieleSetztenAendern extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gesundheitsziele_setzten_aendern);
         //get User Action
-        if(getIntent().hasExtra("previousPage") == true){
+        if(getIntent().hasExtra("previousPage")) {
             previousPage = (String) getIntent().getExtras().getString("previousPage");
         }
-        if(getIntent().hasExtra("goalType") == true){
-            goalType = getIntent().getExtras().getString("goalType");
+        if(getIntent().hasExtra(ActivityInterfaceKeys.HEALTH_GOAL_TYPE)) {
+            goalType = getIntent().getExtras().getString(ActivityInterfaceKeys.HEALTH_GOAL_TYPE);
         }
+        if(getIntent().hasExtra(ActivityInterfaceKeys.HEALTH_GOAL_ID)) {
+            goalId = getIntent().getExtras().getString(ActivityInterfaceKeys.HEALTH_GOAL_ID);
+        }
+        Log.d("gesundheitszielsetzen", goalType);
         //set correct heading for HelatGoal-View
         healthGoalName = (TextView) findViewById(R.id.txtHealthGoalName);
         healtGoalDataDescription = (TextView) findViewById(R.id.txtHealtGoalDataDescription);
@@ -117,8 +121,6 @@ public class gesundheitszieleSetztenAendern extends AppCompatActivity {
         String backendUrl = "";
         //get PatientId
         patiendId = Preferences.loadActualPatientID(getApplicationContext());
-        //goalId = HEALTH_GOAL_ID;
-        goalId = "2181788";
 
         String goalTypeForUrl = "";
         if(goalType.equals("weightGoal")){
@@ -126,6 +128,7 @@ public class gesundheitszieleSetztenAendern extends AppCompatActivity {
         }else if(goalType.equals("stepsGoal")){
             goalTypeForUrl = "steps";
         }
+
         //get correct Url
         if(previousPage.equals("aendern")){
             backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + "api/v1/goal/" + goalTypeForUrl + "/" + goalId;
