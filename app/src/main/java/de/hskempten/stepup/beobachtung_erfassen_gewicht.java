@@ -41,12 +41,17 @@ public class beobachtung_erfassen_gewicht extends AppCompatActivity implements A
     DatePicker dpObservationWeight;
     Button save;
     Spinner deviceSpinner;
+    Spinner goalSpinner;
 
     RequestQueue requestQueue;
 
     List<String> deviceIds;
     List<String> deviceNames;
     String deviceId;
+
+    List<String> goalIds;
+    List<String> goalValues;
+    String goalId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,7 @@ public class beobachtung_erfassen_gewicht extends AppCompatActivity implements A
 
         findViews();
         initDeviceSpinner();
+        initGoalSpinner();
         initSaveButton();
     }
 
@@ -112,11 +118,71 @@ public class beobachtung_erfassen_gewicht extends AppCompatActivity implements A
         deviceSpinner.setOnItemSelectedListener(this);
     }
 
+    private void initGoalSpinner() {
+        String backendServer = Preferences.loadBackendUrl(getApplicationContext()) + APIEndpoints.WEIGHT_GOAL + "patient/" + Preferences.loadActualPatientID(getApplicationContext());
+
+        // Sending data to backend
+        JsonArrayRequest jsonobj = new JsonArrayRequest(Request.Method.GET, backendServer, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        goalIds = new ArrayList<>();
+                        goalValues = new ArrayList<>();
+
+                        for(int i = 0; i < response.length(); i++){
+                            JSONObject jresponse = null;
+                            try {
+                                jresponse = response.getJSONObject(i);
+
+                                String id = jresponse.getString("id");
+                                String value = jresponse.getString("weightGoal");
+                                String description = jresponse.getString("description");
+                                String dueDate = jresponse.getString("dueDate");
+
+                                if (dueDate != null && !dueDate.isEmpty()) {
+                                    dueDate = dueDate.split("T")[0];
+                                }
+
+                                if (deviceId == null || deviceId.isEmpty()) {
+                                    deviceId = id;
+                                }
+
+                                goalIds.add(id);
+                                goalValues.add(description + ": " + value + " (" + dueDate + ")");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                                getApplicationContext(), android.R.layout.simple_spinner_item, goalValues);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        goalSpinner.setAdapter(adapter);
+
+                        Toast.makeText(getApplicationContext(), "Gesundheitsziele erfolgreich geladen!" , duration).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i(TAG, "onResponse: " + error.getMessage());
+                        String message = "Gesundheitsziele konnten nicht geladen werden: " + error.getMessage();
+                        Toast.makeText(getApplicationContext(), message , duration).show();
+                    }
+                }
+        ){
+
+        };
+        requestQueue.add(jsonobj);
+        goalSpinner.setOnItemSelectedListener(this);
+    }
+
     private void findViews() {
         eTxtNumber = findViewById(R.id.eTxtWeightObservation);
         dpObservationWeight = findViewById(R.id.dpWeightObservationDate);
         save = findViewById(R.id.btnSaveWeightObservation);
         deviceSpinner = findViewById(R.id.spinnerDeviceWeight);
+        goalSpinner = findViewById(R.id.spinnerWeightObservationGoals);
     }
 
     private void initSaveButton() {
@@ -173,6 +239,8 @@ public class beobachtung_erfassen_gewicht extends AppCompatActivity implements A
                 data.put("patientID", patientId);
                 data.put("fhirServer", fhirServer);
                 data.put("id", id);
+                data.put("goalID", goalId);
+                data.put("deviceID", deviceId);
 
                 requestQueue = Volley.newRequestQueue(getApplicationContext());
 
@@ -210,7 +278,22 @@ public class beobachtung_erfassen_gewicht extends AppCompatActivity implements A
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        deviceId = deviceIds.get(position);
+        switch (parent.getId()) {
+            case R.id.spinnerDeviceWeight:
+                deviceId = deviceIds.get(position);
+                break;
+            case R.id.spinnerWeightObservationGoals:
+                try {
+                    goalId = goalIds.get(position);
+                } catch (IndexOutOfBoundsException exception) {
+                    Log.d(TAG, "onItemSelected: Index out of bounce in goal IDs");
+                }
+                break;
+            default:
+                Log.d(TAG, "onItemSelected: Error default");
+                break;
+        }
+
     }
 
     @Override

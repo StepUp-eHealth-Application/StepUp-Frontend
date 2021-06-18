@@ -27,7 +27,7 @@
         android:layout_marginTop="16dp"
         android:text="Datum der Beobachtung"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerDeviceSteps" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerStepsObservation" />
 
     <DatePicker
         android:id="@+id/dpObservationSteps"
@@ -92,4 +92,25 @@
         android:text="Gerät"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/eTxtNumberSteps" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="16dp"
+        android:text="Gesundheitsziel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerDeviceSteps" />
+
+    <Spinner
+        android:id="@+id/spinnerStepsObservation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView11" />
 </androidx.constraintlayout.widget.ConstraintLayout>

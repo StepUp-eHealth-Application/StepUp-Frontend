@@ -187,7 +187,7 @@ public class ObservationController {
         observation.setSubject(patientRef);
 
         String deviceId = stepsObservationDTO.getDeviceID();
-        if (deviceId == null && !deviceId.isEmpty()) {
+        if (deviceId != null && !deviceId.isEmpty()) {
             // Setting device reference
             Device device = (Device) deviceController
                 .searchDeviceById(stepsObservationDTO.getDeviceID(), stepsObservationDTO.getFhirServer(), client)
