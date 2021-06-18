@@ -37,6 +37,13 @@ public class ObservationEndpoint {
         return new ResponseEntity<>(observations, HttpStatus.OK);
     }
 
+    @GetMapping("weight/goal/{goalId}/patient/{patientId}")
+    public HttpEntity<List<WeightObservationDTO>> getWeightsByGoalId(@PathVariable String goalId, @PathVariable String patientId) {
+        List<WeightObservationDTO> observations = observationController.getWeightsByGoalId(goalId, patientId);
+
+        return new ResponseEntity<>(observations, HttpStatus.OK);
+    }
+
     @PostMapping("weight/date")
     public HttpEntity<List<WeightObservationDTO>> getWeightsByDate(@RequestBody DateDTO dateDTO) {
         List<WeightObservationDTO> observations = observationController.getWeightsByDate(dateDTO);
@@ -47,6 +54,12 @@ public class ObservationEndpoint {
     @GetMapping("steps/{id}")
     public HttpEntity<StepsObservationDTO> getStepsById(@PathVariable String id) {
         StepsObservationDTO stepsObservationDTO = observationController.getStepsObservationById(id);
+        return new ResponseEntity<>(stepsObservationDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("steps/goal/{goalId}/patient/{patientId}")
+    public HttpEntity<List<StepsObservationDTO>> getStepsByGoalId(@PathVariable String goalId, @PathVariable String patientId) {
+        List<StepsObservationDTO> stepsObservationDTO = observationController.getStepsByGoalId(goalId, patientId);
         return new ResponseEntity<>(stepsObservationDTO, HttpStatus.OK);
     }
 
