@@ -14,6 +14,7 @@ import de.hskempten.stepupbackend.dto.DateDTO;
 import de.hskempten.stepupbackend.dto.StepsObservationDTO;
 import de.hskempten.stepupbackend.dto.WeightObservationDTO;
 import de.hskempten.stepupbackend.helpers.FhirHelpers;
+import org.hl7.fhir.r4.model.*;
 
 @Controller
 public class ObservationController {
