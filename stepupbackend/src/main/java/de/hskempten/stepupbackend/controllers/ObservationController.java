@@ -30,6 +30,9 @@ public class ObservationController {
     @Autowired
     private PractitionerController practitionerController;
 
+    @Autowired
+    private GoalController goalController;
+
     public WeightObservationDTO addWeightObservation(WeightObservationDTO weightObservationDTO) {
         FhirContext ctx = FhirContext.forR4();
         String serverBase = weightObservationDTO.getFhirServer();
@@ -159,7 +162,7 @@ public class ObservationController {
 
     public StepsObservationDTO addStepsObservation(StepsObservationDTO stepsObservationDTO) {
         FhirContext ctx = FhirContext.forR4();
-        String serverBase = stepsObservationDTO.getFhirServer();
+        String serverBase = settingsController.getFhirServerUrl();
 
         IGenericClient client = ctx.newRestfulGenericClient(serverBase);
 
@@ -194,7 +197,7 @@ public class ObservationController {
             .addCoding()
             .setSystem("http://loinc.org")
             .setCode("41950-7")
-            .setDisplay("Number of Steps in 24 Hours, Measured at " + stepsObservationDTO.getDate().toString());
+            .setDisplay("Number of Steps in 24 Hours, Measured at " + stepsObservationDTO.getDate().toString() + ", for Goal with ID: " + stepsObservationDTO.getGoalID());
 
         // Setting value
         // TODO: add date when possible
@@ -260,7 +263,16 @@ public class ObservationController {
         stepsObservationDto.setFhirServer(fhirServer);
 
         try {
-            String dateStr = observation.getCode().getCoding().get(0).getDisplay().replace("Number of Steps in 24 Hours, Measured at ", "");
+            String dateStr = observation.getCode().getCoding().get(0).getDisplay();
+            dateStr = dateStr.replace("Number of Steps in 24 Hours, Measured at ", "");
+
+            if (dateStr.contains(", for Goal with ID: ")) {
+                var parts = dateStr.split(", for Goal with ID: ");
+                dateStr = parts[0];
+                String goalId = parts[1];
+                stepsObservationDto.setGoalID(goalId);
+            }
+
             System.out.println("Date String: " + dateStr);
             LocalDate date = LocalDate.parse(dateStr);
             stepsObservationDto.setDate(date);
@@ -414,6 +426,41 @@ public class ObservationController {
             StepsObservationDTO weightObservationDTO = convertObservationToStepsDto(fhirServer, patient, observation);
 
             retObervations.add(weightObservationDTO);
+        }
+
+        return retObervations;
+    }
+
+    public List<StepsObservationDTO> getStepsByGoalId(String goalId, String patientId) {
+        String fhirServer = settingsController.getFhirServerUrl();
+
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        Bundle observations = client.search().forResource(Observation.class)
+            .where(Observation.SUBJECT.hasId(patientId))
+            .returnBundle(Bundle.class).execute();
+
+        List<StepsObservationDTO> retObervations = new ArrayList<>();
+        for (Bundle.BundleEntryComponent entry : observations.getEntry()) {
+            Observation observation = (Observation) entry.getResource();
+
+            // Skipping weight observations
+            if (observation.getCode() == null
+                || observation.getCode().getCoding() == null
+                || observation.getCode().getCoding().get(0) == null
+                || observation.getCode().getCoding().get(0).getDisplay() == null) {
+                continue;
+            }
+            if (!observation.getCode().getCoding().get(0).getDisplay().contains("Number of Steps in 24 Hours, Measured at ")) {
+                continue;
+            }
+
+            StepsObservationDTO stepsObservationDto = convertObservationToStepsDto(fhirServer, null, observation);
+
+            if (stepsObservationDto.getGoalID().equals(goalId)) {
+                retObervations.add(stepsObservationDto);
+            }
         }
 
         return retObervations;

@@ -50,6 +50,12 @@ public class ObservationEndpoint {
         return new ResponseEntity<>(stepsObservationDTO, HttpStatus.OK);
     }
 
+    @GetMapping("steps/goal/{goalId}/patient/{patientId}")
+    public HttpEntity<List<StepsObservationDTO>> getStepsByGoalId(@PathVariable String goalId, @PathVariable String patientId) {
+        List<StepsObservationDTO> stepsObservationDTO = observationController.getStepsByGoalId(goalId, patientId);
+        return new ResponseEntity<>(stepsObservationDTO, HttpStatus.OK);
+    }
+
     @PostMapping("steps")
     public HttpEntity<StepsObservationDTO> addStepsObservation(@RequestBody StepsObservationDTO stepsObservationDTO) {
         stepsObservationDTO = observationController.addStepsObservation(stepsObservationDTO);
