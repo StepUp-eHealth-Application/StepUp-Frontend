@@ -258,13 +258,13 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private String getBackendUrlGoalSteps() {
-        String backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + APIEndpoints.STEPS_GOAL + patientId;
+        String backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + APIEndpoints.STEPS_GOAL_PATIENT + patientId;
         Log.d(TAG, "Backend URL: " + backendUrl);
         return backendUrl;
     }
 
     private String getBackendUrlGoalWeight() {
-        String backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + APIEndpoints.WEIGHT_GOAL + patientId;
+        String backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + APIEndpoints.WEIGHT_GOAL_PATIENT + patientId;
         Log.d(TAG, "Backend URL: " + backendUrl);
         return backendUrl;
     }
