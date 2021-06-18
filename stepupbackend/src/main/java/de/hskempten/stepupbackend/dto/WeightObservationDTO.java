@@ -18,16 +18,19 @@ public class WeightObservationDTO {
     private String patientID;
     private String fhirServer;
     private String deviceID;
+    private String goalID;
 
     public WeightObservationDTO(@JsonProperty("weight") float weight,
                                 @JsonProperty("date") LocalDate date,
                                 @JsonProperty("patientID") String patientID,
                                 @JsonProperty("fhirServer") String fhirServer,
-                                @JsonProperty("deviceID") String deviceID) {
+                                @JsonProperty("deviceID") String deviceID,
+                                @JsonProperty("goalID") String goalID) {
         this.weight = weight;
         this.date = date;
         this.patientID = patientID;
         this.fhirServer = fhirServer;
         this.deviceID = deviceID;
+        this.goalID = goalID;
     }
 }
