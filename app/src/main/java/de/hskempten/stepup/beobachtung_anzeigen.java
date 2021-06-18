@@ -156,13 +156,13 @@ public class beobachtung_anzeigen extends AppCompatActivity {
     }
 
     private String getBackendUrlObservationSteps() {
-        String backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + APIEndpoints.STEPS_OBSERVATION_PATIENT + patientId;
+        String backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + APIEndpoints.STEPS_OBSERVATION + "goal/" + goalId + "/patient/" + patientId;
         Log.d(TAG, "Backend URL: " + backendUrl);
         return backendUrl;
     }
 
     private String getBackendUrlObservationWeight() {
-        String backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + APIEndpoints.WEIGHT_OBSERVATION_PATIENT + patientId;
+        String backendUrl = Preferences.loadBackendUrl(getApplicationContext()) + APIEndpoints.WEIGHT_OBSERVATION + "goal/" + goalId + "/patient/" + patientId;
         Log.d(TAG, "Backend URL: " + backendUrl);
         return backendUrl;
     }
