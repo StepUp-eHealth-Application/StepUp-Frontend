@@ -23,7 +23,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import de.hskempten.stepup.helpers.APIEndpoints;
 import de.hskempten.stepup.helpers.ActivityInterfaceKeys;
@@ -48,6 +51,12 @@ public class beobachtung_anzeigen extends AppCompatActivity {
     String backendUrlGoal;
     String backendUrlObservationSteps;
     String backendUrlObservationWeight;
+    int stepsResult = 0;
+    int stepsGoal;
+    float weightResult;
+    float weightGoal;
+    Date newest;
+    SimpleDateFormat parser = new SimpleDateFormat("yyy-mm-dd");
 
     RequestQueue requestQueue;
 
@@ -76,7 +85,6 @@ public class beobachtung_anzeigen extends AppCompatActivity {
         backendUrlObservationSteps = getBackendUrlObservationSteps();
         backendUrlObservationWeight = getBackendUrlObservationWeight();
         getPatientNameFromBackend(backendUrlName);
-        getGoalFromBackend(backendUrlGoal);
         // getting patient observations
         listView = (ListView) findViewById(R.id.lstObservations);
         arrayList = new ArrayList<>();
@@ -98,15 +106,7 @@ public class beobachtung_anzeigen extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         arrayList.clear();
-        switch (goalType) {
-            case "steps":
-                getPatientObservationsFromBackend(backendUrlObservationSteps);
-                break;
-            case "weight":
-                getPatientObservationsFromBackend(backendUrlObservationWeight);
-                break;
-        }
-        adapter.notifyDataSetChanged();
+        getGoalFromBackend(backendUrlGoal);
     }
 
     private void setupQueue() {
@@ -176,12 +176,27 @@ public class beobachtung_anzeigen extends AppCompatActivity {
                         try {
                             txtGoalname.setText(response.getString("description"));
                             Log.d(TAG, "goalType: " + goalType);
-                            if (goalType.equals("steps")) txtGoalvalue.setText(response.getString("stepsGoal"));
-                            else if (goalType.equals("weight")) txtGoalvalue.setText(response.getString("weightGoal") + " kg");
+                            if (goalType.equals("steps")) {
+                                txtGoalvalue.setText("Ziel: " + response.getString("stepsGoal"));
+                                stepsGoal = Integer.parseInt(response.getString("stepsGoal"));
+                            }
+                            else if (goalType.equals("weight")) {
+                                txtGoalvalue.setText("Ziel: " + response.getString("weightGoal") + " kg");
+                                weightGoal = Float.parseFloat(response.getString("weightGoal"));
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         Toast.makeText(getApplicationContext(), "Gesundheitsziel wurde erfolgreich geladen.", duration).show();
+                        switch (goalType) {
+                            case "steps":
+                                getPatientObservationsFromBackend(backendUrlObservationSteps);
+                                break;
+                            case "weight":
+                                getPatientObservationsFromBackend(backendUrlObservationWeight);
+                                break;
+                        }
+                        adapter.notifyDataSetChanged();
                     }
                 },
                 new Response.ErrorListener() {
@@ -219,14 +234,23 @@ public class beobachtung_anzeigen extends AppCompatActivity {
                                 }
                                 String date = obsObj.getString("date");
                                 String accomplished = "";
-                                if (goalType.equals("steps")) accomplished = obsObj.getString("steps");
-                                else if (goalType.equals("weight")) accomplished = obsObj.getString("weight");
+                                if (goalType.equals("steps")) {
+                                    accomplished = obsObj.getString("steps");
+                                    stepsResult += Integer.parseInt(obsObj.getString("steps"));
+                                }
+                                else if (goalType.equals("weight")) {
+                                    accomplished = obsObj.getString("weight");
+                                    if (newest == null || newest.compareTo(parser.parse(obsObj.getString("date"))) > 0) {
+                                        newest = parser.parse(obsObj.getString("date"));
+                                        weightResult = Float.parseFloat(obsObj.getString("weight"));
+                                    }
+                                }
 
                                 // create new widget
                                 addListItem(id, device, date, accomplished);
                                 Log.d(TAG, "added list item");
                             }
-                        } catch (JSONException e) {
+                        } catch (JSONException | ParseException e) {
                             e.printStackTrace();
                         }
                         Log.d(TAG, "onResponse: success, url: " + backendUrlObservations);
@@ -251,5 +275,15 @@ public class beobachtung_anzeigen extends AppCompatActivity {
     private void addListItem(String id, String device, String date, String accomplished) {
         arrayList.add(new DataModelObservation(id, device, date, accomplished));
         adapter.notifyDataSetChanged();
+        if (goalType.equals("steps") && stepsGoal != 0) {
+            float diff = Math.round(((float)stepsResult / (float)stepsGoal) * 100);
+            if (diff < 100) txtGoalvalue.setText("Zielerreichung: " + stepsResult + " / " + stepsGoal + " (" + diff + "%)");
+            else txtGoalvalue.setText("Ziel erreicht: " + stepsResult + " / " + stepsGoal);
+        }
+        else if (goalType.equals("weight")) {
+            float diff = weightResult - weightGoal;
+            if (diff > 0) txtGoalvalue.setText("Zielerreichung: " + weightResult + "kg / " + weightGoal + "kg (noch " + diff + "kg verbleibend)");
+            else txtGoalvalue.setText("Ziel erreicht: " + weightResult + "kg / " + weightGoal + "kg");
+        }
     }
 }

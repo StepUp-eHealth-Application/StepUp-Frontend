@@ -1,12 +1,5 @@
 package de.hskempten.stepupbackend.controllers;
 
-import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.rest.client.api.IGenericClient;
-import de.hskempten.stepupbackend.dto.DateDTO;
-import de.hskempten.stepupbackend.dto.StepsObservationDTO;
-import de.hskempten.stepupbackend.dto.WeightObservationDTO;
-import de.hskempten.stepupbackend.helpers.FhirHelpers;
-import org.hl7.fhir.r4.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -14,6 +7,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.rest.client.api.IGenericClient;
+import de.hskempten.stepupbackend.dto.DateDTO;
+import de.hskempten.stepupbackend.dto.StepsObservationDTO;
+import de.hskempten.stepupbackend.dto.WeightObservationDTO;
+import de.hskempten.stepupbackend.helpers.FhirHelpers;
 
 @Controller
 public class ObservationController {
@@ -127,7 +127,8 @@ public class ObservationController {
     private WeightObservationDTO convertObservationToWeightObservation(String fhirServer, Patient patient, Observation observation) {
         WeightObservationDTO weightObservationDTO = new WeightObservationDTO();
         weightObservationDTO.setId(observation.getIdElement().getIdPart());
-
+        weightObservationDTO.setGoalID("-1");
+        
         String patientId = observation.getSubject().getReference();
         if (patientId != null && !patientId.isEmpty() && patientId.contains("/")) {
             var patientParts = patientId.split("/");
