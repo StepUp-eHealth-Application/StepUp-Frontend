@@ -70,7 +70,7 @@ public class ObservationController {
                 .addCoding()
                     .setSystem("http://loinc.org")
                     .setCode("29463-7")
-                    .setDisplay("Body weight measured at " + weightObservationDTO.getDate().toString());
+                    .setDisplay("Body weight measured at " + weightObservationDTO.getDate().toString() + ", for Goal with ID: " + weightObservationDTO.getGoalID());
 
         // Setting value
         // TODO: add date when possible
@@ -138,6 +138,14 @@ public class ObservationController {
 
         try {
             String dateStr = observation.getCode().getCoding().get(0).getDisplay().replace("Body weight measured at ", "");
+
+            if (dateStr.contains(", for Goal with ID: ")) {
+                var splits = dateStr.split(", for Goal with ID: ");
+                dateStr = splits[0];
+                String goalId = splits[1];
+                weightObservationDTO.setGoalID(goalId);
+            }
+
             System.out.println("Date String: " + dateStr);
             LocalDate date = LocalDate.parse(dateStr);
             weightObservationDTO.setDate(date);
@@ -457,6 +465,41 @@ public class ObservationController {
             }
 
             StepsObservationDTO stepsObservationDto = convertObservationToStepsDto(fhirServer, null, observation);
+
+            if (stepsObservationDto.getGoalID().equals(goalId)) {
+                retObervations.add(stepsObservationDto);
+            }
+        }
+
+        return retObervations;
+    }
+
+    public List<WeightObservationDTO> getWeightsByGoalId(String goalId, String patientId) {
+        String fhirServer = settingsController.getFhirServerUrl();
+
+        FhirContext ctx = FhirContext.forR4();
+        IGenericClient client = ctx.newRestfulGenericClient(fhirServer);
+
+        Bundle observations = client.search().forResource(Observation.class)
+            .where(Observation.SUBJECT.hasId(patientId))
+            .returnBundle(Bundle.class).execute();
+
+        List<WeightObservationDTO> retObervations = new ArrayList<>();
+        for (Bundle.BundleEntryComponent entry : observations.getEntry()) {
+            Observation observation = (Observation) entry.getResource();
+
+            // Skipping weight observations
+            if (observation.getCode() == null
+                || observation.getCode().getCoding() == null
+                || observation.getCode().getCoding().get(0) == null
+                || observation.getCode().getCoding().get(0).getDisplay() == null) {
+                continue;
+            }
+            if (observation.getCode().getCoding().get(0).getDisplay().contains("Number of Steps in 24 Hours, Measured at ")) {
+                continue;
+            }
+
+            WeightObservationDTO stepsObservationDto = convertObservationToWeightObservation(fhirServer, null, observation);
 
             if (stepsObservationDto.getGoalID().equals(goalId)) {
                 retObervations.add(stepsObservationDto);
