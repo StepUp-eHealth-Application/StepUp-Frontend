@@ -1,0 +1,78 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="100sp"
+        android:layout_gravity="center"
+        android:layout_margin="10sp">
+
+        <FrameLayout
+            android:background="@color/tertiary"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:text="Zeitpunkt:"
+            android:layout_gravity="left|top"
+            android:textAlignment="gravity"
+            android:textColor="@color/secondary"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/txtDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:layout_gravity="right|top"
+            android:textAlignment="gravity"
+            android:text="TT.MM.YYY"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:text="Erfassungsgerät:"
+            android:textSize="20dp"
+            android:layout_gravity="left|center"
+            android:textAlignment="gravity"
+            android:textColor="@color/secondary"/>
+
+        <TextView
+            android:id="@+id/txtDevice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:layout_gravity="right|center"
+            android:textAlignment="gravity"
+            android:text="Gerätename"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:text="Fortschritt:"
+            android:textSize="20dp"
+            android:layout_gravity="left|bottom"
+            android:textAlignment="gravity"
+            android:textColor="@color/secondary"/>
+
+        <TextView
+            android:id="@+id/txtAccomplished"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:layout_gravity="right|bottom"
+            android:textAlignment="gravity"
+            android:text="80kg"
+            android:textSize="16sp" />
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

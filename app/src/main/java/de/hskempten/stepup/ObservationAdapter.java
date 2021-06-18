@@ -10,22 +10,21 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class GoalAdapter extends ArrayAdapter<DataModelGoal> {
+public class ObservationAdapter extends ArrayAdapter<DataModelObservation> {
 
-    private static final String TAG = "GoalAdapter";
+    private static final String TAG = "ObservationAdapter";
 
-    private ArrayList<DataModelGoal> dataSet;
+    private ArrayList<DataModelObservation> dataSet;
     Context mContext;
 
     private static class ViewHolder {
-        TextView description;
-        TextView dueDate;
-        TextView goal;
+        TextView device;
+        TextView date;
         TextView accomplished;
     }
 
-    public GoalAdapter(ArrayList<DataModelGoal> data, Context context) {
-        super(context, R.layout.listitem_goal, data);
+    public ObservationAdapter(ArrayList<DataModelObservation> data, Context context) {
+        super(context, R.layout.listitem_observation, data);
         this.dataSet = data;
         this.mContext = context;
         Log.d(TAG, "created GoalAdapter");
@@ -34,25 +33,23 @@ public class GoalAdapter extends ArrayAdapter<DataModelGoal> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Log.d(TAG, "executed: getView()");
-        DataModelGoal dataModelGoal = getItem(position);
+        DataModelObservation dataModelObservation = getItem(position);
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.listitem_goal, parent, false);
-            viewHolder.description = (TextView) convertView.findViewById(R.id.txtDescription);
-            viewHolder.dueDate = (TextView) convertView.findViewById(R.id.txtDueDate);
-            viewHolder.goal = (TextView) convertView.findViewById(R.id.txtGoal);
+            convertView = inflater.inflate(R.layout.listitem_observation, parent, false);
+            viewHolder.device = (TextView) convertView.findViewById(R.id.txtDevice);
+            viewHolder.date = (TextView) convertView.findViewById(R.id.txtDate);
             viewHolder.accomplished = (TextView) convertView.findViewById(R.id.txtAccomplished);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.description.setText(dataModelGoal.getDescription());
-        viewHolder.dueDate.setText(dataModelGoal.getDueDate());
-        viewHolder.goal.setText(dataModelGoal.getGoal());
-        viewHolder.accomplished.setText(dataModelGoal.getAccomplished());
+        viewHolder.device.setText(dataModelObservation.getDevice());
+        viewHolder.date.setText(dataModelObservation.getDate());
+        viewHolder.accomplished.setText(dataModelObservation.getAccomplished());
         Log.d(TAG, "returning viewHolder");
         return convertView;
     }

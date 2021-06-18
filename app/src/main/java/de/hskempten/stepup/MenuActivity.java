@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -83,6 +82,7 @@ public class MenuActivity extends AppCompatActivity {
                 DataModelGoal dataModelGoal = arrayList.get(position);
                 Intent intent = new Intent(getApplicationContext(), beobachtung_anzeigen.class);
                 intent.putExtra(ActivityInterfaceKeys.HEALTH_GOAL_ID, dataModelGoal.getId());
+                intent.putExtra(ActivityInterfaceKeys.HEALTH_GOAL_TYPE, dataModelGoal.getType());
                 MenuActivity.this.startActivity(intent);
             }
         });
@@ -284,12 +284,13 @@ public class MenuActivity extends AppCompatActivity {
                                 String description = stepsObj.getString("description");
                                 String dueDate = stepsObj.getString("dueDate");
                                 String stepsGoal = stepsObj.getString("stepsGoal");
+                                String type = "steps";
 
                                 // calculate accomplishment
                                 String accomplished = "foo";
 
                                 // create new widget
-                                addListItem(id, description, dueDate, stepsGoal, accomplished);
+                                addListItem(id, description, dueDate, stepsGoal, accomplished, type);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -321,12 +322,13 @@ public class MenuActivity extends AppCompatActivity {
                                 String description = stepsObj.getString("description");
                                 String dueDate = stepsObj.getString("dueDate");
                                 String weightGoal = stepsObj.getString("weightGoal");
+                                String type = "weight";
 
                                 // calculate accomplishment
                                 String accomplished = "foo";
 
                                 // create new widget
-                                addListItem(id, description, dueDate, weightGoal, accomplished);
+                                addListItem(id, description, dueDate, weightGoal, accomplished, type);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -350,7 +352,7 @@ public class MenuActivity extends AppCompatActivity {
         txtTitle.setText(fullName);
     }
 
-    private void addListItem(String id, String description, String dueDate, String goal, String accomplished) {
-        arrayList.add(new DataModelGoal(id, description, dueDate, goal, accomplished));
+    private void addListItem(String id, String description, String dueDate, String goal, String accomplished, String type) {
+        arrayList.add(new DataModelGoal(id, description, dueDate, goal, accomplished, type));
     }
 }
