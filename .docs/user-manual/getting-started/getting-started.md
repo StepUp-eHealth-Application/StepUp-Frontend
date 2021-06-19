@@ -6,7 +6,7 @@
 2. Öffnen Sie das Menü und klicken Sie auf "Servereinstellungen"
 ![](pic2.png)
 
-3. Geben Sie die URL zu einem FHIR Server und dem Backend an. Beachten Sie, dass sie eventuell eine Portnummer angeben müsssen. Außerdem sollte die URL mit "http://" oder "https://" anfangen. Zudem muss die URL mit einem "/" enden. Es ist auch wichtig, dass der eingegebene FHIR Server Referenzen erlaubt.
+3. Geben Sie die URL zu einem FHIR Server und dem Backend an. Beachten Sie, dass sie eventuell eine Portnummer angeben müsssen. Außerdem sollte die URL mit "http://" oder "https://" anfangen. Zudem muss die URL mit einem "/" enden. Es ist auch wichtig, dass der eingegebene FHIR Server Referenzen erlaubt. Die App wurde ausgiebig mithilfe folgenden FHIR Servers getestet: http://hapi.fhir.org/baseR4/.
 ![](pic3.png)
 
 4. Speichern Sie die Eingabe mit dem Klick auf "Speichern" ab. Wenn alles erfolgreich war, wird eine Erfolgsmeldung erscheinen 
