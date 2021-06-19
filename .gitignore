@@ -259,3 +259,4 @@ gradle-app.setting
 
 # Project specific 
 stepupbackend/fhir_settings.dat
+app/release/
