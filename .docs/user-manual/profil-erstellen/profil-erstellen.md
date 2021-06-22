@@ -12,7 +12,7 @@
 
 ![](pic3.png)
 
-4. Wenn alles Ihr Profil erfolgreich erstellt wurde, erhalten Sie eine Erfolgsmeldung
+4. Wenn Ihr Profil erfolgreich erstellt wurde, erhalten Sie eine Erfolgsmeldung
 
 ![](pic4.png)
 
