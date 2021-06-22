@@ -1,7 +1,6 @@
 package de.hskempten.stepup;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +11,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import de.hskempten.stepup.helpers.APIEndpoints;
+import de.hskempten.stepup.helpers.ActivityInterfaceKeys;
 import de.hskempten.stepup.preferences.Preferences;
 
 public class beobachtungen_erfassen extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -41,7 +43,6 @@ public class beobachtungen_erfassen extends AppCompatActivity implements Adapter
     DatePicker dpObservationSteps;
     Button save;
     Spinner deviceSpinner;
-    Spinner goalSpinner;
 
     RequestQueue requestQueue;
 
@@ -49,14 +50,14 @@ public class beobachtungen_erfassen extends AppCompatActivity implements Adapter
     List<String> deviceNames;
     String deviceId;
 
-    List<String> goalIds;
-    List<String> goalValues;
     String goalId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_beobachtungen_erfassen);
+        Intent intent = getIntent();
+        if(getIntent().hasExtra(ActivityInterfaceKeys.HEALTH_GOAL_ID)) goalId = intent.getStringExtra(ActivityInterfaceKeys.HEALTH_GOAL_ID);
 
         requestQueue = Volley.newRequestQueue(getApplicationContext());
 
@@ -66,7 +67,6 @@ public class beobachtungen_erfassen extends AppCompatActivity implements Adapter
 
         initDeviceSpinner();
         initButtonOnClick();
-        initGoalSpinner();
     }
 
     private void initButtonOnClick() {
@@ -207,90 +207,16 @@ public class beobachtungen_erfassen extends AppCompatActivity implements Adapter
         deviceSpinner.setOnItemSelectedListener(this);
     }
 
-    private void initGoalSpinner() {
-        String backendServer = Preferences.loadBackendUrl(getApplicationContext()) + APIEndpoints.STEPS_GOAL + "patient/" + Preferences.loadActualPatientID(getApplicationContext());
-
-        // Sending data to backend
-        JsonArrayRequest jsonobj = new JsonArrayRequest(Request.Method.GET, backendServer, null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        goalIds = new ArrayList<>();
-                        goalValues = new ArrayList<>();
-
-                        for(int i = 0; i < response.length(); i++){
-                            JSONObject jresponse = null;
-                            try {
-                                jresponse = response.getJSONObject(i);
-
-                                String id = jresponse.getString("id");
-                                String value = jresponse.getString("stepsGoal");
-                                String description = jresponse.getString("description");
-                                String dueDate = jresponse.getString("dueDate");
-
-                                if (dueDate != null && !dueDate.isEmpty()) {
-                                    dueDate = dueDate.split("T")[0];
-                                }
-
-                                if (deviceId == null || deviceId.isEmpty()) {
-                                    deviceId = id;
-                                }
-
-                                goalIds.add(id);
-                                goalValues.add(description + ": " + value + " (" + dueDate + ")");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                                getApplicationContext(), android.R.layout.simple_spinner_item, goalValues);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        goalSpinner.setAdapter(adapter);
-                        goalSpinner.setOnItemSelectedListener(beobachtungen_erfassen.this);
-
-                        Toast.makeText(getApplicationContext(), "Gesundheitsziele erfolgreich geladen!" , duration).show();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.i(TAG, "onResponse: " + error.getMessage());
-                        String message = "Gesundheitsziele konnten nicht geladen werden: " + error.getMessage();
-                        Toast.makeText(getApplicationContext(), message , duration).show();
-                    }
-                }
-        ){
-
-        };
-        requestQueue.add(jsonobj);
-    }
-
     private void findViews() {
         eTxtNumber = findViewById(R.id.eTxtNumberSteps);
         dpObservationSteps = findViewById(R.id.dpObservationSteps);
         save = findViewById(R.id.btnSaveObservationSteps);
         deviceSpinner = findViewById(R.id.spinnerDeviceSteps);
-        goalSpinner = findViewById(R.id.spinnerStepsObservation);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (parent.getId()) {
-            case R.id.spinnerDeviceSteps:
-                deviceId = deviceIds.get(position);
-                break;
-            case R.id.spinnerStepsObservation:
-                try {
-                    goalId = goalIds.get(position);
-                } catch (IndexOutOfBoundsException exception) {
-                    Log.d(TAG, "onItemSelected: Index out of bounce in goal IDs");
-                }
-                break;
-            default:
-                Log.d(TAG, "onItemSelected: Error default");
-                break;
-        }
+        deviceId = deviceIds.get(position);
     }
 
     @Override
