@@ -4,7 +4,7 @@
 
 ![](pic1.png)
 
-2. Geben Sie Vorname (1), Nachname (2), Geschlecht (3) und Addresse (4) ein. Speichern Sie Ihre Eingabe mit mit einem Klick auf den "Speichern" Button (5)
+2. Geben Sie Vorname (1), Nachname (2), Geschlecht (3) und Addresse (4) ein. Speichern Sie Ihre Eingabe mit einem Klick auf den "Speichern" Button (5)
 
 ![](pic2.png)
 
