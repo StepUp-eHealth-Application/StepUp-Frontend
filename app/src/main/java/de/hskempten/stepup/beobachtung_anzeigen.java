@@ -96,8 +96,16 @@ public class beobachtung_anzeigen extends AppCompatActivity {
         btnNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(beobachtung_anzeigen.this, ChooseObservationType.class);
-                beobachtung_anzeigen.this.startActivity(intent);
+                if (goalType.equals("steps")) {
+                    Intent intent = new Intent(beobachtung_anzeigen.this, beobachtungen_erfassen.class);
+                    intent.putExtra(ActivityInterfaceKeys.HEALTH_GOAL_ID, goalId);
+                    beobachtung_anzeigen.this.startActivity(intent);
+                }
+                else if (goalType.equals("weight")) {
+                    Intent intent = new Intent(beobachtung_anzeigen.this, beobachtung_erfassen_gewicht.class);
+                    intent.putExtra(ActivityInterfaceKeys.HEALTH_GOAL_ID, goalId);
+                    beobachtung_anzeigen.this.startActivity(intent);
+                }
             }
         });
     }
