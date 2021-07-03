@@ -161,7 +161,11 @@ public class beobachtung_erfassen_gewicht extends AppCompatActivity implements A
                 if (dpObservationWeight.getMonth() + 1 < 10) {
                     date += "0";
                 }
-                date += (dpObservationWeight.getMonth() + 1) + "-" + dpObservationWeight.getDayOfMonth();
+                date += (dpObservationWeight.getMonth() + 1) + "-";
+                if (dpObservationWeight.getDayOfMonth() < 10) {
+                    date += "0";
+                }
+                date += dpObservationWeight.getDayOfMonth();
 
                 String fhirServer = Preferences.loadFhirServerUrl(beobachtung_erfassen_gewicht.this);
                 String id = null;
