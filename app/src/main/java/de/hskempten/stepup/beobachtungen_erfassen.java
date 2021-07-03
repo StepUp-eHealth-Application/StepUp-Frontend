@@ -97,7 +97,11 @@ public class beobachtungen_erfassen extends AppCompatActivity implements Adapter
                 if (dpObservationSteps.getMonth() + 1 < 10) {
                     date += "0";
                 }
-                date += (dpObservationSteps.getMonth() + 1) + "-" + dpObservationSteps.getDayOfMonth();
+                date += (dpObservationSteps.getMonth() + 1) + "-";
+                if (dpObservationSteps.getDayOfMonth() < 10) {
+                    date += "0";
+                }
+                date += dpObservationSteps.getDayOfMonth();
 
                 String fhirServer = Preferences.loadFhirServerUrl(beobachtungen_erfassen.this);
                 String id = null;
