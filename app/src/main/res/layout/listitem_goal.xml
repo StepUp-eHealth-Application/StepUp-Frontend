@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10sp"
-            android:text="Goal Description"
+            android:text="@string/txtDescription"
             android:layout_gravity="left|top"
             android:textAlignment="gravity"
             android:textColor="@color/secondary"
@@ -32,7 +32,7 @@
             android:layout_margin="10sp"
             android:layout_gravity="right|bottom"
             android:textAlignment="gravity"
-            android:text="TT.MM.YYY"
+            android:text="@string/txtDueDate"
             android:textSize="16sp" />
 
         <TextView
@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10sp"
-            android:text="Goal"
+            android:text="@string/txtGoal"
             android:textSize="20dp"
             android:layout_gravity="left|bottom"
             android:textAlignment="gravity"
