@@ -25,4 +25,115 @@
         <item>Schrittzähler</item>
     </string-array>
 
+
+
+
+
+    <string name="textView5_1">Patientendaten</string>
+    <string name="textView5_2">Gesundheitsziele</string>
+    <string name="textView5_3">Zusammenfassung erstellen</string>
+    <string name="DateHealthGoalTextView_1">Datum der Beobachtung</string>
+    <string name="DateHealthGoalTextView_2">Datum des Gesundheitsziel</string>
+    <string name="txtTitle_1">Beobachtungen</string>
+    <string name="txtTitle_2">StepUp</string>
+    <string name="txtTitle_3">Gesundheitsziele</string>
+    <string name="txtTitle_4">Einstellungen</string>
+    <string name="txtPatientName_1">Patient wird geladen...</string>
+    <string name="txtPatientName_2">Patient wird geladen...</string>
+    <string name="btnNew_1">Neue Beobachtung erstellen</string>
+    <string name="btnNew_2">Neues Gesundheitsziel erstellen</string>
+    <string name="txtResponse_1">TextView</string>
+    <string name="txtResponse_2"></string>
+    <string name="textView7_1">Name</string>
+    <string name="textView7_2">Datum</string>
+
+
+
+    <string name="txtGoalname">Gesundheitsziel wird geladen...</string>
+    <string name="txtGoalvalue"></string>
+    <string name="btnSaveWeightObservation">Speichern</string>
+    <string name="textView10">Datum der Beobachtung</string>
+    <string name="textView9">Aktuelles Gewicht (kg)</string>
+    <string name="textView8">Neue Beobachtung zum Gewicht</string>
+    <string name="textView3">Gerät</string>
+    <string name="txtBeaobachtungErfassenName">Neue Beobachtung zum Schrittzähler</string>
+    <string name="textView4">Anzahl Schritte</string>
+    <string name="btnSaveObservationSteps">Speichern</string>
+    <string name="textView2">Gerät</string>
+    <string name="txtDeviceName">Gerätename</string>
+    <string name="txtViewTitle">Diagnosegerät erstellen</string>
+    <string name="txtManufacturer">Hersteller</string>
+    <string name="txtViewDeviceStatus">Gerätestatus</string>
+    <string name="txtViewDeviceType">Gerätetyp</string>
+    <string name="txtNote">Notiz</string>
+    <string name="btnCreateDevice">Gerät erstellen</string>
+    <string name="txtName">-</string>
+    <string name="textView16">Geschlecht</string>
+    <string name="txtGender">-</string>
+    <string name="textView18">Adresse</string>
+    <string name="txtAddresse">-</string>
+    <string name="textView20">Postleitzahl</string>
+    <string name="txtPatientPostalCode">-</string>
+    <string name="textView22">Stadt</string>
+    <string name="txtPatientCity">-</string>
+    <string name="textView24">Land</string>
+    <string name="txtPatientCountry">-</string>
+    <string name="tv_MaxMustermann">Max Mustermann</string>
+    <string name="info_text">Schritte pro Tag</string>
+    <string name="info_text2">02.02.2020</string>
+    <string name="tv_Ziel1500">Ziel: 1500</string>
+    <string name="info_text4">Gewicht</string>
+    <string name="info_text5">12.03.2020</string>
+    <string name="tv_Ziel70kg">Ziel: 70kg</string>
+    <string name="buttonSave">Speichern</string>
+    <string name="txtHealthGoalName">Name</string>
+    <string name="txtHealtGoalDataDescription">Desscription</string>
+    <string name="imgLogo">StepUp Logo</string>
+    <string name="txtRolle">Bitte wählen Sie Ihre Rolle:</string>
+    <string name="btnPatient">Patient</string>
+    <string name="btnLe">Leistungserbringer</string>
+    <string name="btnSettings">Einstellungen</string>
+    <string name="btnSummary">Zusammenfassung</string>
+    <string name="btnPatientData">Persönliche Daten</string>
+    <string name="btnAddDevice">Neues Gerät anlegen</string>
+    <string name="btnCreatePatient">Profil erstellen</string>
+    <string name="btnFHIRServerSettings">Servereinstellungen</string>
+    <string name="txtViewMyData">Meine Daten</string>
+    <string name="txtFirstName">Vorname</string>
+    <string name="txtStreet">Straße</string>
+    <string name="txtCity">Stadt</string>
+    <string name="txtCountry">Land</string>
+    <string name="txtPostalCode">Postleitzahl</string>
+    <string name="txtLastName">Nachname</string>
+    <string name="txtViewGender">Geschlecht</string>
+    <string name="txtViewAddress">Addresse</string>
+    <string name="btnSave">Speichern</string>
+    <string name="btnSearchByGender">Filter nach Geschlecht</string>
+    <string name="eTxtAddress">Nach Adresse suchen</string>
+    <string name="btnFilterByAddress">Filter Nach Adresse</string>
+    <string name="etxtFhirServer">FHIR Server</string>
+    <string name="eTxtBackendServer">Backend Server</string>
+    <string name="btnSaveSettings">Speichern</string>
+    <string name="btnCreateSummary">Zusammenfassung erstellen</string>
+    <string name="txtDescription">Goal Description</string>
+    <string name="txtDueDate">TT.MM.YYY</string>
+    <string name="txtGoal">Goal</string>
+    <string name="Zeitpunkt">Zeitpunkt:</string>
+    <string name="txtDate">TT.MM.YYY</string>
+    <string name="Erfassungsgerät">Erfassungsgerät:</string>
+    <string name="txtDevice">Gerätename</string>
+    <string name="Fortschritt">Fortschritt:</string>
+    <string name="txtAccomplished">80kg</string>
+
+
+
+
+
+
+
+
+
+
+
+
 </resources>

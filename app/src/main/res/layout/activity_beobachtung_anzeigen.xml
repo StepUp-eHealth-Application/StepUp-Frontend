@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16sp"
-            android:text="Patient wird geladen..."
+            android:text="@string/txtPatientName_1"
             android:textColor="@color/secondary"
             android:textSize="24sp"
             android:layout_gravity="center_vertical|left"
@@ -32,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16sp"
-        android:text="Beobachtungen"
+        android:text="@string/txtTitle_1"
         android:textColor="@color/secondary"
         android:textSize="24sp"
         app:layout_constraintTop_toBottomOf="@+id/layoutHeader"
@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16sp"
-        android:text="Gesundheitsziel wird geladen..."
+        android:text="@string/txtGoalname"
         android:textColor="@color/secondary"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16sp"
-        android:text=""
+        android:text="@string/txtGoalvalue"
         android:textColor="@color/secondary"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -85,7 +85,7 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:srcCompat="@android:drawable/ic_input_add"
-    android:contentDescription="Neue Beobachtung erstellen" />
+    android:contentDescription="@string/btnNew_1" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

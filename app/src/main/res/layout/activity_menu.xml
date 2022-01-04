@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16sp"
-            android:text="Patient wird geladen..."
+            android:text="@string/txtPatientName_2"
             android:textColor="@color/secondary"
             android:textSize="24sp"
             android:layout_gravity="center_vertical|left"
@@ -32,7 +32,7 @@
             android:background="@color/white"
             android:layout_gravity="center_vertical|right"
             app:srcCompat="@drawable/ic_baseline_format_list_bulleted_24"
-            android:contentDescription="Einstellungen" />
+            android:contentDescription="@string/btnSettings" />
 
     </androidx.cardview.widget.CardView>
 
@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16sp"
-        android:text="Gesundheitsziele"
+        android:text="@string/txtTitle_3"
         android:textColor="@color/secondary"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +74,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_input_add"
-        android:contentDescription="Neues Gesundheitsziel erstellen" />
+        android:contentDescription="@string/btnNew_2" />
 
     <LinearLayout
         android:id="@+id/viewSettings"
@@ -94,7 +94,7 @@
             android:layout_marginEnd="4dp"
             android:backgroundTint="@color/white"
             android:textAllCaps="false"
-            android:text="Zusammenfassung"
+            android:text="@string/btnSummary"
             android:textColor="@color/secondary"
             android:textSize="16sp" />
 
@@ -106,7 +106,7 @@
             android:layout_marginEnd="4dp"
             android:backgroundTint="@color/white"
             android:textAllCaps="false"
-            android:text="Persönliche Daten"
+            android:text="@string/btnPatientData"
             android:textColor="@color/secondary"
             android:textSize="16sp" />
 
@@ -118,7 +118,7 @@
             android:layout_marginEnd="4dp"
             android:backgroundTint="@color/white"
             android:textAllCaps="false"
-            android:text="Neues Gerät anlegen"
+            android:text="@string/btnAddDevice"
             android:textColor="@color/secondary"
             android:textSize="16sp" />
         <Button
@@ -128,7 +128,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:backgroundTint="@color/white"
-            android:text="Profil erstellen"
+            android:text="@string/btnCreatePatient"
             android:textAllCaps="false"
             android:textColor="@color/secondary"
             android:textSize="16sp" />
@@ -140,7 +140,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:backgroundTint="@color/white"
-            android:text="Servereinstellungen"
+            android:text="@string/btnFHIRServerSettings"
             android:textAllCaps="false"
             android:textColor="@color/secondary"
             android:textSize="16sp" />

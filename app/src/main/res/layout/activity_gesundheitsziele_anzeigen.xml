@@ -15,9 +15,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/tv_MaxMustermann"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="Max Mustermann"
+        android:text="@string/tv_MaxMustermann"
         android:textSize="24sp"
         android:paddingTop="13dp"
         android:paddingLeft="20dp"
@@ -31,7 +32,7 @@
         android:layout_height="60dp"
         android:paddingLeft="25dp"
         android:paddingTop="13dp"
-        android:text="Gesundheitsziele"
+        android:text="@string/textView5_2"
         android:textColor="@color/secondary"
         android:textSize="24sp"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
@@ -59,7 +60,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:paddingTop="8dp"
-            android:text="Schritte pro Tag"
+            android:text="@string/info_text"
             android:textColor="@color/secondary"
             android:textSize="22sp" />
 
@@ -69,15 +70,16 @@
             android:layout_height="wrap_content"
             android:paddingLeft="260dp"
             android:paddingTop="18dp"
-            android:text="02.02.2020"
+            android:text="@string/info_text2"
             android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/tv_Ziel1500"
             android:layout_width="match_parent"
             android:layout_height="90dp"
             android:paddingLeft="10dp"
             android:paddingTop="65dp"
-            android:text="Ziel: 1500"
+            android:text="@string/tv_Ziel1500"
             android:textSize="20dp"
             android:textColor="@color/secondary"/>
     </androidx.cardview.widget.CardView>
@@ -104,7 +106,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:paddingTop="8dp"
-            android:text="Gewicht"
+            android:text="@string/info_text4"
             android:textColor="@color/secondary"
             android:textSize="22sp"/>
 
@@ -114,15 +116,16 @@
             android:layout_height="wrap_content"
             android:paddingLeft="260dp"
             android:paddingTop="18dp"
-            android:text="12.03.2020"
+            android:text="@string/info_text5"
             android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/tv_Ziel70kg"
             android:layout_width="match_parent"
             android:layout_height="90dp"
             android:paddingLeft="10dp"
             android:paddingTop="65dp"
-            android:text="Ziel: 70kg"
+            android:text="@string/tv_Ziel70kg"
             android:textSize="20dp"
             android:textColor="@color/secondary"/>
     </androidx.cardview.widget.CardView>
